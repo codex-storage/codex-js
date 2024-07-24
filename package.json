@@ -1,0 +1,42 @@
+{
+	"name": "@codex/sdk-js",
+	"version": "0.0.1",
+	"description": "Codex SDK to interact with the Codex decentralized storage network.",
+	"main": "index.js",
+	"scripts": {
+		"prepack": "npm run build",
+		"prebuild": "rm -Rf dist/*",
+		"build": "tsc",
+		"compile": "tsc --noEmit",
+		"pretest": "npm run build",
+		"test": "node --test",
+		"watch": "tsc --watch"
+	},
+	"keywords": [
+		"Codex",
+		"Javascript",
+		"SDK",
+		"storage"
+	],
+	"files": [
+		"dist/**"
+	],
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"author": "Codex team",
+	"readme": "README.md",
+	"license": "MIT",
+	"engines": {
+		"node": ">=20"
+	},
+	"devDependencies": {
+		"@faker-js/faker": "^8.4.1",
+		"@tsconfig/strictest": "^2.0.5",
+		"typescript": "^5.5.4"
+	},
+	"dependencies": {
+		"@sinclair/typebox": "^0.32.35"
+	}
+}
