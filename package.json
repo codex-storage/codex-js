@@ -9,11 +9,12 @@
 	"scripts": {
 		"prepack": "npm run build",
 		"prebuild": "rm -Rf dist/*",
-		"build": "tsup tsup src/index.ts --format esm,cjs --dts --minify",
+		"build": "tsup tsup src/index.ts --format esm,cjs --dts",
 		"compile": "tsc --noEmit",
 		"pretest": "npm run build",
 		"test": "node --test",
-		"watch": "tsc --watch"
+		"watch": "tsc --watch",
+		"format": "prettier --write ./src"
 	},
 	"keywords": [
 		"Codex",
@@ -48,6 +49,7 @@
 	"devDependencies": {
 		"@faker-js/faker": "^8.4.1",
 		"@tsconfig/strictest": "^2.0.5",
+		"prettier": "^3.3.3",
 		"tsup": "^8.2.3",
 		"typescript": "^5.5.4"
 	},

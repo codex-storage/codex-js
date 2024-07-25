@@ -1,167 +1,189 @@
-import * as v from 'valibot'
-import { Api } from "../api/config"
-import { CodexValibotIssuesMap } from '../errors/errors'
-import { Fetch } from "../fetch-safe/fetch-safe"
-import type { SafeValue } from "../values/values"
-import { type CodexAvailability, type CodexAvailabilityCreateResponse, CodexCreateAvailabilityInput, CodexCreateStorageRequestInput, type CodexCreateStorageRequestResponse, type CodexPurchase, type CodexReservation, type CodexSlot, CodexUpdateAvailabilityInput } from "./types"
+import * as v from "valibot";
+import { Api } from "../api/config";
+import { CodexValibotIssuesMap } from "../errors/errors";
+import { Fetch } from "../fetch-safe/fetch-safe";
+import type { SafeValue } from "../values/values";
+import {
+  type CodexAvailability,
+  type CodexAvailabilityCreateResponse,
+  CodexCreateAvailabilityInput,
+  CodexCreateStorageRequestInput,
+  type CodexCreateStorageRequestResponse,
+  type CodexPurchase,
+  type CodexReservation,
+  type CodexSlot,
+  CodexUpdateAvailabilityInput,
+} from "./types";
 
 export class Marketplace {
-	readonly url: string
+  readonly url: string;
 
-	constructor(url: string) {
-		this.url = url
-	}
+  constructor(url: string) {
+    this.url = url;
+  }
 
-	/**
-	 * Returns active slots
-	 */
-	async activeSlots(): Promise<SafeValue<CodexSlot[]>> {
-		const url = this.url + Api.config.prefix + "/sales/slots"
+  /**
+   * Returns active slots
+   */
+  async activeSlots(): Promise<SafeValue<CodexSlot[]>> {
+    const url = this.url + Api.config.prefix + "/sales/slots";
 
-		return Fetch.safe<CodexSlot[]>(url, {
-			method: "GET"
-		})
-	}
+    return Fetch.safe<CodexSlot[]>(url, {
+      method: "GET",
+    });
+  }
 
-	/**
-	 * Returns active slot with id {slotId} for the host
-	 */
-	async activeSlot(slotId: string): Promise<SafeValue<CodexSlot>> {
-		const url = this.url + Api.config.prefix + "/sales/slots/" + slotId
+  /**
+   * Returns active slot with id {slotId} for the host
+   */
+  async activeSlot(slotId: string): Promise<SafeValue<CodexSlot>> {
+    const url = this.url + Api.config.prefix + "/sales/slots/" + slotId;
 
-		return Fetch.safe<CodexSlot>(url, {
-			method: "GET"
-		})
-	}
+    return Fetch.safe<CodexSlot>(url, {
+      method: "GET",
+    });
+  }
 
-	/**
-	 * Returns storage that is for sale
-	 */
-	async availabilities(): Promise<SafeValue<CodexAvailability[]>> {
-		const url = this.url + Api.config.prefix + "/sales/availability"
+  /**
+   * Returns storage that is for sale
+   */
+  async availabilities(): Promise<SafeValue<CodexAvailability[]>> {
+    const url = this.url + Api.config.prefix + "/sales/availability";
 
-		return Fetch.safe<CodexAvailability[]>(url, {
-			method: "GET"
-		})
-	}
+    return Fetch.safe<CodexAvailability[]>(url, {
+      method: "GET",
+    });
+  }
 
-	/**
-	 * Offers storage for sale
-	 */
-	async createAvailability(input: CodexCreateAvailabilityInput)
-		: Promise<SafeValue<CodexAvailabilityCreateResponse>> {
-		const result = v.safeParse(CodexCreateAvailabilityInput, input)
+  /**
+   * Offers storage for sale
+   */
+  async createAvailability(
+    input: CodexCreateAvailabilityInput,
+  ): Promise<SafeValue<CodexAvailabilityCreateResponse>> {
+    const result = v.safeParse(CodexCreateAvailabilityInput, input);
 
-		if (!result.success) {
-			return {
-				error: true,
-				data: {
-					type: "validation",
-					message: "Cannot validate the input",
-					errors: CodexValibotIssuesMap(result.issues)
-				}
-			}
-		}
+    if (!result.success) {
+      return {
+        error: true,
+        data: {
+          type: "validation",
+          message: "Cannot validate the input",
+          errors: CodexValibotIssuesMap(result.issues),
+        },
+      };
+    }
 
-		const url = this.url + Api.config.prefix + "/sales/availability"
+    const url = this.url + Api.config.prefix + "/sales/availability";
 
-		return Fetch.safe<CodexAvailabilityCreateResponse>(url, {
-			method: "POST",
-			headers: {
-				"content-type": "application/json"
-			},
-			body: JSON.stringify(result.output)
-		})
-	}
+    return Fetch.safe<CodexAvailabilityCreateResponse>(url, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(result.output),
+    });
+  }
 
-	/**
-	 * The new parameters will be only considered for new requests. 
-	 * Existing Requests linked to this Availability will continue as is.
-	 */
-	async updateAvailability(input: CodexUpdateAvailabilityInput): Promise<SafeValue<CodexAvailability>> {
-		const result = v.safeParse(CodexUpdateAvailabilityInput, input)
+  /**
+   * The new parameters will be only considered for new requests.
+   * Existing Requests linked to this Availability will continue as is.
+   */
+  async updateAvailability(
+    input: CodexUpdateAvailabilityInput,
+  ): Promise<SafeValue<CodexAvailability>> {
+    const result = v.safeParse(CodexUpdateAvailabilityInput, input);
 
-		if (!result.success) {
-			return {
-				error: true,
-				data: {
-					type: "validation",
-					message: "Cannot validate the input",
-					errors: CodexValibotIssuesMap(result.issues)
-				}
-			}
-		}
+    if (!result.success) {
+      return {
+        error: true,
+        data: {
+          type: "validation",
+          message: "Cannot validate the input",
+          errors: CodexValibotIssuesMap(result.issues),
+        },
+      };
+    }
 
-		const url = this.url + Api.config.prefix + "/sales/availability/" + result.output.id
+    const url =
+      this.url + Api.config.prefix + "/sales/availability/" + result.output.id;
 
-		return Fetch.safe<CodexAvailability>(url, {
-			method: "POST",
-			headers: {
-				"content-type": "application/json"
-			},
-			body: JSON.stringify(result.output)
-		})
-	}
+    return Fetch.safe<CodexAvailability>(url, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(result.output),
+    });
+  }
 
-	/**
-	 * Return's list of Reservations for ongoing Storage Requests that the node hosts.
-	 */
-	async reservations(availabilityId: string): Promise<SafeValue<CodexReservation[]>> {
-		const url = this.url + Api.config.prefix + `/sales/availability/${availabilityId}/reservations`
+  /**
+   * Return's list of Reservations for ongoing Storage Requests that the node hosts.
+   */
+  async reservations(
+    availabilityId: string,
+  ): Promise<SafeValue<CodexReservation[]>> {
+    const url =
+      this.url +
+      Api.config.prefix +
+      `/sales/availability/${availabilityId}/reservations`;
 
-		return Fetch.safe<CodexReservation[]>(url, {
-			method: "GET"
-		})
-	}
+    return Fetch.safe<CodexReservation[]>(url, {
+      method: "GET",
+    });
+  }
 
-	/**
-	 * Returns list of purchase IDs
-	 */
-	async purchaseIds(): Promise<SafeValue<string[]>> {
-		const url = this.url + Api.config.prefix + `/storage/purchases`
+  /**
+   * Returns list of purchase IDs
+   */
+  async purchaseIds(): Promise<SafeValue<string[]>> {
+    const url = this.url + Api.config.prefix + `/storage/purchases`;
 
-		return Fetch.safe<string[]>(url, {
-			method: "GET"
-		})
-	}
+    return Fetch.safe<string[]>(url, {
+      method: "GET",
+    });
+  }
 
-	/**
-	 * Returns purchase details
-	 */
-	async purchaseDetail(purchaseId: string): Promise<SafeValue<CodexPurchase>> {
-		const url = this.url + Api.config.prefix + `/storage/purchases/` + purchaseId
+  /**
+   * Returns purchase details
+   */
+  async purchaseDetail(purchaseId: string): Promise<SafeValue<CodexPurchase>> {
+    const url =
+      this.url + Api.config.prefix + `/storage/purchases/` + purchaseId;
 
-		return Fetch.safe<CodexPurchase>(url, {
-			method: "GET"
-		})
-	}
+    return Fetch.safe<CodexPurchase>(url, {
+      method: "GET",
+    });
+  }
 
-	/**
-	 * Creates a new request for storage.
-	 */
-	async createStorageRequest(input: CodexCreateStorageRequestInput): Promise<SafeValue<CodexCreateStorageRequestResponse>> {
-		const result = v.safeParse(CodexCreateStorageRequestInput, input)
+  /**
+   * Creates a new request for storage.
+   */
+  async createStorageRequest(
+    input: CodexCreateStorageRequestInput,
+  ): Promise<SafeValue<CodexCreateStorageRequestResponse>> {
+    const result = v.safeParse(CodexCreateStorageRequestInput, input);
 
-		if (!result.success) {
-			return {
-				error: true,
-				data: {
-					type: "validation",
-					message: "Cannot validate the input",
-					errors: CodexValibotIssuesMap(result.issues)
-				}
-			}
-		}
+    if (!result.success) {
+      return {
+        error: true,
+        data: {
+          type: "validation",
+          message: "Cannot validate the input",
+          errors: CodexValibotIssuesMap(result.issues),
+        },
+      };
+    }
 
-		const { cid, ...body } = result.output
-		const url = this.url + Api.config.prefix + "/storage/request/" + cid
+    const { cid, ...body } = result.output;
+    const url = this.url + Api.config.prefix + "/storage/request/" + cid;
 
-		return Fetch.safe<CodexCreateStorageRequestResponse>(url, {
-			method: "POST",
-			headers: {
-				"content-type": "application/json"
-			},
-			body: JSON.stringify(body)
-		})
-	}
+    return Fetch.safe<CodexCreateStorageRequestResponse>(url, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+  }
 }
