@@ -8,27 +8,17 @@ type ValidationError = {
 };
 
 /**
- *  The CodexError which can be error object of 3 types:
- * `error`: Object containing the error message
- * `api`: Object containing the api error message and the status code
- * `validation`: Object containing the error message and a field `errors` of type ValidationError
- * containing the error message for each fields.
+ *  The CodexError contains a message and 3 optionals properties:
+ * `code`: The (http) code error when it comes from a request
+ * `errors`: A {ValidationError} array when it comes from an object validation process
+ * `stack`: The error stack when the CodexError results from a error thrown
  */
-export type CodexError =
-  | {
-      type: "error";
-      message: string;
-    }
-  | {
-      type: "api";
-      message: string;
-      status: number;
-    }
-  | {
-      type: "validation";
-      message: string;
-      errors: ValidationError[];
-    };
+export type CodexError = {
+  message: string;
+  code?: number;
+  errors?: ValidationError[];
+  stack?: string;
+};
 
 export const CodexValibotIssuesMap = (issues: InferIssue<any>[]) =>
   issues.map((i) => ({
