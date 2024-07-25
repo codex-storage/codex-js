@@ -1,4 +1,4 @@
-import { SafeValue } from "../values/values"
+import type { SafeValue } from "../values/values"
 
 export class Disk {
     readonly url: string

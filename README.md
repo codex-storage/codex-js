@@ -2,6 +2,8 @@
 
 The Codex SDK provides an API for interacting with the Codex decentralized storage network.
 
+The SDK has a small bundle size and support tree shaking. 
+
 ## Import 
 
 ```js
@@ -22,6 +24,12 @@ To create a Codex instance, provide the REST API url to interact with the Codex 
 const codex = new Codex("http://localhost:3000")
 ```
 
+To use a module, you need to use the await syntax. If the module is not loaded yet, it will be imported first and then cached in memory.
+
+```js
+const marketplace = await codex.marketplace()
+```
+
 ### Error handling 
 
 The SDK provides a type called `SafeValue` for error handling instead of throwing errors. It is inspired by Go's "error as value" concept.
@@ -37,7 +45,7 @@ The error type is a [CodexError](./src/errors/errors.ts#L15) which can be error 
 Example: 
 
 ```js
-const slots = await codex.marketplace.activeSlots(); 
+const slots = marketplace.activeSlots(); 
 
 if (slots.error) {
     // Do something to handle the error in slots.data 
@@ -49,6 +57,13 @@ if (slots.error) {
 
 ### Marketplace 
 
+The following API assume that you have already a marketplace module loaded, example: 
+
+```js
+const codex = new Codex("http://localhost:3000")
+const marketplace = await codex.marketplace()
+```
+
 #### activeSlots()
 
 Returns active slots.
@@ -58,7 +73,7 @@ Returns active slots.
 Example: 
 
 ```js
-const slots = await codex.marketplace.activeSlots(); 
+const slots = await marketplace.activeSlots(); 
 ```
 
 #### activeSlot(slotId)
@@ -72,7 +87,7 @@ Example:
 
 ```js
 const slotId=  "AB9........"
-const slot = await codex.marketplace.activeSlot(slotId); 
+const slot = await marketplace.activeSlot(slotId); 
 ```
 
 
@@ -85,7 +100,7 @@ Returns storage that is for sale.
 Example: 
 
 ```js
-const availabilities = await codex.marketplace.availabilities(); 
+const availabilities = await marketplace.availabilities(); 
 ```
 
 #### createAvailability
@@ -98,7 +113,7 @@ Offers storage for sale.
 Example: 
 
 ```js
-const response = await codex.marketplace.createAvailability({
+const response = await marketplace.createAvailability({
     maxCollateral: 1,
     totalSize: 3000,
     minPrice: 100,
@@ -116,7 +131,7 @@ Return list of reservations for ongoing Storage Requests that the node hosts.
 Example: 
 
 ```js
-const reservations = await codex.marketplace.reservations("Ox..."); 
+const reservations = await marketplace.reservations("Ox..."); 
 ```
 
 
@@ -130,7 +145,7 @@ Creates a new Request for storage
 Example: 
 
 ```js
-const request = await codex.marketplace.createStorageRequest({
+const request = await marketplace.createStorageRequest({
     duration: 3000,
     reward: 100,
     proofProbability: 1,
@@ -152,7 +167,7 @@ Returns list of purchase IDs
 Example: 
 
 ```js
-const ids = await codex.marketplace.purchaseIds(); 
+const ids = await marketplace.purchaseIds(); 
 ```
 
 #### purchaseDetail
@@ -166,5 +181,5 @@ Example:
 
 ```js
 const purchaseId =  "Ox........"
-const purchase = await codex.marketplace.purchaseDetail(purchaseId); 
+const purchase = await marketplace.purchaseDetail(purchaseId); 
 ```

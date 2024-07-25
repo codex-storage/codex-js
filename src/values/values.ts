@@ -1,4 +1,4 @@
-import { CodexError } from "../errors/errors";
+import { type CodexError } from "../errors/errors";
 
 /**
  * SafeValue is a type used for error handling instead of throwing errors.
