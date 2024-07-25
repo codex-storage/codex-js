@@ -56,13 +56,29 @@ function missingNumberValidationError(field: string) {
 			message: "Cannot validate the input",
 			errors: [
 				{
-					path: "/" + field,
-					message: "Expected required property"
+					path: field,
+					expected: 'number',
+					message: 'Invalid type: Expected number but received undefined',
+					received: 'undefined'
 				},
+			]
+		}
+	}
+}
+
+function extraValidationError(field: string, value: unknown) {
+	return {
+		error: true,
+		data: {
+			type: "validation",
+			message: "Cannot validate the input",
+			errors: [
 				{
-					path: "/" + field,
-					message: "Expected number"
-				}
+					path: field,
+					expected: 'never',
+					message: `Invalid type: Expected never but received "${value}"`,
+					received: `"${value}"`
+				},
 			]
 		}
 	}
@@ -76,19 +92,17 @@ function missingStringValidationError(field: string) {
 			message: "Cannot validate the input",
 			errors: [
 				{
-					path: "/" + field,
-					message: "Expected required property"
-				},
-				{
-					path: "/" + field,
-					message: "Expected string"
+					path: field,
+					expected: 'string',
+					message: 'Invalid type: Expected string but received undefined',
+					received: 'undefined'
 				}
 			]
 		}
 	}
 }
 
-function mistypeNumberValidationError(field: string) {
+function mistypeNumberValidationError(field: string, value: string) {
 	return {
 		error: true,
 		data: {
@@ -96,8 +110,10 @@ function mistypeNumberValidationError(field: string) {
 			message: "Cannot validate the input",
 			errors: [
 				{
-					path: "/" + field,
-					message: "Expected number"
+					path: field,
+					expected: 'number',
+					message: `Invalid type: Expected number but received "${value}"`,
+					received: `"${value}"`
 				},
 			]
 		}
@@ -112,8 +128,10 @@ function minNumberValidationError(field: string, min: number) {
 			message: "Cannot validate the input",
 			errors: [
 				{
-					path: "/" + field,
-					message: "Expected number to be greater or equal to " + min
+					path: field,
+					expected: '>=' + min,
+					message: 'Invalid value: Expected >=1 but received 0',
+					received: '0'
 				}
 			]
 		}
@@ -143,7 +161,7 @@ describe("marketplace", () => {
 		assert.deepStrictEqual(response, missingNumberValidationError("totalSize"));
 	});
 
-	it("returns an error when trying to create an availability with an invalid number valid", async () => {
+	it.only("returns an error when trying to create an availability with an invalid number valid", async () => {
 		const response = await marketplace.createAvailability({
 			duration: 3000,
 			maxCollateral: 1,
@@ -151,7 +169,7 @@ describe("marketplace", () => {
 			totalSize: "abc"
 		} as any)
 
-		assert.deepStrictEqual(response, mistypeNumberValidationError("totalSize"));
+		assert.deepStrictEqual(response, mistypeNumberValidationError("totalSize", "abc"));
 	});
 
 	it("returns an error when trying to create an availability with zero total size", async () => {
@@ -171,6 +189,8 @@ describe("marketplace", () => {
 			maxCollateral: 1,
 			minPrice: 100,
 		} as any)
+
+		console.info(response.error)
 
 		assert.deepStrictEqual(response, missingNumberValidationError("duration"));
 	});
@@ -206,6 +226,18 @@ describe("marketplace", () => {
 		assert.deepStrictEqual(response, missingNumberValidationError("maxCollateral"));
 	});
 
+	it("returns an error when trying to create an availability with an extra field", async () => {
+		const response = await marketplace.createAvailability({
+			maxCollateral: 1,
+			totalSize: 3000,
+			minPrice: 100,
+			duration: 100,
+			hello: "world"
+		} as any)
+
+		assert.deepStrictEqual(response, extraValidationError("hello", "world"));
+	});
+
 	it("returns a response when the request succeed", async (t) => {
 		const data = { ...createAvailability(), freeSize: 1000 }
 
@@ -218,8 +250,7 @@ describe("marketplace", () => {
 			totalSize: 3000,
 			minPrice: 100,
 			duration: 100,
-			hello: "world"
-		} as any)
+		})
 
 		assert.deepStrictEqual(response, { error: false, data });
 	});

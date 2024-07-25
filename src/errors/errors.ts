@@ -1,8 +1,10 @@
-import { ValueErrorIterator } from "@sinclair/typebox/build/cjs/errors"
+import { type InferIssue } from "valibot"
 
 type ValidationError = {
-	path: string
+	expected: string
+	received: string
 	message: string
+	path: string
 }
 
 /**
@@ -25,27 +27,11 @@ export type CodexError = {
 	errors: ValidationError[]
 }
 
-export const CodexValidationErrors = {
-	map(iterator: ValueErrorIterator) {
-		let error
-		const errors = []
+export const CodexValibotIssuesMap = (issues: InferIssue<any>[]) => issues.map(i => ({
+	expected: i.expected,
+	received: i.received,
+	message: i.message,
+	path: i.path.map((item: { key: string }) => item.key).join('.')
+}))
 
-		while (error = iterator.First()) {
-			errors.push({
-				path: error.path,
-				message: error.message
-			})
-		}
 
-		return errors
-	}
-}
-
-// export class CodexError extends Error {
-// 	readonly status: number | null
-
-// 	constructor(message: string, status: number | null = null) {
-// 		super(message)
-// 		this.status = status
-// 	}
-// }

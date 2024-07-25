@@ -1,4 +1,4 @@
-import { Static, Type } from "@sinclair/typebox"
+import * as v from 'valibot';
 
 export type CodexStorageRequest = {
 	id: string
@@ -130,24 +130,24 @@ export type CodexAvailabilityCreateResponse = CodexAvailability & {
 	freeSize: string
 }
 
-export const CodexCreateAvailabilityInput = Type.Object({
-	totalSize: Type.Number({ minimum: 1 }),
-	duration: Type.Number({ minimum: 1 }),
-	minPrice: Type.Number(),
-	maxCollateral: Type.Number()
+export const CodexCreateAvailabilityInput = v.strictObject({
+	totalSize: v.pipe(v.number(), v.minValue(1)),
+	duration: v.pipe(v.number(), v.minValue(1)),
+	minPrice: v.number(),
+	maxCollateral: v.number(),
 })
 
-export type CodexCreateAvailabilityInput = Static<typeof CodexCreateAvailabilityInput>
+export type CodexCreateAvailabilityInput = v.InferOutput<typeof CodexCreateAvailabilityInput>;
 
-export const CodexUpdateAvailabilityInput = Type.Object({
-	id: Type.String(),
-	totalSize: Type.Optional(Type.Number({ minimum: 1 })),
-	duration: Type.Optional(Type.Number({ minimum: 1 })),
-	minPrice: Type.Optional(Type.Number()),
-	maxCollateral: Type.Optional(Type.Number())
+export const CodexUpdateAvailabilityInput = v.strictObject({
+	id: v.string(),
+	totalSize: v.optional(v.pipe(v.number(), v.minValue(1))),
+	duration: v.optional(v.pipe(v.number(), v.minValue(1))),
+	minPrice: v.optional(v.number()),
+	maxCollateral: v.optional(v.number()),
 })
 
-export type CodexUpdateAvailabilityInput = Static<typeof CodexUpdateAvailabilityInput>
+export type CodexUpdateAvailabilityInput = v.InferOutput<typeof CodexUpdateAvailabilityInput>;
 
 export type CodexReservation = {
 	id: string
@@ -179,17 +179,17 @@ export type CodexPurchase = {
 	request: CodexStorageRequest
 }
 
-export const CodexCreateStorageRequestInput = Type.Object({
-	cid: Type.String(),
-	duration: Type.Number({ minimum: 1 }),
-	reward: Type.Number(),
-	proofProbability: Type.Number(),
-	nodes: Type.Optional(Type.Number({ default: 1 })),
-	tolerance: Type.Optional(Type.Number({ default: 0 })),
-	expiry: Type.Number({ minimum: 1 }),
-	collateral: Type.Number()
+export const CodexCreateStorageRequestInput = v.strictObject({
+	cid: v.string(),
+	duration: v.pipe(v.number(), v.minValue(1)),
+	reward: v.number(),
+	proofProbability: v.number(),
+	nodes: v.optional(v.number(), 1),
+	tolerance: v.optional(v.number(), 0),
+	expiry: v.pipe(v.number(), v.minValue(1)),
+	collateral: v.number(),
 })
 
-export type CodexCreateStorageRequestInput = Static<typeof CodexCreateStorageRequestInput>
+export type CodexCreateStorageRequestInput = v.InferOutput<typeof CodexCreateStorageRequestInput>;
 
 export type CodexCreateStorageRequestResponse = Omit<CodexCreateStorageRequestInput, "cid"> 
