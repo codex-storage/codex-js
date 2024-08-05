@@ -1,37 +1,50 @@
+import { Promises } from "../promise-safe/promise-safe";
 import { type SafeValue } from "../values/values";
 
 export const Fetch = {
-  async safe<T extends Object>(
+  async safe(url: string, init: RequestInit): Promise<SafeValue<Response>> {
+    const res = await Promises.safe(() => fetch(url, init));
+
+    if (res.error) {
+      return {
+        error: true,
+        data: {
+          message:
+            "The connection with the Codex node seems to be broken. Please check your node is running.",
+          code: 502,
+        },
+      };
+    }
+
+    if (!res.data.ok) {
+      const message = await Promises.safe(() => res.data.text());
+
+      if (message.error) {
+        return message;
+      }
+
+      return {
+        error: true,
+        data: {
+          message: message.data,
+          code: res.data.status,
+        },
+      };
+    }
+
+    return { error: false, data: res.data };
+  },
+
+  async safeJson<T extends Object>(
     url: string,
-    init: RequestInit,
+    init: RequestInit
   ): Promise<SafeValue<T>> {
-    const res = await fetch(url, init);
+    const res = await this.safe(url, init);
 
-    if (!res.ok) {
-      const message = await res.text();
-
-      return {
-        error: true,
-        data: {
-          message,
-          code: res.status,
-        },
-      };
+    if (res.error) {
+      return res;
     }
 
-    try {
-      const json = await res.json();
-
-      return { error: false, data: json };
-    } catch (e) {
-      const opts = e instanceof Error && e.stack ? { stack: e.stack } : {};
-      return {
-        error: true,
-        data: {
-          message: e instanceof Error ? e.message : "JSON parsing error :" + e,
-          ...opts,
-        },
-      };
-    }
+    return Promises.safe(() => res.data.json());
   },
 };

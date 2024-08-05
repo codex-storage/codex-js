@@ -5,14 +5,10 @@
 	],
 	"compilerOptions": {
 		"declaration": true,
-		"removeComments": false,
 		"lib": [
 			"ES2020",
 			"DOM",
 		],
-		"outDir": "./dist",
-		"module": "ESNext",
-		"moduleResolution": "Bundler",
-		"verbatimModuleSyntax": true
+		"outDir": "./dist"
 	}
 }
