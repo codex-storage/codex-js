@@ -28,7 +28,7 @@ export class Marketplace {
   async activeSlots(): Promise<SafeValue<CodexSlot[]>> {
     const url = this.url + Api.config.prefix + "/sales/slots";
 
-    return Fetch.safe<CodexSlot[]>(url, {
+    return Fetch.safeJson<CodexSlot[]>(url, {
       method: "GET",
     });
   }
@@ -39,7 +39,7 @@ export class Marketplace {
   async activeSlot(slotId: string): Promise<SafeValue<CodexSlot>> {
     const url = this.url + Api.config.prefix + "/sales/slots/" + slotId;
 
-    return Fetch.safe<CodexSlot>(url, {
+    return Fetch.safeJson<CodexSlot>(url, {
       method: "GET",
     });
   }
@@ -50,7 +50,7 @@ export class Marketplace {
   async availabilities(): Promise<SafeValue<CodexAvailability[]>> {
     const url = this.url + Api.config.prefix + "/sales/availability";
 
-    return Fetch.safe<CodexAvailability[]>(url, {
+    return Fetch.safeJson<CodexAvailability[]>(url, {
       method: "GET",
     });
   }
@@ -75,7 +75,7 @@ export class Marketplace {
 
     const url = this.url + Api.config.prefix + "/sales/availability";
 
-    return Fetch.safe<CodexAvailabilityCreateResponse>(url, {
+    return Fetch.safeJson<CodexAvailabilityCreateResponse>(url, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -106,7 +106,7 @@ export class Marketplace {
     const url =
       this.url + Api.config.prefix + "/sales/availability/" + result.output.id;
 
-    return Fetch.safe<CodexAvailability>(url, {
+    return Fetch.safeJson<CodexAvailability>(url, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -126,7 +126,7 @@ export class Marketplace {
       Api.config.prefix +
       `/sales/availability/${availabilityId}/reservations`;
 
-    return Fetch.safe<CodexReservation[]>(url, {
+    return Fetch.safeJson<CodexReservation[]>(url, {
       method: "GET",
     });
   }
@@ -137,7 +137,7 @@ export class Marketplace {
   async purchaseIds(): Promise<SafeValue<string[]>> {
     const url = this.url + Api.config.prefix + `/storage/purchases`;
 
-    return Fetch.safe<string[]>(url, {
+    return Fetch.safeJson<string[]>(url, {
       method: "GET",
     });
   }
@@ -149,7 +149,7 @@ export class Marketplace {
     const url =
       this.url + Api.config.prefix + `/storage/purchases/` + purchaseId;
 
-    return Fetch.safe<CodexPurchase>(url, {
+    return Fetch.safeJson<CodexPurchase>(url, {
       method: "GET",
     });
   }
@@ -175,7 +175,7 @@ export class Marketplace {
     const { cid, ...body } = result.output;
     const url = this.url + Api.config.prefix + "/storage/request/" + cid;
 
-    return Fetch.safe<CodexCreateStorageRequestResponse>(url, {
+    return Fetch.safeJson<CodexCreateStorageRequestResponse>(url, {
       method: "POST",
       headers: {
         "content-type": "application/json",

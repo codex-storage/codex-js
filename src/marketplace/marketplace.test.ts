@@ -5,34 +5,34 @@ import { Fetch } from "../fetch-safe/fetch-safe";
 import { Marketplace } from "./marketplace";
 
 // function createSlot() {
-// 	return {
-// 		"id": faker.string.alphanumeric(64),
-// 		"request": {
+//  return {
+//    "id": faker.string.alphanumeric(64),
+//    "request": {
 
-// 			"id": faker.string.alphanumeric(64),
-// 			"client": faker.finance.ethereumAddress(),
-// 			"ask":
-// 			{
-// 				"slots": faker.number.int({ min: 0, max: 9 }),
-// 				"slotSize": faker.number.float({ max: 10000 }).toString(),
-// 				"duration": faker.number.int({ max: 300000 }).toString(),
-// 				"proofProbability": faker.number.int({ max: 9 }),
-// 				"reward": faker.number.float({ max: 1000 }).toString(),
-// 				"maxSlotLoss": faker.number.int({ max: 9 })
-// 			},
-// 			"content": {
-// 				"cid": faker.string.alphanumeric(64),
-// 				"por": {
-// 					"u": faker.string.alphanumeric(16),
-// 					"publicKey": faker.string.alphanumeric(64),
-// 					"name": faker.string.alphanumeric(16)
-// 				}
-// 			},
-// 			"expiry": faker.number.int({ min: 2, max: 59 }) + " minutes",
-// 			"nonce": faker.string.alphanumeric(64)
-// 		},
-// 		"slotIndex": faker.number.int({ min: 0, max: 9 })
-// 	}
+//      "id": faker.string.alphanumeric(64),
+//      "client": faker.finance.ethereumAddress(),
+//      "ask":
+//      {
+//        "slots": faker.number.int({ min: 0, max: 9 }),
+//        "slotSize": faker.number.float({ max: 10000 }).toString(),
+//        "duration": faker.number.int({ max: 300000 }).toString(),
+//        "proofProbability": faker.number.int({ max: 9 }),
+//        "reward": faker.number.float({ max: 1000 }).toString(),
+//        "maxSlotLoss": faker.number.int({ max: 9 })
+//      },
+//      "content": {
+//        "cid": faker.string.alphanumeric(64),
+//        "por": {
+//          "u": faker.string.alphanumeric(16),
+//          "publicKey": faker.string.alphanumeric(64),
+//          "name": faker.string.alphanumeric(16)
+//        }
+//      },
+//      "expiry": faker.number.int({ min: 2, max: 59 }) + " minutes",
+//      "nonce": faker.string.alphanumeric(64)
+//    },
+//    "slotIndex": faker.number.int({ min: 0, max: 9 })
+//  }
 // }
 
 function createStorageRequest() {
@@ -52,7 +52,6 @@ function missingNumberValidationError(field: string) {
   return {
     error: true,
     data: {
-      type: "validation",
       message: "Cannot validate the input",
       errors: [
         {
@@ -70,7 +69,6 @@ function extraValidationError(field: string, value: unknown) {
   return {
     error: true,
     data: {
-      type: "validation",
       message: "Cannot validate the input",
       errors: [
         {
@@ -88,7 +86,6 @@ function missingStringValidationError(field: string) {
   return {
     error: true,
     data: {
-      type: "validation",
       message: "Cannot validate the input",
       errors: [
         {
@@ -106,7 +103,6 @@ function mistypeNumberValidationError(field: string, value: string) {
   return {
     error: true,
     data: {
-      type: "validation",
       message: "Cannot validate the input",
       errors: [
         {
@@ -124,7 +120,6 @@ function minNumberValidationError(field: string, min: number) {
   return {
     error: true,
     data: {
-      type: "validation",
       message: "Cannot validate the input",
       errors: [
         {
@@ -161,7 +156,7 @@ describe("marketplace", () => {
     assert.deepStrictEqual(response, missingNumberValidationError("totalSize"));
   });
 
-  it.only("returns an error when trying to create an availability with an invalid number valid", async () => {
+  it("returns an error when trying to create an availability with an invalid number valid", async () => {
     const response = await marketplace.createAvailability({
       duration: 3000,
       maxCollateral: 1,
@@ -192,8 +187,6 @@ describe("marketplace", () => {
       maxCollateral: 1,
       minPrice: 100,
     } as any);
-
-    console.info(response.error);
 
     assert.deepStrictEqual(response, missingNumberValidationError("duration"));
   });
@@ -247,7 +240,9 @@ describe("marketplace", () => {
   it("returns a response when the request succeed", async (t) => {
     const data = { ...createAvailability(), freeSize: 1000 };
 
-    t.mock.method(Fetch, "safe", () => Promise.resolve({ error: false, data }));
+    t.mock.method(Fetch, "safeJson", () =>
+      Promise.resolve({ error: false, data })
+    );
 
     const response = await marketplace.createAvailability({
       maxCollateral: 1,
@@ -262,7 +257,9 @@ describe("marketplace", () => {
   it("returns a response when the create availability succeed", async (t) => {
     const data = { ...createAvailability(), freeSize: 1000 };
 
-    t.mock.method(Fetch, "safe", () => Promise.resolve({ error: false, data }));
+    t.mock.method(Fetch, "safeJson", () =>
+      Promise.resolve({ error: false, data })
+    );
 
     const response = await marketplace.createAvailability({
       maxCollateral: 1,
@@ -301,7 +298,9 @@ describe("marketplace", () => {
   it("returns a response when the update availability succeed", async (t) => {
     const data = createAvailability();
 
-    t.mock.method(Fetch, "safe", () => Promise.resolve({ error: false, data }));
+    t.mock.method(Fetch, "safeJson", () =>
+      Promise.resolve({ error: false, data })
+    );
 
     const response = await marketplace.updateAvailability({
       id: faker.string.alphanumeric(64),

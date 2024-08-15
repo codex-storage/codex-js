@@ -7,12 +7,14 @@
 		"url": "https://github.com/codex-storage/codex-js"
 	},
 	"scripts": {
-		"prepack": "npm run build",
+		"prepack": "tsup tsup src/index.ts --format esm,cjs --dts",
 		"prebuild": "rm -Rf dist/*",
-		"build": "tsup tsup src/index.ts --format esm,cjs --dts",
+		"build": "tsc --p tsconfig.test.json",
 		"compile": "tsc --noEmit",
 		"pretest": "npm run build",
+		"pretest:only": "npm run build",
 		"test": "node --test",
+		"test:only": "node --test --test-only",
 		"watch": "tsc --watch",
 		"format": "prettier --write ./src"
 	},
@@ -44,7 +46,7 @@
 	"readme": "README.md",
 	"license": "MIT",
 	"engines": {
-		"node": ">=18"
+		"node": ">=20"
 	},
 	"devDependencies": {
 		"@faker-js/faker": "^8.4.1",

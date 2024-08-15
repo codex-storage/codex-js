@@ -25,5 +25,5 @@ export const CodexValibotIssuesMap = (issues: InferIssue<any>[]) =>
     expected: i.expected,
     received: i.received,
     message: i.message,
-    path: i.path.map((item: { key: string }) => item.key).join("."),
+    path: i.path?.map((item: { key: string }) => item.key).join("."),
   }));

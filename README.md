@@ -4,6 +4,8 @@ The Codex SDK provides an API for interacting with the Codex decentralized stora
 
 The SDK has a small bundle size and support tree shaking.
 
+The SDK is currently under early development and the API can change at any time.
+
 ## Import
 
 ```js

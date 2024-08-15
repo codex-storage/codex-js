@@ -45,48 +45,45 @@ class MockResponse implements Response {
   }
 }
 
-describe("fetch", () => {
+describe.only("fetch", () => {
   it("returns an error when the http call failed", async (t) => {
     global.fetch = t.mock.fn(() =>
-      Promise.resolve(new MockResponse(false, 500, "error"))
+      Promise.resolve(new MockResponse(false, 500, "error")),
     );
 
-    const result = await Fetch.safe("http://localhost:3000/some-url", {
+    const result = await Fetch.safeJson("http://localhost:3000/some-url", {
       method: "GET",
     });
+
     const error = {
-      type: "api",
       message: "error",
-      status: 500,
+      code: 500,
     };
 
     assert.deepStrictEqual(result, { error: true, data: error });
   });
 
-  it("returns an error when the json parsing failed", async (t) => {
+  it.only("returns an error when the json parsing failed", async (t) => {
     global.fetch = t.mock.fn(() =>
-      Promise.resolve(new MockResponse(true, 200, ""))
+      Promise.resolve(new MockResponse(true, 200, "")),
     );
 
-    const result = await Fetch.safe("http://localhost:3000/some-url", {
+    const result = await Fetch.safeJson("http://localhost:3000/some-url", {
       method: "GET",
     });
-    const error = {
-      type: "error",
-      message: "Unexpected end of JSON input",
-    };
 
-    assert.deepStrictEqual(result, { error: true, data: error });
+    assert.ok(result.error);
+    assert.deepStrictEqual(result.data.message, "Unexpected end of JSON input");
   });
 
   it("returns the data when the fetch succeed", async (t) => {
     global.fetch = t.mock.fn(() =>
       Promise.resolve(
-        new MockResponse(true, 200, JSON.stringify({ hello: "world" }))
-      )
+        new MockResponse(true, 200, JSON.stringify({ hello: "world" })),
+      ),
     );
 
-    const result = await Fetch.safe("http://localhost:3000/some-url", {
+    const result = await Fetch.safeJson("http://localhost:3000/some-url", {
       method: "GET",
     });
 
