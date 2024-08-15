@@ -1,0 +1,15 @@
+{
+	"extends": "@tsconfig/strictest/tsconfig.json",
+	"include": [
+		"src"
+	],
+	"compilerOptions": {
+		"declaration": true,
+		"removeComments": false,
+		"lib": [
+			"ES2020",
+			"DOM",
+		],
+		"outDir": "./dist",
+	}
+}
