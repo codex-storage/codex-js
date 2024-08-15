@@ -2,8 +2,8 @@ import * as v from 'valibot'
 import { Api } from "../api/config"
 import { CodexValibotIssuesMap } from '../errors/errors'
 import { Fetch } from "../fetch-safe/fetch-safe"
-import { SafeValue } from "../values/values"
-import { CodexAvailability, CodexAvailabilityCreateResponse, CodexCreateAvailabilityInput, CodexCreateStorageRequestInput, CodexCreateStorageRequestResponse, CodexPurchase, CodexReservation, CodexSlot, CodexUpdateAvailabilityInput } from "./types"
+import type { SafeValue } from "../values/values"
+import { type CodexAvailability, type CodexAvailabilityCreateResponse, CodexCreateAvailabilityInput, CodexCreateStorageRequestInput, type CodexCreateStorageRequestResponse, type CodexPurchase, type CodexReservation, type CodexSlot, CodexUpdateAvailabilityInput } from "./types"
 
 export class Marketplace {
 	readonly url: string

@@ -6,13 +6,25 @@ export * from "./marketplace/types";
 
 export class Codex {
 	readonly url: string
-	readonly marketplace: Marketplace
+	private _marketplace: Marketplace | null
 	readonly disk: Disk
 
 	constructor(url: string) {
 		this.url = url
-		this.marketplace = new Marketplace(url)
+		this._marketplace = null
 		this.disk = new Disk(url)
+	}
+
+	async marketplace() {
+		if (this._marketplace) {
+			return this._marketplace
+		}
+
+		const module = await import("./marketplace/marketplace")
+
+		this._marketplace = new module.Marketplace(this.url)
+
+		return module.Marketplace
 	}
 }
 
