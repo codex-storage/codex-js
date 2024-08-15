@@ -1,5 +1,5 @@
 import { Api } from "../api/config";
-import { Chunks } from "../chunks/chunks";
+/*import { Chunks } from "../chunks/chunks";*/
 import { Fetch } from "../fetch-safe/fetch-safe";
 import type { SafeValue } from "../values/values";
 import type { CodexDataResponse, CodexNodeSpace } from "./types";
@@ -30,17 +30,17 @@ export class Data {
         return data;
       }
 
-      /*      const mimetypes = [
-              "image/png",
-              "image/jpg",
-              "image/jpeg",
-              "audio/mp3",
-              "video/mp4",
-              "application/pdf",
-              "application/msdoc",
-              "text/plain",
-            ];
-      */
+      /*     const mimetypes = [
+             "image/png",
+             "image/jpg",
+             "image/jpeg",
+             "audio/mp3",
+             "video/mp4",
+             "application/pdf",
+             "application/msdoc",
+             "text/plain",
+           ];*/
+
       return {
         error: false,
         data: {
@@ -102,9 +102,7 @@ export class Data {
 
       xhr.open("POST", url, true);
 
-      await Chunks.split(file);
-
-      xhr.send(new Blob(await Chunks.split(file)));
+      xhr.send(file);
 
       xhr.onload = function () {
         if (xhr.status != 200) {
