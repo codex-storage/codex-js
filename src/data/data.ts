@@ -1,5 +1,4 @@
 import { Api } from "../api/config";
-/*import { Chunks } from "../chunks/chunks";*/
 import { Fetch } from "../fetch-safe/fetch-safe";
 import type { SafeValue } from "../values/values";
 import type { CodexDataResponse, CodexNodeSpace } from "./types";
@@ -30,21 +29,21 @@ export class Data {
         return data;
       }
 
-      /*     const mimetypes = [
-             "image/png",
-             "image/jpg",
-             "image/jpeg",
-             "audio/mp3",
-             "video/mp4",
-             "application/pdf",
-             "application/msdoc",
-             "text/plain",
-           ];*/
+      const mimetypes = [
+        "image/png",
+        "image/jpg",
+        "image/jpeg",
+        "audio/mp3",
+        "video/mp4",
+        "application/pdf",
+        "application/msdoc",
+        "text/plain",
+      ];
 
       return {
         error: false,
         data: {
-          content: data.data.content /*.map((content) => {
+          content: data.data.content.map((content) => {
             const random = Math.trunc(Math.random() * (mimetypes.length - 1));
             const mimetype = mimetypes[random];
             const [, extension] = mimetype?.split("/") || [];
@@ -62,7 +61,7 @@ export class Data {
                 uploadedAt: new Date().toJSON(),
               },
             };
-          })*/,
+          }),
         },
       };
     });
