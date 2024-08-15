@@ -157,7 +157,7 @@ const ids = await codex.marketplace.purchaseIds();
 
 #### purchaseDetail
 
-Returns list of purchase IDs
+Returns purchase details
 
 - purchaseId (string, required)
 - returns Promise<[CodexPurchase](./src/marketplace/types.ts#L168)[]>
