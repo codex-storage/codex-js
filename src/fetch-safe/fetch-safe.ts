@@ -3,7 +3,7 @@ import { type SafeValue } from "../values/values";
 export const Fetch = {
   async safe<T extends Object>(
     url: string,
-    init: RequestInit
+    init: RequestInit,
   ): Promise<SafeValue<T>> {
     const res = await fetch(url, init);
 
@@ -13,9 +13,8 @@ export const Fetch = {
       return {
         error: true,
         data: {
-          type: "api",
           message,
-          status: res.status,
+          code: res.status,
         },
       };
     }
@@ -25,11 +24,12 @@ export const Fetch = {
 
       return { error: false, data: json };
     } catch (e) {
+      const opts = e instanceof Error && e.stack ? { stack: e.stack } : {};
       return {
         error: true,
         data: {
-          type: "error",
           message: e instanceof Error ? e.message : "JSON parsing error :" + e,
+          ...opts,
         },
       };
     }

@@ -67,7 +67,6 @@ export class Marketplace {
       return {
         error: true,
         data: {
-          type: "validation",
           message: "Cannot validate the input",
           errors: CodexValibotIssuesMap(result.issues),
         },
@@ -98,7 +97,6 @@ export class Marketplace {
       return {
         error: true,
         data: {
-          type: "validation",
           message: "Cannot validate the input",
           errors: CodexValibotIssuesMap(result.issues),
         },
@@ -168,7 +166,6 @@ export class Marketplace {
       return {
         error: true,
         data: {
-          type: "validation",
           message: "Cannot validate the input",
           errors: CodexValibotIssuesMap(result.issues),
         },
