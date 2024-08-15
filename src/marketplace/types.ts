@@ -181,6 +181,8 @@ export type CodexPurchase = {
   error: string;
 
   request: CodexStorageRequest;
+
+  requestId: string;
 };
 
 export const CodexCreateStorageRequestInput = v.strictObject({
@@ -196,9 +198,4 @@ export const CodexCreateStorageRequestInput = v.strictObject({
 
 export type CodexCreateStorageRequestInput = v.InferOutput<
   typeof CodexCreateStorageRequestInput
->;
-
-export type CodexCreateStorageRequestResponse = Omit<
-  CodexCreateStorageRequestInput,
-  "cid"
 >;

@@ -8,10 +8,10 @@ import {
   type CodexAvailabilityCreateResponse,
   CodexCreateAvailabilityInput,
   CodexCreateStorageRequestInput,
-  type CodexCreateStorageRequestResponse,
   type CodexPurchase,
   type CodexReservation,
   type CodexSlot,
+  type CodexStorageRequest,
   CodexUpdateAvailabilityInput,
 } from "./types";
 
@@ -59,7 +59,7 @@ export class Marketplace {
    * Offers storage for sale
    */
   async createAvailability(
-    input: CodexCreateAvailabilityInput,
+    input: CodexCreateAvailabilityInput
   ): Promise<SafeValue<CodexAvailabilityCreateResponse>> {
     const result = v.safeParse(CodexCreateAvailabilityInput, input);
 
@@ -89,7 +89,7 @@ export class Marketplace {
    * Existing Requests linked to this Availability will continue as is.
    */
   async updateAvailability(
-    input: CodexUpdateAvailabilityInput,
+    input: CodexUpdateAvailabilityInput
   ): Promise<SafeValue<CodexAvailability>> {
     const result = v.safeParse(CodexUpdateAvailabilityInput, input);
 
@@ -119,7 +119,7 @@ export class Marketplace {
    * Return's list of Reservations for ongoing Storage Requests that the node hosts.
    */
   async reservations(
-    availabilityId: string,
+    availabilityId: string
   ): Promise<SafeValue<CodexReservation[]>> {
     const url =
       this.url +
@@ -142,6 +142,40 @@ export class Marketplace {
     });
   }
 
+  async purchases(): Promise<SafeValue<CodexPurchase[]>> {
+    const url = this.url + Api.config.prefix + `/storage/purchases`;
+
+    const res = await Fetch.safeJson<string[]>(url, {
+      method: "GET",
+    });
+
+    if (res.error) {
+      return res;
+    }
+
+    const promises = [];
+
+    for (const id of res.data) {
+      promises.push(this.purchaseDetail(id));
+    }
+
+    const purchases = await Promise.all(promises);
+
+    return {
+      error: false,
+      data: purchases.map((p) =>
+        p.error
+          ? ({
+              state: "error",
+              error: p.data.message,
+              requestId: "",
+              request: {} as CodexStorageRequest,
+            } satisfies CodexPurchase)
+          : p.data
+      ),
+    };
+  }
+
   /**
    * Returns purchase details
    */
@@ -158,8 +192,8 @@ export class Marketplace {
    * Creates a new request for storage.
    */
   async createStorageRequest(
-    input: CodexCreateStorageRequestInput,
-  ): Promise<SafeValue<CodexCreateStorageRequestResponse>> {
+    input: CodexCreateStorageRequestInput
+  ): Promise<SafeValue<string>> {
     const result = v.safeParse(CodexCreateStorageRequestInput, input);
 
     if (!result.success) {
@@ -172,15 +206,38 @@ export class Marketplace {
       };
     }
 
-    const { cid, ...body } = result.output;
+    const {
+      cid,
+      duration,
+      reward,
+      proofProbability,
+      nodes,
+      collateral,
+      expiry,
+      tolerance,
+    } = result.output;
     const url = this.url + Api.config.prefix + "/storage/request/" + cid;
 
-    return Fetch.safeJson<CodexCreateStorageRequestResponse>(url, {
+    const res = await Fetch.safe(url, {
       method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(body),
+      // headers: {
+      //   "content-type": "application/json",
+      // },
+      body: JSON.stringify({
+        duration: duration.toString(),
+        reward: reward.toString(),
+        proofProbability: proofProbability.toString(),
+        nodes,
+        collateral: collateral.toString(),
+        expiry: expiry.toString(),
+        tolerance,
+      }),
     });
+
+    if (res.error) {
+      return res;
+    }
+
+    return { error: false, data: await res.data.text() };
   }
 }
