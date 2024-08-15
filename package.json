@@ -37,6 +37,6 @@
 		"typescript": "^5.5.4"
 	},
 	"dependencies": {
-		"@sinclair/typebox": "^0.32.35"
+		"valibot": "^0.36.0"
 	}
 }

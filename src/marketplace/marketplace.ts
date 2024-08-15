@@ -1,6 +1,6 @@
-import { Value } from '@sinclair/typebox/value'
+import * as v from 'valibot'
 import { Api } from "../api/config"
-import { CodexValidationErrors } from '../errors/errors'
+import { CodexValibotIssuesMap } from '../errors/errors'
 import { Fetch } from "../fetch-safe/fetch-safe"
 import { SafeValue } from "../values/values"
 import { CodexAvailability, CodexAvailabilityCreateResponse, CodexCreateAvailabilityInput, CodexCreateStorageRequestInput, CodexCreateStorageRequestResponse, CodexPurchase, CodexReservation, CodexSlot, CodexUpdateAvailabilityInput } from "./types"
@@ -50,17 +50,15 @@ export class Marketplace {
 	 */
 	async createAvailability(input: CodexCreateAvailabilityInput)
 		: Promise<SafeValue<CodexAvailabilityCreateResponse>> {
-		const cleaned = Value.Clean(CodexCreateAvailabilityInput, input)
+		const result = v.safeParse(CodexCreateAvailabilityInput, input)
 
-		if (!Value.Check(CodexCreateAvailabilityInput, cleaned)) {
-			const iterator = Value.Errors(CodexCreateAvailabilityInput, cleaned)
-
+		if (!result.success) {
 			return {
 				error: true,
 				data: {
 					type: "validation",
 					message: "Cannot validate the input",
-					errors: CodexValidationErrors.map(iterator)
+					errors: CodexValibotIssuesMap(result.issues)
 				}
 			}
 		}
@@ -72,7 +70,7 @@ export class Marketplace {
 			headers: {
 				"content-type": "application/json"
 			},
-			body: JSON.stringify(cleaned)
+			body: JSON.stringify(result.output)
 		})
 	}
 
@@ -81,29 +79,27 @@ export class Marketplace {
 	 * Existing Requests linked to this Availability will continue as is.
 	 */
 	async updateAvailability(input: CodexUpdateAvailabilityInput): Promise<SafeValue<CodexAvailability>> {
-		const cleaned = Value.Clean(CodexUpdateAvailabilityInput, input)
+		const result = v.safeParse(CodexUpdateAvailabilityInput, input)
 
-		if (!Value.Check(CodexUpdateAvailabilityInput, cleaned)) {
-			const iterator = Value.Errors(CodexUpdateAvailabilityInput, cleaned)
-
+		if (!result.success) {
 			return {
 				error: true,
 				data: {
 					type: "validation",
 					message: "Cannot validate the input",
-					errors: CodexValidationErrors.map(iterator)
+					errors: CodexValibotIssuesMap(result.issues)
 				}
 			}
 		}
 
-		const url = this.url + Api.config.prefix + "/sales/availability/" + cleaned.id
+		const url = this.url + Api.config.prefix + "/sales/availability/" + result.output.id
 
 		return Fetch.safe<CodexAvailability>(url, {
 			method: "POST",
 			headers: {
 				"content-type": "application/json"
 			},
-			body: JSON.stringify(cleaned)
+			body: JSON.stringify(result.output)
 		})
 	}
 
@@ -144,22 +140,20 @@ export class Marketplace {
 	 * Creates a new request for storage.
 	 */
 	async createStorageRequest(input: CodexCreateStorageRequestInput): Promise<SafeValue<CodexCreateStorageRequestResponse>> {
-		const cleaned = Value.Clean(CodexCreateStorageRequestInput, input)
+		const result = v.safeParse(CodexCreateStorageRequestInput, input)
 
-		if (!Value.Check(CodexCreateStorageRequestInput, cleaned)) {
-			const iterator = Value.Errors(CodexCreateStorageRequestInput, cleaned)
-
+		if (!result.success) {
 			return {
 				error: true,
 				data: {
 					type: "validation",
 					message: "Cannot validate the input",
-					errors: CodexValidationErrors.map(iterator)
+					errors: CodexValibotIssuesMap(result.issues)
 				}
 			}
 		}
 
-		const { cid, ...body } = cleaned
+		const { cid, ...body } = result.output
 		const url = this.url + Api.config.prefix + "/storage/request/" + cid
 
 		return Fetch.safe<CodexCreateStorageRequestResponse>(url, {

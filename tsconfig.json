@@ -11,5 +11,8 @@
 			"DOM",
 		],
 		"outDir": "./dist",
-	}
+		// "module": "ES2015",
+		// "moduleResolution": "Bundler"
+	},
+	"buildOptions": {}
 }
