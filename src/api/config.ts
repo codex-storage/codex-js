@@ -1,5 +1,5 @@
 export const Api = {
-    config: {
-        prefix: "/api/codex/v1"
-    }
-}
+  config: {
+    prefix: "/api/codex/v1",
+  },
+};
