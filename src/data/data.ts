@@ -3,12 +3,12 @@ import { Fetch } from "../fetch-safe/fetch-safe";
 import type { SafeValue } from "../values/values";
 import type { CodexDataResponse, CodexNodeSpace } from "./types";
 
-type UploadResponse = {
+export type UploadResponse = {
   result: Promise<SafeValue<string>>;
   abort: () => void;
 };
 
-export class Data {
+export class CodexData {
   readonly url: string;
 
   constructor(url: string) {
@@ -29,39 +29,10 @@ export class Data {
         return data;
       }
 
-      const mimetypes = [
-        "image/png",
-        "image/jpg",
-        "image/jpeg",
-        "audio/mp3",
-        "video/mp4",
-        "application/pdf",
-        "application/msdoc",
-        "text/plain",
-      ];
-
       return {
         error: false,
         data: {
-          content: data.data.content.map((content) => {
-            const random = Math.trunc(Math.random() * (mimetypes.length - 1));
-            const mimetype = mimetypes[random];
-            const [, extension] = mimetype?.split("/") || [];
-            const filename = Array(5)
-              .fill("")
-              .map((_) => ((Math.random() * 36) | 0).toString(36))
-              .join("");
-
-            return {
-              cid: content.cid,
-              manifest: {
-                ...content.manifest,
-                filename: `${filename}.${extension}`,
-                mimetype: mimetype || "",
-                uploadedAt: new Date().toJSON(),
-              },
-            };
-          }),
+          content: data.data.content,
         },
       };
     });

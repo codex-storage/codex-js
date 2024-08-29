@@ -1,61 +1,61 @@
 {
-	"name": "@codex/sdk-js",
-	"version": "0.0.1",
-	"description": "Codex SDK to interact with the Codex decentralized storage network.",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/codex-storage/codex-js"
-	},
-	"scripts": {
-		"prepack": "tsup tsup src/index.ts --format esm,cjs --dts",
-		"prebuild": "rm -Rf dist/*",
-		"build": "tsc --p tsconfig.test.json",
-		"compile": "tsc --noEmit",
-		"pretest": "npm run build",
-		"pretest:only": "npm run build",
-		"test": "node --test",
-		"test:only": "node --test --test-only",
-		"watch": "tsc --watch",
-		"format": "prettier --write ./src"
-	},
-	"keywords": [
-		"Codex",
-		"Javascript",
-		"SDK",
-		"storage"
-	],
-	"main": "./dist/index.js",
-	"types": "./dist/index.d.ts",
-	"exports": {
-		".": {
-			"import": {
-				"types": "./dist/index.d.ts",
-				"default": "./dist/index.mjs"
-			},
-			"require": {
-				"types": "./dist/index.d.cts",
-				"default": "./dist/index.js"
-			}
-		}
-	},
-	"sideEffects": false,
-	"files": [
-		"dist"
-	],
-	"author": "Codex team",
-	"readme": "README.md",
-	"license": "MIT",
-	"engines": {
-		"node": ">=20"
-	},
-	"devDependencies": {
-		"@faker-js/faker": "^8.4.1",
-		"@tsconfig/strictest": "^2.0.5",
-		"prettier": "^3.3.3",
-		"tsup": "^8.2.3",
-		"typescript": "^5.5.4"
-	},
-	"dependencies": {
-		"valibot": "^0.36.0"
-	}
+  "name": "@codex/sdk-js",
+  "version": "0.0.1",
+  "description": "Codex SDK to interact with the Codex decentralized storage network.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codex-storage/codex-js"
+  },
+  "scripts": {
+    "prepack": "tsup tsup src/index.ts --format esm,cjs --dts",
+    "prebuild": "rm -Rf dist/*",
+    "build": "tsc --p tsconfig.json",
+    "compile": "tsc --noEmit",
+    "pretest": "npm run build",
+    "pretest:only": "npm run build",
+    "test": "node --test",
+    "test:only": "node --test --test-only",
+    "watch": "tsc --watch",
+    "format": "prettier --write ./src"
+  },
+  "keywords": [
+    "Codex",
+    "Javascript",
+    "SDK",
+    "storage"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "author": "Codex team",
+  "readme": "README.md",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "@tsconfig/strictest": "^2.0.5",
+    "prettier": "^3.3.3",
+    "tsup": "^8.2.3",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "valibot": "^0.36.0"
+  }
 }

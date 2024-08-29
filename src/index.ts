@@ -1,4 +1,4 @@
-import type { Data } from "./data/data";
+import type { CodexData } from "./data/data";
 import type { Node } from "./node/node";
 import { Marketplace } from "./marketplace/marketplace";
 import type { Debug } from "./debug/debug";
@@ -10,10 +10,12 @@ export * from "./data/types";
 export * from "./values/values";
 export * from "./errors/errors";
 
+export { type CodexData, type UploadResponse } from "./data/data";
+
 export class Codex {
   readonly url: string;
   private _marketplace: Marketplace | null;
-  private _data: Data | null;
+  private _data: CodexData | null;
   private _node: Node | null;
   private _debug: Debug | null;
 
@@ -44,7 +46,7 @@ export class Codex {
 
     const module = await import("./data/data");
 
-    this._data = new module.Data(this.url);
+    this._data = new module.CodexData(this.url);
 
     return this._data;
   }
