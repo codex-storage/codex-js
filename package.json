@@ -7,7 +7,7 @@
     "url": "https://github.com/codex-storage/codex-js"
   },
   "scripts": {
-    "prepack": "npm run buid",
+    "prepack": "npm run build",
     "prebuild": "rm -Rf dist/*",
     "build": "tsup tsup src/index.ts --format esm,cjs --dts --sourcemap",
     "compile": "tsc --noEmit",
