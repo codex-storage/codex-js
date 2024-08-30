@@ -1,12 +1,11 @@
 import { Api } from "../api/config";
 import { Fetch } from "../fetch-safe/fetch-safe";
 import type { SafeValue } from "../values/values";
-import type { CodexDataResponse, CodexNodeSpace } from "./types";
-
-export type UploadResponse = {
-  result: Promise<SafeValue<string>>;
-  abort: () => void;
-};
+import type {
+  CodexDataResponse,
+  CodexNodeSpace,
+  UploadResponse,
+} from "./types";
 
 export class CodexData {
   readonly url: string;
@@ -97,20 +96,6 @@ export class CodexData {
         });
       };
     });
-
-    // const promise = Fetch.safe(url, {
-    //   method: "POST",
-    //   headers: { "Content-Type": "text/plain" },
-    //   body: file.stream(),
-    //   // @ts-ignore
-    //   duplex: "half",
-    // })
-    //   .then(async (res) => {
-    //     console.info(res);
-    //     return res.error
-    //       ? res
-    //       : { error: false as false, data: await res.data.text() };
-    //   })
 
     return {
       result: promise,

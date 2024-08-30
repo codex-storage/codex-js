@@ -13,6 +13,7 @@
 		"outDir": "./dist",
 		"module": "ESNext",
 		"moduleResolution": "Bundler",
-		"verbatimModuleSyntax": true
+		"verbatimModuleSyntax": true,
+		"sourceMap": true
 	}
 }

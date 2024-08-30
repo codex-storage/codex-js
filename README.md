@@ -139,8 +139,8 @@ const reservations = await marketplace.reservations("Ox...");
 
 Creates a new Request for storage
 
-- input ([CodexCreateStorageRequestInput](./src/marketplace/types.ts#L186), required)
-- returns Promise<[CodexCreateStorageRequestResponse](./src/marketplace/types.ts#L201)[]>
+- input ([CodexCreateStorageRequestInput](./src/marketplace/types.ts#L188), required)
+- returns Promise<string>
 
 Example:
 
@@ -180,4 +180,91 @@ Example:
 ```js
 const purchaseId = "Ox........";
 const purchase = await marketplace.purchaseDetail(purchaseId);
+```
+
+### Data
+
+The following API assume that you have already a data module loaded, example:
+
+```js
+const codex = new Codex("http://localhost:3000");
+const data = await codex.data();
+```
+
+#### cids
+
+Returns the manifest stored locally in node.
+
+- returns Promise<[CodexDataResponse](./src/data/types.ts#L57)[]>
+
+Example:
+
+```js
+const cids = await data.cids();
+```
+
+#### space
+
+Returns a summary of the storage space allocation of the node
+
+- returns Promise<[CodexNodeSpace](./src/data/types.ts#61)[]>
+
+Example:
+
+```js
+const space = await data.space();
+```
+
+#### upload
+
+Upload a file in a streaming manner
+
+- file (File, require)
+- onProgress (onProgress: (loaded: number, total: number) => void, optional)
+- returns Promise<[UploadResponse](./src/data/types.ts#85)[]>
+
+Example:
+
+```js
+// Get file from previous event
+const [file] = e.target.files
+
+const upload = await data.upload(file, (loaded: number, total: number) => {
+  // Use loaded and total so update a progress bar for example
+});
+await upload.result();
+```
+
+### Node
+
+The following API assume that you have already a node module loaded, example:
+
+```js
+const codex = new Codex("http://localhost:3000");
+const data = await codex.node();
+```
+
+#### setLogLevel
+
+Set log level at run time.
+
+- level ([CodexLogLevel](./src/debug/types.ts#L3), required)
+- returns Promise<string>
+
+Example:
+
+```js
+await debug.setLogLevel("DEBUG");
+```
+
+#### info
+
+Gets node information
+
+- returns Promise<[CodexDebugInfo](./src/debug/types.ts#L15)>
+
+Example:
+
+```js
+const info = await debug.info();
 ```

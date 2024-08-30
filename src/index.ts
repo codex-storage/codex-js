@@ -10,7 +10,7 @@ export * from "./data/types";
 export * from "./values/values";
 export * from "./errors/errors";
 
-export { type CodexData, type UploadResponse } from "./data/data";
+export { type CodexData } from "./data/data";
 
 export class Codex {
   readonly url: string;

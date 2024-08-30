@@ -1,5 +1,5 @@
 {
-  "name": "@codex/sdk-js",
+  "name": "@codex-storage/sdk-js",
   "version": "0.0.1",
   "description": "Codex SDK to interact with the Codex decentralized storage network.",
   "repository": {
@@ -7,9 +7,9 @@
     "url": "https://github.com/codex-storage/codex-js"
   },
   "scripts": {
-    "prepack": "tsup tsup src/index.ts --format esm,cjs --dts",
+    "prepack": "npm run buid",
     "prebuild": "rm -Rf dist/*",
-    "build": "tsc --p tsconfig.json",
+    "build": "tsup tsup src/index.ts --format esm,cjs --dts --sourcemap",
     "compile": "tsc --noEmit",
     "pretest": "npm run build",
     "pretest:only": "npm run build",

@@ -1,6 +1,7 @@
 import { Api } from "../api/config";
 import { CodexValibotIssuesMap } from "../errors/errors";
 import { Fetch } from "../fetch-safe/fetch-safe";
+import type { SafeValue } from "../values/values";
 import { CodexLogLevel, type CodexDebugInfo } from "./types";
 import * as v from "valibot";
 
@@ -14,17 +15,17 @@ export class Debug {
   /**
    * Set log level at run time
    */
-  setLogLevel(level: CodexLogLevel) {
+  setLogLevel(level: CodexLogLevel): Promise<SafeValue<Response>> {
     const result = v.safeParse(CodexLogLevel, level);
 
     if (!result.success) {
-      return {
+      return Promise.resolve({
         error: true,
         data: {
           message: "Cannot validate the input",
           errors: CodexValibotIssuesMap(result.issues),
         },
-      };
+      });
     }
 
     const url =

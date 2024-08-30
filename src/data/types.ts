@@ -1,3 +1,5 @@
+import type { SafeValue } from "../values/values";
+
 export type CodexManifest = {
   /**
    * "Root hash of the content"
@@ -78,4 +80,9 @@ export type CodexNodeSpace = {
    * Amount of storage space reserved
    */
   quotaReservedBytes: number;
+};
+
+export type UploadResponse = {
+  result: Promise<SafeValue<string>>;
+  abort: () => void;
 };
