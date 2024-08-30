@@ -9,13 +9,13 @@ The SDK is currently under early development and the API can change at any time.
 ## Import
 
 ```js
-import { Codex } from "@codex/sdk-js";
+import { Codex } from "@codex-storage/sdk-js";
 ```
 
 or
 
 ```js
-const { Codex } = require("@codex/sdk-js");
+const { Codex } = require("@codex-storage/sdk-js");
 ```
 
 ## How to use
