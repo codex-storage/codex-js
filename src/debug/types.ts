@@ -26,7 +26,7 @@ export type CodexDebugInfo = {
   /**
    * Path of the data repository where all nodes data are stored
    */
-  repo: "string";
+  repo: string;
 
   // Signed Peer Record (libp2p)
   spr: string;

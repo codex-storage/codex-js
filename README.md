@@ -6,7 +6,11 @@ The SDK has a small bundle size and support tree shaking.
 
 The SDK is currently under early development and the API can change at any time.
 
-## Import
+## How to use
+
+### Sync api
+
+The easiest way is to use the sync API, but you will not benefit from tree shaking.
 
 ```js
 import { Codex } from "@codex-storage/sdk-js";
@@ -18,7 +22,29 @@ or
 const { Codex } = require("@codex-storage/sdk-js");
 ```
 
-## How to use
+To create a Codex instance, provide the REST API url to interact with the Codex client:
+
+```js
+const codex = new Codex("http://localhost:3000");
+```
+
+Then you can access any module like this:
+
+```js
+const marketplace = codex.marketplace;
+```
+
+### Async api
+
+```js
+import { Codex } from "@codex-storage/sdk-js/async";
+```
+
+or
+
+```js
+const { Codex } = require("@codex-storage/sdk-js/async");
+```
 
 To create a Codex instance, provide the REST API url to interact with the Codex client:
 
@@ -249,7 +275,7 @@ const data = await codex.node();
 Set log level at run time.
 
 - level ([CodexLogLevel](./src/debug/types.ts#L3), required)
-- returns Promise<string>
+- returns Promise<"">
 
 Example:
 

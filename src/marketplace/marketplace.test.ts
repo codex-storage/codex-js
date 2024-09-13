@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
 import assert from "assert";
-import { describe, it } from "node:test";
+import { afterEach, describe, it, vi } from "vitest";
 import { Fetch } from "../fetch-safe/fetch-safe";
-import { Marketplace } from "./marketplace";
+import { CodexMarketplace } from "./marketplace";
 
 // function createSlot() {
 //  return {
@@ -144,7 +144,11 @@ function createAvailability() {
 }
 
 describe("marketplace", () => {
-  const marketplace = new Marketplace("http://localhost:3000");
+  const marketplace = new CodexMarketplace("http://localhost:3000");
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   it("returns an error when trying to create an availability without total size", async () => {
     const response = await marketplace.createAvailability({
@@ -237,12 +241,11 @@ describe("marketplace", () => {
     assert.deepStrictEqual(response, extraValidationError("hello", "world"));
   });
 
-  it("returns a response when the request succeed", async (t) => {
+  it("returns a response when the request succeed", async () => {
     const data = { ...createAvailability(), freeSize: 1000 };
 
-    t.mock.method(Fetch, "safeJson", () =>
-      Promise.resolve({ error: false, data })
-    );
+    const spy = vi.spyOn(Fetch, "safeJson");
+    spy.mockImplementationOnce(() => Promise.resolve({ error: false, data }));
 
     const response = await marketplace.createAvailability({
       maxCollateral: 1,
@@ -254,12 +257,11 @@ describe("marketplace", () => {
     assert.deepStrictEqual(response, { error: false, data });
   });
 
-  it("returns a response when the create availability succeed", async (t) => {
+  it("returns a response when the create availability succeed", async () => {
     const data = { ...createAvailability(), freeSize: 1000 };
 
-    t.mock.method(Fetch, "safeJson", () =>
-      Promise.resolve({ error: false, data })
-    );
+    const spy = vi.spyOn(Fetch, "safeJson");
+    spy.mockImplementationOnce(() => Promise.resolve({ error: false, data }));
 
     const response = await marketplace.createAvailability({
       maxCollateral: 1,
@@ -295,12 +297,11 @@ describe("marketplace", () => {
     assert.deepStrictEqual(response, minNumberValidationError("duration", 1));
   });
 
-  it("returns a response when the update availability succeed", async (t) => {
+  it("returns a response when the update availability succeed", async () => {
     const data = createAvailability();
 
-    t.mock.method(Fetch, "safeJson", () =>
-      Promise.resolve({ error: false, data })
-    );
+    const spy = vi.spyOn(Fetch, "safeJson");
+    spy.mockImplementationOnce(() => Promise.resolve({ error: false, data }));
 
     const response = await marketplace.updateAvailability({
       id: faker.string.alphanumeric(64),

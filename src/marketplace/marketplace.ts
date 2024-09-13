@@ -15,7 +15,7 @@ import {
   CodexUpdateAvailabilityInput,
 } from "./types";
 
-export class Marketplace {
+export class CodexMarketplace {
   readonly url: string;
 
   constructor(url: string) {

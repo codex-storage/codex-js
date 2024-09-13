@@ -5,7 +5,7 @@ import type { SafeValue } from "../values/values";
 import { CodexLogLevel, type CodexDebugInfo } from "./types";
 import * as v from "valibot";
 
-export class Debug {
+export class CodexDebug {
   readonly url: string;
 
   constructor(url: string) {
@@ -15,7 +15,7 @@ export class Debug {
   /**
    * Set log level at run time
    */
-  setLogLevel(level: CodexLogLevel): Promise<SafeValue<Response>> {
+  async setLogLevel(level: CodexLogLevel): Promise<SafeValue<"">> {
     const result = v.safeParse(CodexLogLevel, level);
 
     if (!result.success) {
@@ -34,10 +34,16 @@ export class Debug {
       "/debug/chronicles/loglevel?level=" +
       level;
 
-    return Fetch.safe(url, {
+    const res = await Fetch.safe(url, {
       method: "POST",
       body: "",
     });
+
+    if (res.error) {
+      return res;
+    }
+
+    return { error: false, data: "" };
   }
 
   /**
