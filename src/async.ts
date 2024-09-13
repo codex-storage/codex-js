@@ -1,7 +1,7 @@
-import { CodexData } from "./data/data";
-import { CodexNode } from "./node/node";
+import type { CodexData } from "./data/data";
+import type { CodexNode } from "./node/node";
 import { CodexMarketplace } from "./marketplace/marketplace";
-import { CodexDebug } from "./debug/debug";
+import type { CodexDebug } from "./debug/debug";
 
 export * from "./fetch-safe/fetch-safe";
 export * from "./marketplace/types";
@@ -30,42 +30,50 @@ export class Codex {
     this._debug = null;
   }
 
-  get marketplace() {
+  async marketplace() {
     if (this._marketplace) {
       return this._marketplace;
     }
 
-    this._marketplace = new CodexMarketplace(this.url);
+    const module = await import("./marketplace/marketplace");
+
+    this._marketplace = new module.CodexMarketplace(this.url);
 
     return this._marketplace;
   }
 
-  get data() {
+  async data() {
     if (this._data) {
       return this._data;
     }
 
-    this._data = new CodexData(this.url);
+    const module = await import("./data/data");
+
+    this._data = new module.CodexData(this.url);
 
     return this._data;
   }
 
-  get node() {
+  async node() {
     if (this._node) {
       return this._node;
     }
 
-    this._node = new CodexNode(this.url);
+    const module = await import("./node/node");
+
+    this._node = new module.CodexNode(this.url);
 
     return this._node;
   }
 
-  get debug() {
+  async debug() {
     if (this._debug) {
       return this._debug;
     }
 
-    this._debug = new CodexDebug(this.url);
+    const module = await import("./debug/debug");
+
+    this._debug = new module.CodexDebug(this.url);
 
     return this._debug;
   }
