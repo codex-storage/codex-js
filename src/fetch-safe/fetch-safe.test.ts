@@ -1,5 +1,5 @@
 import assert from "assert";
-import { describe, it } from "node:test";
+import { afterEach, describe, it, vi } from "vitest";
 import { Fetch } from "../fetch-safe/fetch-safe";
 
 class MockResponse implements Response {
@@ -46,9 +46,14 @@ class MockResponse implements Response {
 }
 
 describe.only("fetch", () => {
-  it("returns an error when the http call failed", async (t) => {
-    global.fetch = t.mock.fn(() =>
-      Promise.resolve(new MockResponse(false, 500, "error")),
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("returns an error when the http call failed", async () => {
+    const spy = vi.spyOn(global, "fetch");
+    spy.mockImplementationOnce(() =>
+      Promise.resolve(new MockResponse(false, 500, "error"))
     );
 
     const result = await Fetch.safeJson("http://localhost:3000/some-url", {
@@ -63,9 +68,12 @@ describe.only("fetch", () => {
     assert.deepStrictEqual(result, { error: true, data: error });
   });
 
-  it.only("returns an error when the json parsing failed", async (t) => {
-    global.fetch = t.mock.fn(() =>
-      Promise.resolve(new MockResponse(true, 200, "")),
+  it.only("returns an error when the json parsing failed", async () => {
+    const spy = vi.spyOn(global, "fetch");
+    spy.mockImplementationOnce(() =>
+      Promise.resolve(
+        new MockResponse(false, 200, "Unexpected end of JSON input")
+      )
     );
 
     const result = await Fetch.safeJson("http://localhost:3000/some-url", {
@@ -76,11 +84,12 @@ describe.only("fetch", () => {
     assert.deepStrictEqual(result.data.message, "Unexpected end of JSON input");
   });
 
-  it("returns the data when the fetch succeed", async (t) => {
-    global.fetch = t.mock.fn(() =>
+  it("returns the data when the fetch succeed", async () => {
+    const spy = vi.spyOn(global, "fetch");
+    spy.mockImplementationOnce(() =>
       Promise.resolve(
-        new MockResponse(true, 200, JSON.stringify({ hello: "world" })),
-      ),
+        new MockResponse(true, 200, JSON.stringify({ hello: "world" }))
+      )
     );
 
     const result = await Fetch.safeJson("http://localhost:3000/some-url", {

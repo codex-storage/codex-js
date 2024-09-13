@@ -8,13 +8,11 @@
   },
   "scripts": {
     "prepack": "npm run build",
-    "prebuild": "rm -Rf dist/*",
-    "build": "tsup tsup src/index.ts --format esm,cjs --dts --sourcemap",
+    "prebuild": "npm run compile && rm -Rf dist/*",
+    "build": "tsup src/index.ts src/async.ts --format esm,cjs --dts --sourcemap --treeshake",
     "compile": "tsc --noEmit",
-    "pretest": "npm run build",
-    "pretest:only": "npm run build",
-    "test": "node --test",
-    "test:only": "node --test --test-only",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "watch": "tsc --watch",
     "format": "prettier --write ./src"
   },
@@ -36,6 +34,16 @@
         "types": "./dist/index.d.cts",
         "default": "./dist/index.js"
       }
+    },
+    "./async": {
+      "import": {
+        "types": "./dist/async.d.ts",
+        "default": "./dist/async.mjs"
+      },
+      "require": {
+        "types": "./dist/async.d.cts",
+        "default": "./dist/async.js"
+      }
     }
   },
   "sideEffects": false,
@@ -53,7 +61,8 @@
     "@tsconfig/strictest": "^2.0.5",
     "prettier": "^3.3.3",
     "tsup": "^8.2.3",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "vitest": "^2.1.1"
   },
   "dependencies": {
     "valibot": "^0.36.0"
