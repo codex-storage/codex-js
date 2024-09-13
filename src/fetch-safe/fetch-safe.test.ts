@@ -1,6 +1,5 @@
 import { afterEach, assert, describe, it, vi } from "vitest";
 import { Fetch } from "../fetch-safe/fetch-safe";
-import type { CodexError } from "../async";
 
 describe.only("fetch", () => {
   afterEach(() => {
