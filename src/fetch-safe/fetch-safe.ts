@@ -9,8 +9,7 @@ export const Fetch = {
       return {
         error: true,
         data: {
-          message:
-            "The connection with the Codex node seems to be broken. Please check your node is running.",
+          message: res.data.message,
           code: 502,
         },
       };
