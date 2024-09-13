@@ -220,9 +220,6 @@ export class CodexMarketplace {
 
     const res = await Fetch.safe(url, {
       method: "POST",
-      // headers: {
-      //   "content-type": "application/json",
-      // },
       body: JSON.stringify({
         duration: duration.toString(),
         reward: reward.toString(),

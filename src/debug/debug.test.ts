@@ -30,13 +30,16 @@ describe("debug", () => {
     });
   });
 
-  // it("returns a success when trying to setup the log level with a correct value", async (t) => {
-  //   const spy = vi.spyOn(Fetch, "safe");
+  it("returns a success when trying to setup the log level with a correct value", async (t) => {
+    const mockResponse = {
+      ok: true,
+      status: 200,
+      text: async () => "",
+    } as Response;
+    globalThis.fetch = vi.fn().mockResolvedValue(mockResponse);
 
-  //   expect(spy).toHaveBeenCalledTimes(1);
+    const response = await debug.setLogLevel("ERROR");
 
-  //   const response = await debug.setLogLevel("ERROR");
-
-  //   assert.deepStrictEqual(response, { error: false, data: true });
-  // });
+    assert.deepStrictEqual(response, { error: false, data: "" });
+  });
 });
