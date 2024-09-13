@@ -1,5 +1,4 @@
-import assert from "assert";
-import { afterEach, describe, it, vi } from "vitest";
+import { afterEach, assert, describe, it, vi } from "vitest";
 import { CodexDebug } from "./debug";
 import type { CodexLogLevel } from "./types";
 

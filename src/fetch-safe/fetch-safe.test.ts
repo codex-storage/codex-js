@@ -1,6 +1,6 @@
-import assert from "assert";
-import { afterEach, describe, it, vi } from "vitest";
+import { afterEach, assert, describe, it, vi } from "vitest";
 import { Fetch } from "../fetch-safe/fetch-safe";
+import type { CodexError } from "../async";
 
 class MockResponse implements Response {
   headers: Headers = new Headers();
@@ -81,7 +81,10 @@ describe.only("fetch", () => {
     });
 
     assert.ok(result.error);
-    assert.deepStrictEqual(result.data.message, "Unexpected end of JSON input");
+    assert.deepStrictEqual(
+      (result.data as CodexError).message,
+      "Unexpected end of JSON input"
+    );
   });
 
   it("returns the data when the fetch succeed", async () => {

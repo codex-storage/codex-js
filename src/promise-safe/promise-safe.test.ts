@@ -1,5 +1,4 @@
-import assert from "assert";
-import { describe, it } from "vitest";
+import { assert, describe, it } from "vitest";
 import { Promises } from "./promise-safe";
 
 describe("promise safe", () => {

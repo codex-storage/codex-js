@@ -1,6 +1,5 @@
 import { faker } from "@faker-js/faker";
-import assert from "assert";
-import { afterEach, describe, it, vi } from "vitest";
+import { afterEach, assert, describe, it, vi } from "vitest";
 import { Fetch } from "../fetch-safe/fetch-safe";
 import { CodexMarketplace } from "./marketplace";
 
@@ -50,7 +49,7 @@ function createStorageRequest() {
 
 function missingNumberValidationError(field: string) {
   return {
-    error: true,
+    error: true as any,
     data: {
       message: "Cannot validate the input",
       errors: [
@@ -67,7 +66,7 @@ function missingNumberValidationError(field: string) {
 
 function extraValidationError(field: string, value: unknown) {
   return {
-    error: true,
+    error: true as any,
     data: {
       message: "Cannot validate the input",
       errors: [
@@ -84,7 +83,7 @@ function extraValidationError(field: string, value: unknown) {
 
 function missingStringValidationError(field: string) {
   return {
-    error: true,
+    error: true as any,
     data: {
       message: "Cannot validate the input",
       errors: [
@@ -101,7 +100,7 @@ function missingStringValidationError(field: string) {
 
 function mistypeNumberValidationError(field: string, value: string) {
   return {
-    error: true,
+    error: true as any,
     data: {
       message: "Cannot validate the input",
       errors: [
@@ -118,7 +117,7 @@ function mistypeNumberValidationError(field: string, value: string) {
 
 function minNumberValidationError(field: string, min: number) {
   return {
-    error: true,
+    error: true as any,
     data: {
       message: "Cannot validate the input",
       errors: [
@@ -140,6 +139,10 @@ function createAvailability() {
     size: faker.number.int({ min: 3000, max: 300000 }),
     requestId: faker.finance.ethereumAddress(),
     slotIndex: faker.number.int({ min: 0, max: 9 }),
+    totalSize: faker.number.int({ min: 0, max: 9 }).toString(),
+    duration: faker.number.int({ min: 0, max: 9 }).toString(),
+    minPrice: faker.number.int({ min: 0, max: 9 }).toString(),
+    maxCollateral: faker.number.int({ min: 0, max: 9 }).toString(),
   };
 }
 
@@ -242,7 +245,7 @@ describe("marketplace", () => {
   });
 
   it("returns a response when the request succeed", async () => {
-    const data = { ...createAvailability(), freeSize: 1000 };
+    const data = { ...createAvailability(), freeSize: "1000" };
 
     const spy = vi.spyOn(Fetch, "safeJson");
     spy.mockImplementationOnce(() => Promise.resolve({ error: false, data }));
@@ -258,7 +261,7 @@ describe("marketplace", () => {
   });
 
   it("returns a response when the create availability succeed", async () => {
-    const data = { ...createAvailability(), freeSize: 1000 };
+    const data = { ...createAvailability(), freeSize: "1000" };
 
     const spy = vi.spyOn(Fetch, "safeJson");
     spy.mockImplementationOnce(() => Promise.resolve({ error: false, data }));

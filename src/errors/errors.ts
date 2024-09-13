@@ -4,7 +4,7 @@ type ValidationError = {
   expected: string;
   received: string;
   message: string;
-  path: string;
+  path: string | undefined;
 };
 
 /**
