@@ -1,7 +1,7 @@
 import { Api } from "../api/config";
 import type { SafeValue } from "../async";
 import { Fetch } from "../fetch-safe/fetch-safe";
-import { Promises } from "../promise-safe/promise-safe";
+import type { CodexSpr } from "./types";
 
 export class CodexNode {
   readonly url: string;
@@ -32,18 +32,12 @@ export class CodexNode {
   /**
    * Get Node's SPR
    */
-  async spr(): Promise<SafeValue<string>> {
+  async spr(): Promise<SafeValue<CodexSpr>> {
     const url = this.url + Api.config.prefix + "/spr";
 
-    const res = await Fetch.safe(url, {
+    return Fetch.safeJson(url, {
       method: "GET",
     });
-
-    if (res.error) {
-      return res;
-    }
-
-    return await Promises.safe(res.data.text);
   }
 
   /**

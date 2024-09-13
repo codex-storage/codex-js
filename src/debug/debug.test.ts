@@ -30,7 +30,7 @@ describe("debug", () => {
     });
   });
 
-  it("returns a success when trying to setup the log level with a correct value", async (t) => {
+  it("returns a success when trying to setup the log level with a correct value", async () => {
     const mockResponse = {
       ok: true,
       status: 200,

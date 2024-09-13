@@ -308,7 +308,7 @@ const node = await codex.node;
 
 Get Node's SPR
 
-- returns Promise<string>
+- returns Promise<[CodexSpr](./src/node/types.ts#L1)>
 
 Example:
 
