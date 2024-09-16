@@ -1,49 +1,22 @@
-import { faker } from "@faker-js/faker";
 import { afterEach, assert, describe, it, vi } from "vitest";
 import { Fetch } from "../fetch-safe/fetch-safe";
 import { CodexMarketplace } from "./marketplace";
-
-// function createSlot() {
-//  return {
-//    "id": faker.string.alphanumeric(64),
-//    "request": {
-
-//      "id": faker.string.alphanumeric(64),
-//      "client": faker.finance.ethereumAddress(),
-//      "ask":
-//      {
-//        "slots": faker.number.int({ min: 0, max: 9 }),
-//        "slotSize": faker.number.float({ max: 10000 }).toString(),
-//        "duration": faker.number.int({ max: 300000 }).toString(),
-//        "proofProbability": faker.number.int({ max: 9 }),
-//        "reward": faker.number.float({ max: 1000 }).toString(),
-//        "maxSlotLoss": faker.number.int({ max: 9 })
-//      },
-//      "content": {
-//        "cid": faker.string.alphanumeric(64),
-//        "por": {
-//          "u": faker.string.alphanumeric(16),
-//          "publicKey": faker.string.alphanumeric(64),
-//          "name": faker.string.alphanumeric(16)
-//        }
-//      },
-//      "expiry": faker.number.int({ min: 2, max: 59 }) + " minutes",
-//      "nonce": faker.string.alphanumeric(64)
-//    },
-//    "slotIndex": faker.number.int({ min: 0, max: 9 })
-//  }
-// }
+import {
+  randomEthereumAddress,
+  randomInt,
+  randomString,
+} from "../tests/tests.util";
 
 function createStorageRequest() {
   return {
-    cid: faker.string.alphanumeric(64),
-    duration: faker.number.int({ min: 1 }),
-    reward: faker.number.int(),
-    proofProbability: faker.number.int(),
-    nodes: faker.number.int(),
-    tolerance: faker.number.int(),
-    expiry: faker.number.int({ min: 1 }),
-    collateral: faker.number.int(),
+    cid: randomString(64),
+    duration: randomInt(1, 64000),
+    reward: randomInt(1, 100),
+    proofProbability: randomInt(1, 100),
+    nodes: randomInt(1, 5),
+    tolerance: randomInt(1, 100),
+    expiry: randomInt(1, 100),
+    collateral: randomInt(1, 100),
   };
 }
 
@@ -134,15 +107,15 @@ function minNumberValidationError(field: string, min: number) {
 
 function createAvailability() {
   return {
-    id: faker.finance.ethereumAddress(),
-    availabilityId: faker.finance.ethereumAddress(),
-    size: faker.number.int({ min: 3000, max: 300000 }),
-    requestId: faker.finance.ethereumAddress(),
-    slotIndex: faker.number.int({ min: 0, max: 9 }),
-    totalSize: faker.number.int({ min: 0, max: 9 }).toString(),
-    duration: faker.number.int({ min: 0, max: 9 }).toString(),
-    minPrice: faker.number.int({ min: 0, max: 9 }).toString(),
-    maxCollateral: faker.number.int({ min: 0, max: 9 }).toString(),
+    id: randomEthereumAddress(),
+    availabilityId: randomEthereumAddress(),
+    size: randomInt(3000, 300000),
+    requestId: randomEthereumAddress(),
+    slotIndex: randomInt(0, 9),
+    totalSize: randomInt(0, 9).toString(),
+    duration: randomInt(0, 9).toString(),
+    minPrice: randomInt(0, 9).toString(),
+    maxCollateral: randomInt(0, 9).toString(),
   };
 }
 
@@ -284,7 +257,7 @@ describe("marketplace", () => {
 
   it("returns an error when trying to update an availability with zero total size", async () => {
     const response = await marketplace.updateAvailability({
-      id: faker.string.alphanumeric(64),
+      id: randomString(64),
       totalSize: 0,
     });
 
@@ -293,7 +266,7 @@ describe("marketplace", () => {
 
   it("returns an error when trying to update an availability with zero duration", async () => {
     const response = await marketplace.updateAvailability({
-      id: faker.string.alphanumeric(64),
+      id: randomString(64),
       duration: 0,
     });
 
@@ -307,7 +280,7 @@ describe("marketplace", () => {
     spy.mockImplementationOnce(() => Promise.resolve({ error: false, data }));
 
     const response = await marketplace.updateAvailability({
-      id: faker.string.alphanumeric(64),
+      id: randomString(64),
       totalSize: 3000,
     });
 
