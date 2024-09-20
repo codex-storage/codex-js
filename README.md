@@ -148,6 +148,25 @@ const response = await marketplace.createAvailability({
 });
 ```
 
+#### updateAvailability
+
+Updates availability.
+
+- input ([CodexUpdateAvailabilityInput](./src/marketplace/types.ts#L171), required)
+- returns Promise<"">
+
+Example:
+
+```js
+const response = await marketplace.updateAvailability({
+  id: "0x.....................",
+  maxCollateral: 1,
+  totalSize: 3000,
+  minPrice: 100,
+  duration: 100,
+});
+```
+
 #### reservations
 
 Return list of reservations for ongoing Storage Requests that the node hosts.
