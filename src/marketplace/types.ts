@@ -103,6 +103,33 @@ export type CodexAvailability = {
   /**
    * Size of available storage in bytes
    */
+  totalSize: number;
+
+  /**
+   * Maximum time the storage should be sold for (in seconds)
+   */
+  duration: number;
+
+  /**
+   * Minimum price to be paid (in amount of tokens)
+   */
+  minPrice: number;
+
+  /**
+   * Maximum collateral user is willing to pay per filled Slot (in amount of tokens)
+   */
+  maxCollateral: number;
+};
+
+/**
+ * Storage availability received from the api.
+ */
+export type CodexAvailabilityDto = {
+  id: string;
+
+  /**
+   * Size of available storage in bytes
+   */
   totalSize: string;
 
   /**
@@ -143,10 +170,10 @@ export type CodexCreateAvailabilityInput = v.InferOutput<
 
 export const CodexUpdateAvailabilityInput = v.strictObject({
   id: v.string(),
-  totalSize: v.optional(v.pipe(v.number(), v.minValue(1))),
-  duration: v.optional(v.pipe(v.number(), v.minValue(1))),
-  minPrice: v.optional(v.number()),
-  maxCollateral: v.optional(v.number()),
+  totalSize: v.pipe(v.number(), v.minValue(1)),
+  duration: v.pipe(v.number(), v.minValue(1)),
+  minPrice: v.number(),
+  maxCollateral: v.number(),
 });
 
 export type CodexUpdateAvailabilityInput = v.InferOutput<

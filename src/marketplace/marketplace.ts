@@ -6,6 +6,7 @@ import type { SafeValue } from "../values/values";
 import {
   type CodexAvailability,
   type CodexAvailabilityCreateResponse,
+  type CodexAvailabilityDto,
   CodexCreateAvailabilityInput,
   CodexCreateStorageRequestInput,
   type CodexPurchase,
@@ -50,9 +51,24 @@ export class CodexMarketplace {
   async availabilities(): Promise<SafeValue<CodexAvailability[]>> {
     const url = this.url + Api.config.prefix + "/sales/availability";
 
-    return Fetch.safeJson<CodexAvailability[]>(url, {
+    const res = await Fetch.safeJson<CodexAvailabilityDto[]>(url, {
       method: "GET",
     });
+
+    if (res.error) {
+      return res;
+    }
+
+    return {
+      error: false,
+      data: res.data.map((a) => ({
+        id: a.id,
+        totalSize: parseInt(a.totalSize, 10),
+        duration: parseInt(a.duration, 10),
+        minPrice: parseInt(a.minPrice, 10),
+        maxCollateral: parseInt(a.maxCollateral, 10),
+      })),
+    };
   }
 
   /**
@@ -75,12 +91,16 @@ export class CodexMarketplace {
 
     const url = this.url + Api.config.prefix + "/sales/availability";
 
+    const body = result.output;
+
     return Fetch.safeJson<CodexAvailabilityCreateResponse>(url, {
       method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(result.output),
+      body: JSON.stringify({
+        totalSize: body.totalSize.toString(),
+        duration: body.duration.toString(),
+        minPrice: body.minPrice.toString(),
+        maxCollateral: body.maxCollateral.toString(),
+      }),
     });
   }
 
@@ -90,7 +110,7 @@ export class CodexMarketplace {
    */
   async updateAvailability(
     input: CodexUpdateAvailabilityInput
-  ): Promise<SafeValue<CodexAvailability>> {
+  ): Promise<SafeValue<"">> {
     const result = v.safeParse(CodexUpdateAvailabilityInput, input);
 
     if (!result.success) {
@@ -106,13 +126,23 @@ export class CodexMarketplace {
     const url =
       this.url + Api.config.prefix + "/sales/availability/" + result.output.id;
 
-    return Fetch.safeJson<CodexAvailability>(url, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(result.output),
+    const body = result.output;
+
+    const res = await Fetch.safe(url, {
+      method: "PATCH",
+      body: JSON.stringify({
+        totalSize: body.totalSize.toString(),
+        duration: body.duration.toString(),
+        minPrice: body.minPrice.toString(),
+        maxCollateral: body.maxCollateral.toString(),
+      }),
     });
+
+    if (res.error) {
+      return res;
+    }
+
+    return { error: false, data: "" };
   }
 
   /**

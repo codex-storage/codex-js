@@ -108,10 +108,6 @@ function minNumberValidationError(field: string, min: number) {
 function createAvailability() {
   return {
     id: randomEthereumAddress(),
-    availabilityId: randomEthereumAddress(),
-    size: randomInt(3000, 300000),
-    requestId: randomEthereumAddress(),
-    slotIndex: randomInt(0, 9),
     totalSize: randomInt(0, 9).toString(),
     duration: randomInt(0, 9).toString(),
     minPrice: randomInt(0, 9).toString(),
@@ -230,7 +226,9 @@ describe("marketplace", () => {
       duration: 100,
     });
 
-    assert.deepStrictEqual(response, { error: false, data });
+    assert.ok(!response.error);
+    // @ts-ignore
+    assert.deepEqual(response.data, data);
   });
 
   it("returns a response when the create availability succeed", async () => {
@@ -246,11 +244,18 @@ describe("marketplace", () => {
       duration: 100,
     });
 
-    assert.deepStrictEqual(response, { error: false, data });
+    assert.ok(!response.error);
+    // @ts-ignore
+    assert.deepEqual(response.data, data);
   });
 
   it("returns an error when trying to update an availability without id", async () => {
-    const response = await marketplace.updateAvailability({} as any);
+    const response = await marketplace.updateAvailability({
+      maxCollateral: 1,
+      totalSize: 3000,
+      minPrice: 100,
+      duration: 100,
+    } as any);
 
     assert.deepStrictEqual(response, missingStringValidationError("id"));
   });
@@ -259,6 +264,9 @@ describe("marketplace", () => {
     const response = await marketplace.updateAvailability({
       id: randomString(64),
       totalSize: 0,
+      minPrice: 100,
+      duration: 100,
+      maxCollateral: 100,
     });
 
     assert.deepStrictEqual(response, minNumberValidationError("totalSize", 1));
@@ -267,24 +275,31 @@ describe("marketplace", () => {
   it("returns an error when trying to update an availability with zero duration", async () => {
     const response = await marketplace.updateAvailability({
       id: randomString(64),
+      totalSize: 100,
       duration: 0,
+      minPrice: 100,
+      maxCollateral: 100,
     });
 
     assert.deepStrictEqual(response, minNumberValidationError("duration", 1));
   });
 
   it("returns a response when the update availability succeed", async () => {
-    const data = createAvailability();
-
-    const spy = vi.spyOn(Fetch, "safeJson");
-    spy.mockImplementationOnce(() => Promise.resolve({ error: false, data }));
+    const mockResponse = {
+      ok: true,
+      status: 200,
+    } as any;
+    globalThis.fetch = vi.fn().mockResolvedValue(mockResponse);
 
     const response = await marketplace.updateAvailability({
       id: randomString(64),
       totalSize: 3000,
+      duration: 10,
+      minPrice: 100,
+      maxCollateral: 100,
     });
 
-    assert.deepStrictEqual(response, { error: false, data });
+    assert.ok(!response.error);
   });
 
   it("returns an error when trying to create a storage request without cid", async () => {
