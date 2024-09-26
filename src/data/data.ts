@@ -54,10 +54,10 @@ export class CodexData {
    * XMLHttpRequest is used instead of fetch for this case, to obtain progress information.
    * A callback onProgress can be passed to receive upload progress data information.
    */
-  async upload(
+  upload(
     file: File,
     onProgress?: (loaded: number, total: number) => void
-  ): Promise<UploadResponse> {
+  ): UploadResponse {
     const url = this.url + Api.config.prefix + "/data";
 
     const xhr = new XMLHttpRequest();

@@ -1,6 +1,6 @@
 {
   "name": "@codex-storage/sdk-js",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Codex SDK to interact with the Codex decentralized storage network.",
   "repository": {
     "type": "git",
@@ -64,6 +64,6 @@
     "vitest": "^2.1.1"
   },
   "dependencies": {
-    "valibot": "^0.36.0"
+    "valibot": "^0.32.0"
   }
 }

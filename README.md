@@ -266,7 +266,7 @@ Upload a file in a streaming manner
 
 - file (File, require)
 - onProgress (onProgress: (loaded: number, total: number) => void, optional)
-- returns Promise<[UploadResponse](./src/data/types.ts#85)[]>
+- returns [UploadResponse](./src/data/types.ts#85)
 
 Example:
 
@@ -274,7 +274,7 @@ Example:
 // Get file from previous event
 const [file] = e.target.files
 
-const upload = await data.upload(file, (loaded: number, total: number) => {
+const upload = data.upload(file, (loaded: number, total: number) => {
   // Use loaded and total so update a progress bar for example
 });
 await upload.result();
