@@ -1,5 +1,6 @@
 import { afterEach, assert, describe, it, vi } from "vitest";
 import { Fetch } from "../fetch-safe/fetch-safe";
+import { CodexError } from "../async";
 
 describe.only("fetch", () => {
   afterEach(() => {
@@ -18,10 +19,9 @@ describe.only("fetch", () => {
       method: "GET",
     });
 
-    const error = {
-      message: "error",
+    const error = new CodexError("error", {
       code: 500,
-    };
+    });
 
     assert.deepStrictEqual(result, { error: true, data: error });
   });

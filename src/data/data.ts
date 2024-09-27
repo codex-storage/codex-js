@@ -1,4 +1,5 @@
 import { Api } from "../api/config";
+import { CodexError } from "../errors/errors";
 import { Fetch } from "../fetch-safe/fetch-safe";
 import type { SafeValue } from "../values/values";
 import type {
@@ -77,10 +78,9 @@ export class CodexData {
         if (xhr.status != 200) {
           resolve({
             error: true,
-            data: {
+            data: new CodexError(xhr.responseText, {
               code: xhr.status,
-              message: xhr.responseText,
-            },
+            }),
           });
         } else {
           resolve({ error: false, data: xhr.response });
@@ -90,9 +90,7 @@ export class CodexData {
       xhr.onerror = function () {
         resolve({
           error: true,
-          data: {
-            message: "Something went wrong during the file upload.",
-          },
+          data: new CodexError("Something went wrong during the file upload."),
         });
       };
     });

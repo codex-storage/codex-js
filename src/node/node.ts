@@ -1,6 +1,6 @@
 import { Api } from "../api/config";
-import type { SafeValue } from "../async";
 import { Fetch } from "../fetch-safe/fetch-safe";
+import type { SafeValue } from "../values/values";
 import type { CodexSpr } from "./types";
 
 export class CodexNode {

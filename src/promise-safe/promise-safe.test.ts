@@ -1,5 +1,6 @@
 import { assert, describe, it } from "vitest";
 import { Promises } from "./promise-safe";
+import { CodexError } from "../async";
 
 describe("promise safe", () => {
   it("returns an error when the promise failed", async () => {
@@ -7,7 +8,10 @@ describe("promise safe", () => {
       () => new Promise((_, reject) => reject("error"))
     );
 
-    assert.deepStrictEqual(result, { error: true, data: { message: "error" } });
+    assert.deepStrictEqual(result, {
+      error: true,
+      data: new CodexError("error"),
+    });
   });
 
   it("returns the value when the promise succeed", async () => {

@@ -1,3 +1,4 @@
+import { CodexError } from "../errors/errors";
 import { Promises } from "../promise-safe/promise-safe";
 import { type SafeValue } from "../values/values";
 
@@ -8,15 +9,14 @@ export const Fetch = {
     if (res.error) {
       return {
         error: true,
-        data: {
-          message: res.data.message,
+        data: new CodexError(res.data.message, {
           code: 502,
-        },
+        }),
       };
     }
 
     if (!res.data.ok) {
-      const message = await Promises.safe(() => res.data.text());
+      const message = await Promises.safe(res.data.text);
 
       if (message.error) {
         return message;
@@ -24,10 +24,9 @@ export const Fetch = {
 
       return {
         error: true,
-        data: {
-          message: message.data,
+        data: new CodexError(message.data, {
           code: res.data.status,
-        },
+        }),
       };
     }
 

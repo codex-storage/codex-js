@@ -1,6 +1,6 @@
 import * as v from "valibot";
 import { Api } from "../api/config";
-import { CodexValibotIssuesMap } from "../errors/errors";
+import { CodexError, CodexValibotIssuesMap } from "../errors/errors";
 import { Fetch } from "../fetch-safe/fetch-safe";
 import type { SafeValue } from "../values/values";
 import {
@@ -82,10 +82,9 @@ export class CodexMarketplace {
     if (!result.success) {
       return {
         error: true,
-        data: {
-          message: "Cannot validate the input",
+        data: new CodexError("Cannot validate the input", {
           errors: CodexValibotIssuesMap(result.issues),
-        },
+        }),
       };
     }
 
@@ -116,10 +115,9 @@ export class CodexMarketplace {
     if (!result.success) {
       return {
         error: true,
-        data: {
-          message: "Cannot validate the input",
+        data: new CodexError("Cannot validate the input", {
           errors: CodexValibotIssuesMap(result.issues),
-        },
+        }),
       };
     }
 
@@ -229,10 +227,9 @@ export class CodexMarketplace {
     if (!result.success) {
       return {
         error: true,
-        data: {
-          message: "Cannot validate the input",
+        data: new CodexError("Cannot validate the input", {
           errors: CodexValibotIssuesMap(result.issues),
-        },
+        }),
       };
     }
 

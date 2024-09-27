@@ -1,6 +1,7 @@
 import { afterEach, assert, describe, it, vi } from "vitest";
 import { CodexDebug } from "./debug";
 import type { CodexLogLevel } from "./types";
+import { CodexError } from "../errors/errors";
 
 describe("debug", () => {
   afterEach(() => {
@@ -14,8 +15,7 @@ describe("debug", () => {
 
     assert.deepStrictEqual(response, {
       error: true,
-      data: {
-        message: "Cannot validate the input",
+      data: new CodexError("Cannot validate the input", {
         errors: [
           {
             expected:
@@ -26,7 +26,7 @@ describe("debug", () => {
             received: '"TEST"',
           },
         ],
-      },
+      }),
     });
   });
 

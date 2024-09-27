@@ -1,3 +1,4 @@
+import { CodexError } from "../async";
 import type { SafeValue } from "../values/values";
 
 export const Promises = {
@@ -7,14 +8,11 @@ export const Promises = {
 
       return { error: false, data: result };
     } catch (e) {
-      const opts = e instanceof Error && e.stack ? { stack: e.stack } : {};
-
       return {
         error: true,
-        data: {
-          message: e instanceof Error ? e.message : "" + e,
-          ...opts,
-        },
+        data: new CodexError(e instanceof Error ? e.message : "" + e, {
+          sourceStack: e instanceof Error ? e.stack || null : null,
+        }),
       };
     }
   },

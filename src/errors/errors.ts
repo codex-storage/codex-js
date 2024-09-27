@@ -13,11 +13,27 @@ type ValidationError = {
  * `errors`: A {ValidationError} array when it comes from an object validation process
  * `stack`: The error stack when the CodexError results from a error thrown
  */
-export type CodexError = {
-  message: string;
-  code?: number;
-  errors?: ValidationError[];
-  stack?: string;
+export class CodexError extends Error {
+  code: number | null;
+  errors: ValidationError[] | null;
+  sourceStack: string | null;
+
+  constructor(
+    message: string,
+    { code, errors, sourceStack }: CodexErrorProps = {}
+  ) {
+    super(message);
+
+    this.code = code || null;
+    this.errors = errors || null;
+    this.sourceStack = sourceStack || null;
+  }
+}
+
+type CodexErrorProps = {
+  code?: number | null;
+  errors?: ValidationError[] | null;
+  sourceStack?: string | null;
 };
 
 export const CodexValibotIssuesMap = (issues: InferIssue<any>[]) =>

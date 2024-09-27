@@ -1,5 +1,5 @@
 import { Api } from "../api/config";
-import { CodexValibotIssuesMap } from "../errors/errors";
+import { CodexError, CodexValibotIssuesMap } from "../errors/errors";
 import { Fetch } from "../fetch-safe/fetch-safe";
 import type { SafeValue } from "../values/values";
 import { CodexLogLevel, type CodexDebugInfo } from "./types";
@@ -21,10 +21,9 @@ export class CodexDebug {
     if (!result.success) {
       return Promise.resolve({
         error: true,
-        data: {
-          message: "Cannot validate the input",
+        data: new CodexError("Cannot validate the input", {
           errors: CodexValibotIssuesMap(result.issues),
-        },
+        }),
       });
     }
 

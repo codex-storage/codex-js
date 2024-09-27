@@ -6,6 +6,7 @@ import {
   randomInt,
   randomString,
 } from "../tests/tests.util";
+import { CodexError } from "../errors/errors";
 
 function createStorageRequest() {
   return {
@@ -23,8 +24,7 @@ function createStorageRequest() {
 function missingNumberValidationError(field: string) {
   return {
     error: true as any,
-    data: {
-      message: "Cannot validate the input",
+    data: new CodexError("Cannot validate the input", {
       errors: [
         {
           path: field,
@@ -33,15 +33,14 @@ function missingNumberValidationError(field: string) {
           received: "undefined",
         },
       ],
-    },
+    }),
   };
 }
 
 function extraValidationError(field: string, value: unknown) {
   return {
     error: true as any,
-    data: {
-      message: "Cannot validate the input",
+    data: new CodexError("Cannot validate the input", {
       errors: [
         {
           path: field,
@@ -50,15 +49,14 @@ function extraValidationError(field: string, value: unknown) {
           received: `"${value}"`,
         },
       ],
-    },
+    }),
   };
 }
 
 function missingStringValidationError(field: string) {
   return {
     error: true as any,
-    data: {
-      message: "Cannot validate the input",
+    data: new CodexError("Cannot validate the input", {
       errors: [
         {
           path: field,
@@ -67,15 +65,14 @@ function missingStringValidationError(field: string) {
           received: "undefined",
         },
       ],
-    },
+    }),
   };
 }
 
 function mistypeNumberValidationError(field: string, value: string) {
   return {
     error: true as any,
-    data: {
-      message: "Cannot validate the input",
+    data: new CodexError("Cannot validate the input", {
       errors: [
         {
           path: field,
@@ -84,15 +81,14 @@ function mistypeNumberValidationError(field: string, value: string) {
           received: `"${value}"`,
         },
       ],
-    },
+    }),
   };
 }
 
 function minNumberValidationError(field: string, min: number) {
   return {
     error: true as any,
-    data: {
-      message: "Cannot validate the input",
+    data: new CodexError("Cannot validate the input", {
       errors: [
         {
           path: field,
@@ -101,7 +97,7 @@ function minNumberValidationError(field: string, min: number) {
           received: "0",
         },
       ],
-    },
+    }),
   };
 }
 
