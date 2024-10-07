@@ -16,7 +16,7 @@ export const Fetch = {
     }
 
     if (!res.data.ok) {
-      const message = await Promises.safe(res.data.text);
+      const message = await Promises.safe(() => res.data.text());
 
       if (message.error) {
         return message;
