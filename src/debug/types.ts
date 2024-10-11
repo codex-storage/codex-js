@@ -30,4 +30,27 @@ export type CodexDebugInfo = {
 
   // Signed Peer Record (libp2p)
   spr: string;
+
+  table: {
+    localNode: {
+      nodeId: string
+      peerId: string
+      record: string
+      address: string
+      seen: boolean
+    }
+
+    nodes: {
+      nodeId: string
+      peerId: string
+      record: string
+      address: string
+      seen: boolean
+    }[]
+  }
+
+  codex: {
+    version: string
+    revision: string
+  }
 };
