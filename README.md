@@ -264,7 +264,7 @@ const space = await data.space();
 
 Upload a file in a streaming manner
 
-- file (File, require)
+- file (File, required)
 - onProgress (onProgress: (loaded: number, total: number) => void, optional)
 - returns [UploadResponse](./src/data/types.ts#85)
 
@@ -278,6 +278,20 @@ const upload = data.upload(file, (loaded: number, total: number) => {
   // Use loaded and total so update a progress bar for example
 });
 await upload.result();
+```
+
+#### manifest
+
+Download only the dataset manifest from the network to the local node if it's not available locally.
+
+- cid (string, required)
+- returns [CodexManifest](./src/data/types.ts#3)
+
+Example:
+
+```js
+const cid = "QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx5N";
+const manifest = await data.fetchManifest(cid);
 ```
 
 ### Debug

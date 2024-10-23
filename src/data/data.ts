@@ -4,6 +4,7 @@ import { Fetch } from "../fetch-safe/fetch-safe";
 import type { SafeValue } from "../values/values";
 import type {
   CodexDataResponse,
+  CodexManifest,
   CodexNodeSpace,
   UploadResponse,
 } from "./types";
@@ -63,7 +64,7 @@ export class CodexData {
 
     const xhr = new XMLHttpRequest();
 
-    const promise = new Promise<SafeValue<string>>(async (resolve) => {
+    const promise = new Promise<SafeValue<string>>((resolve) => {
       xhr.upload.onprogress = (evt) => {
         if (evt.lengthComputable) {
           onProgress?.(evt.loaded, evt.total);
@@ -71,7 +72,7 @@ export class CodexData {
       };
 
       xhr.open("POST", url, true);
-
+      // xhr.setRequestHeader("Content-Disposition", "attachment; filename=\"" + file.name + "\"")
       xhr.send(file);
 
       xhr.onload = function () {
@@ -144,5 +145,17 @@ export class CodexData {
     }
 
     return res.data.body;
+  }
+
+  /**
+    * Download only the dataset manifest from the network to the local node 
+    * if it's not available locally.
+   */
+  async fetchManifest(cid: string) {
+    const url = this.url + Api.config.prefix + `/data/${cid}/network/manifest`;
+
+    return Fetch.safeJson<CodexManifest>(url, {
+      method: "GET",
+    });
   }
 }
