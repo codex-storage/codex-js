@@ -309,6 +309,21 @@ const cid = "QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx5N";
 const result = await data.networkDownloadStream(cid);
 ```
 
+#### localDownload
+
+Download a file from the local node in a streaming manner.
+If the file is not available locally, a 404 is returned.
+
+- cid (string, required)
+- returns Response
+
+Example:
+
+```js
+const cid = "QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx5N";
+const result = await data.localDownload(cid);
+```
+
 ### Debug
 
 The following API assume that you have already a node module loaded, example:
