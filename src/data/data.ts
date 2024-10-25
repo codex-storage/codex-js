@@ -58,7 +58,7 @@ export class CodexData {
    * A callback onProgress can be passed to receive upload progress data information.
    */
   upload(
-    file: File,
+    file: Document | XMLHttpRequestBodyInit,
     onProgress?: (loaded: number, total: number) => void
   ): UploadResponse {
     const url = this.url + Api.config.prefix + "/data";
@@ -109,21 +109,12 @@ export class CodexData {
    * Download a file from the local node in a streaming manner.
    * If the file is not available locally, a 404 is returned.
    */
-  async localDownload(cid: string): Promise<SafeValue<ReadableStream<Uint8Array> | null>> {
+  async localDownload(cid: string): Promise<SafeValue<Response>> {
     const url = this.url + Api.config.prefix + "/data/" + cid;
 
-    const res = await Fetch.safe(url, {
+    return Fetch.safe(url, {
       method: "GET",
-      headers: {
-        "content-type": "application/octet-stream",
-      },
     });
-
-    if (res.error) {
-      return res;
-    }
-
-    return { error: false, data: res.data.body };
   }
 
   /**
@@ -134,10 +125,7 @@ export class CodexData {
     const url = this.url + Api.config.prefix + `/data/${cid}/network`;
 
     return Fetch.safeJson(url, {
-      method: "POST",
-      headers: {
-        "content-type": "application/octet-stream",
-      },
+      method: "POST"
     });
   }
 
@@ -145,18 +133,12 @@ export class CodexData {
    * Download a file from the network in a streaming manner. 
    * If the file is not available locally, it will be retrieved from other nodes in the network if able.
    */
-  async networkDownloadStream(cid: string): Promise<SafeValue<ReadableStream<Uint8Array> | null>> {
+  async networkDownloadStream(cid: string): Promise<SafeValue<Response>> {
     const url = this.url + Api.config.prefix + `/data/${cid}/network/stream`;
 
-    const res = await Fetch.safe(url, {
+    return Fetch.safe(url, {
       method: "GET"
     });
-
-    if (res.error) {
-      return res;
-    }
-
-    return { error: false, data: res.data.body };
   }
 
   /**

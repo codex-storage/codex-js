@@ -300,7 +300,7 @@ Download a file from the network in a streaming manner.
 If the file is not available locally, it will be retrieved from other nodes in the network if able.
 
 - cid (string, required)
-- returns ReadableStream<Uint8Array> | null
+- returns Response
 
 Example:
 
