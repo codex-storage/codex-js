@@ -6,6 +6,7 @@ import type {
   CodexDataResponse,
   CodexManifest,
   CodexNodeSpace,
+  NetworkDownloadResponse,
   UploadResponse,
 } from "./types";
 
@@ -107,9 +108,8 @@ export class CodexData {
   /**
    * Download a file from the local node in a streaming manner.
    * If the file is not available locally, a 404 is returned.
-   * There result is a readable stream.
    */
-  async localDownload(cid: string) {
+  async localDownload(cid: string): Promise<SafeValue<ReadableStream<Uint8Array> | null>> {
     const url = this.url + Api.config.prefix + "/data/" + cid;
 
     const res = await Fetch.safe(url, {
@@ -123,21 +123,33 @@ export class CodexData {
       return res;
     }
 
-    return res.data.body;
+    return { error: false, data: res.data.body };
   }
 
   /**
    * Download a file from the network in a streaming manner.
    * If the file is not available locally, it will be retrieved from other nodes in the network if able.
    */
-  async networkDownload(cid: string): Promise<SafeValue<ReadableStream<Uint8Array> | null>> {
+  async networkDownload(cid: string): Promise<SafeValue<NetworkDownloadResponse>> {
     const url = this.url + Api.config.prefix + `/data/${cid}/network`;
 
-    const res = await Fetch.safe(url, {
+    return Fetch.safeJson(url, {
       method: "POST",
       headers: {
         "content-type": "application/octet-stream",
       },
+    });
+  }
+
+  /**
+   * Download a file from the network in a streaming manner. 
+   * If the file is not available locally, it will be retrieved from other nodes in the network if able.
+   */
+  async networkDownloadStream(cid: string): Promise<SafeValue<ReadableStream<Uint8Array> | null>> {
+    const url = this.url + Api.config.prefix + `/data/${cid}/network/stream`;
+
+    const res = await Fetch.safe(url, {
+      method: "GET"
     });
 
     if (res.error) {

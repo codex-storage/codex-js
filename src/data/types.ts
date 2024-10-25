@@ -86,3 +86,9 @@ export type UploadResponse = {
   result: Promise<SafeValue<string>>;
   abort: () => void;
 };
+
+
+export type NetworkDownloadResponse = {
+  cid: string
+  manifest: CodexManifest
+}

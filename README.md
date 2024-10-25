@@ -294,6 +294,21 @@ const cid = "QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx5N";
 const manifest = await data.fetchManifest(cid);
 ```
 
+#### networkDownloadStream
+
+Download a file from the network in a streaming manner.
+If the file is not available locally, it will be retrieved from other nodes in the network if able.
+
+- cid (string, required)
+- returns ReadableStream<Uint8Array> | null
+
+Example:
+
+```js
+const cid = "QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx5N";
+const result = await data.networkDownloadStream(cid);
+```
+
 ### Debug
 
 The following API assume that you have already a node module loaded, example:
