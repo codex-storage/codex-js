@@ -22,7 +22,7 @@ export class CodexNode {
     }
 
     const url =
-      this.url + Api.config.prefix + `/connect/${peerId}?` + addrs.toString();
+      this.url + Api.config.prefix + `/connect/${peerId}?` + params.toString();
 
     return Fetch.safe(url, {
       method: "GET",
