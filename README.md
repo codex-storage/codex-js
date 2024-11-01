@@ -134,8 +134,8 @@ const availabilities = await marketplace.availabilities();
 
 Offers storage for sale.
 
-- input ([CodexCreateAvailabilityInput](./src/marketplace/types.ts#L133), required)
-- returns Promise<[CodexAvailabilityCreateResponse](./src/marketplace/types.ts#L124)[]>
+- input ([CodexCreateAvailabilityInput](./src/marketplace/types.ts#L160), required)
+- returns Promise<[CodexAvailabilityCreateResponse](./src/marketplace/types.ts#L151)[]>
 
 Example:
 
@@ -172,7 +172,7 @@ const response = await marketplace.updateAvailability({
 Return list of reservations for ongoing Storage Requests that the node hosts.
 
 - availabilityId (string, required)
-- returns Promise<[CodexReservation](./src/marketplace/types.ts#L156)[]>
+- returns Promise<[CodexReservation](./src/marketplace/types.ts#L183)[]>
 
 Example:
 
@@ -184,7 +184,7 @@ const reservations = await marketplace.reservations("Ox...");
 
 Creates a new Request for storage
 
-- input ([CodexCreateStorageRequestInput](./src/marketplace/types.ts#L188), required)
+- input ([CodexCreateStorageRequestInput](./src/marketplace/types.ts#L215), required)
 - returns Promise<string>
 
 Example:
@@ -218,7 +218,7 @@ const ids = await marketplace.purchaseIds();
 Returns purchase details
 
 - purchaseId (string, required)
-- returns Promise<[CodexPurchase](./src/marketplace/types.ts#L172)[]>
+- returns Promise<[CodexPurchase](./src/marketplace/types.ts#L199)[]>
 
 Example:
 
@@ -240,7 +240,7 @@ const data = await codex.data;
 
 Returns the manifest stored locally in node.
 
-- returns Promise<[CodexDataResponse](./src/data/types.ts#L57)[]>
+- returns Promise<[CodexDataResponse](./src/data/types.ts#L59)[]>
 
 Example:
 
@@ -252,7 +252,7 @@ const cids = await data.cids();
 
 Returns a summary of the storage space allocation of the node
 
-- returns Promise<[CodexNodeSpace](./src/data/types.ts#61)[]>
+- returns Promise<[CodexNodeSpace](./src/data/types.ts#L63)[]>
 
 Example:
 
@@ -266,7 +266,7 @@ Upload a file in a streaming manner
 
 - file (File, required)
 - onProgress (onProgress: (loaded: number, total: number) => void, optional)
-- returns [UploadResponse](./src/data/types.ts#85)
+- returns [UploadResponse](./src/data/types.ts#L85)
 
 Example:
 
@@ -285,7 +285,7 @@ await upload.result();
 Download only the dataset manifest from the network to the local node if it's not available locally.
 
 - cid (string, required)
-- returns [CodexManifest](./src/data/types.ts#3)
+- returns [CodexManifest](./src/data/types.ts#L3)
 
 Example:
 
