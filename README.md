@@ -266,6 +266,7 @@ Upload a file in a streaming manner
 
 - file (File, required)
 - onProgress (onProgress: (loaded: number, total: number) => void, optional)
+- metadata ({ filename?: string, mimetype?: string }, optional)
 - returns [UploadResponse](./src/data/types.ts#L85)
 
 Example:
@@ -273,10 +274,13 @@ Example:
 ```js
 // Get file from previous event
 const [file] = e.target.files
-
+const metadata = {
+  filename: file.name,
+  mimetype: file.type,
+}
 const upload = data.upload(file, (loaded: number, total: number) => {
   // Use loaded and total so update a progress bar for example
-});
+}, metadata);
 await upload.result();
 ```
 

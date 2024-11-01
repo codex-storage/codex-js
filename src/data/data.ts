@@ -59,7 +59,8 @@ export class CodexData {
    */
   upload(
     file: Document | XMLHttpRequestBodyInit,
-    onProgress?: (loaded: number, total: number) => void
+    onProgress?: (loaded: number, total: number) => void,
+    metadata: { filename?: string, mimetype?: string } = {},
   ): UploadResponse {
     const url = this.url + Api.config.prefix + "/data";
 
@@ -73,7 +74,15 @@ export class CodexData {
       };
 
       xhr.open("POST", url, true);
-      // xhr.setRequestHeader("Content-Disposition", "attachment; filename=\"" + file.name + "\"")
+
+      if (metadata.filename) {
+        xhr.setRequestHeader("Content-Disposition", "attachment; filename=\"" + metadata.filename + "\"")
+      }
+
+      if (metadata.mimetype) {
+        xhr.setRequestHeader("Content-Type", metadata.mimetype)
+      }
+
       xhr.send(file);
 
       xhr.onload = function () {
