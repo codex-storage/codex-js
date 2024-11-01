@@ -32,19 +32,19 @@ export type CodexManifest = {
   treeCid: string;
 
   /**
-   * Name of the name (not implemeted yet)
+   * Name of the name
    */
-  filename: string;
+  filename: string | null;
 
   /**
-   * Mimetype (not implemeted yet)
+   * Mimetype
    */
-  mimetype: string;
+  mimetype: string | null;
 
   /**
-   * Date of upload (not implemented at)
+   * Date of upload
    */
-  uploadedAt: string;
+  uploadedAt: number;
 };
 
 export type CodexDataContent = {
