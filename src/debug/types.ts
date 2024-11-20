@@ -23,6 +23,8 @@ export type CodexDebugInfo = {
    */
   addrs: string[];
 
+  announceAddresses: string[]
+
   /**
    * Path of the data repository where all nodes data are stored
    */
