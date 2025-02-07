@@ -1,6 +1,6 @@
 {
   "name": "@codex-storage/sdk-js",
-  "version": "0.0.17",
+  "version": "0.0.16",
   "description": "Codex SDK to interact with the Codex decentralized storage network.",
   "repository": {
     "type": "git",
@@ -58,10 +58,10 @@
   },
   "devDependencies": {
     "@tsconfig/strictest": "^2.0.5",
-    "prettier": "^3.4.2",
-    "tsup": "^8.3.6",
-    "typescript": "^5.7.3",
-    "vitest": "^3.0.5"
+    "prettier": "^3.3.3",
+    "tsup": "^8.2.3",
+    "typescript": "^5.5.4",
+    "vitest": "^2.1.1"
   },
   "dependencies": {
     "valibot": "^0.32.0"
