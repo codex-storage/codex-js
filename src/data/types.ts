@@ -40,11 +40,6 @@ export type CodexManifest = {
    * Mimetype
    */
   mimetype: string | null;
-
-  /**
-   * Date of upload
-   */
-  uploadedAt: number;
 };
 
 export type CodexDataContent = {
