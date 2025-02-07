@@ -192,7 +192,7 @@ Example:
 ```js
 const request = await marketplace.createStorageRequest({
   duration: 3000,
-  reward: 100,
+  pricePerBytePerSecond: 1,
   proofProbability: 1,
   nodes: 1,
   tolerance: 0,

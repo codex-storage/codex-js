@@ -30,10 +30,9 @@ export type CodexStorageRequest = {
     proofProbability: string;
 
     /**
-     * The maximum amount of tokens paid per second per slot to hosts
-     * the client is willing to pay.
+     * The amount of tokens paid per byte per second per slot to hosts the client is willing to pay
      */
-    reward: string;
+    pricePerBytePerSecond: string;
 
     /**
      * Max slots that can be lost without data considered to be lost.
@@ -215,7 +214,7 @@ export type CodexPurchase = {
 export const CodexCreateStorageRequestInput = v.strictObject({
   cid: v.string(),
   duration: v.pipe(v.number(), v.minValue(1)),
-  reward: v.number(),
+  pricePerBytePerSecond: v.number(),
   proofProbability: v.number(),
   nodes: v.optional(v.number(), 1),
   tolerance: v.optional(v.number(), 0),

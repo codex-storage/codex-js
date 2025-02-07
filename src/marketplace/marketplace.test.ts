@@ -12,7 +12,7 @@ function createStorageRequest() {
   return {
     cid: randomString(64),
     duration: randomInt(1, 64000),
-    reward: randomInt(1, 100),
+    pricePerBytePerSecond: randomInt(1, 100),
     proofProbability: randomInt(1, 100),
     nodes: randomInt(1, 5),
     tolerance: randomInt(1, 100),
@@ -325,12 +325,15 @@ describe("marketplace", () => {
     assert.deepStrictEqual(response, minNumberValidationError("duration", 1));
   });
 
-  it("returns an error when trying to create a storage request without reward", async () => {
-    const { reward, ...rest } = createStorageRequest();
+  it("returns an error when trying to create a storage request without pricePerBytePerSecond", async () => {
+    const { pricePerBytePerSecond, ...rest } = createStorageRequest();
 
     const response = await marketplace.createStorageRequest(rest as any);
 
-    assert.deepStrictEqual(response, missingNumberValidationError("reward"));
+    assert.deepStrictEqual(
+      response,
+      missingNumberValidationError("pricePerBytePerSecond")
+    );
   });
 
   it("returns an error when trying to create a storage request without proof probability", async () => {

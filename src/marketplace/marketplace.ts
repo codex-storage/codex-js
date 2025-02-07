@@ -236,7 +236,7 @@ export class CodexMarketplace {
     const {
       cid,
       duration,
-      reward,
+      pricePerBytePerSecond,
       proofProbability,
       nodes,
       collateral,
@@ -249,7 +249,7 @@ export class CodexMarketplace {
       method: "POST",
       body: JSON.stringify({
         duration: duration.toString(),
-        reward: reward.toString(),
+        pricePerBytePerSecond: pricePerBytePerSecond.toString(),
         proofProbability: proofProbability.toString(),
         nodes,
         collateral: collateral.toString(),
