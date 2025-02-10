@@ -196,7 +196,7 @@ const request = await marketplace.createStorageRequest({
   proofProbability: 1,
   nodes: 1,
   tolerance: 0,
-  collateral: 100,
+  collateralPerByte: 100,
   expiry: 3000,
 });
 ```
