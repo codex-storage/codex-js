@@ -219,7 +219,7 @@ export const CodexCreateStorageRequestInput = v.strictObject({
   nodes: v.optional(v.number(), 1),
   tolerance: v.optional(v.number(), 0),
   expiry: v.pipe(v.number(), v.minValue(1)),
-  collateral: v.number(),
+  collateralPerByte: v.number(),
 });
 
 export type CodexCreateStorageRequestInput = v.InferOutput<

@@ -17,7 +17,7 @@ function createStorageRequest() {
     nodes: randomInt(1, 5),
     tolerance: randomInt(1, 100),
     expiry: randomInt(1, 100),
-    collateral: randomInt(1, 100),
+    collateralPerByte: randomInt(1, 100),
   };
 }
 
@@ -366,14 +366,14 @@ describe("marketplace", () => {
     assert.deepStrictEqual(response, minNumberValidationError("expiry", 1));
   });
 
-  it("returns an error when trying to create a storage request without collateral", async () => {
-    const { collateral, ...rest } = createStorageRequest();
+  it("returns an error when trying to create a storage request without collateralPerByte", async () => {
+    const { collateralPerByte, ...rest } = createStorageRequest();
 
     const response = await marketplace.createStorageRequest(rest as any);
 
     assert.deepStrictEqual(
       response,
-      missingNumberValidationError("collateral")
+      missingNumberValidationError("collateralPerByte")
     );
   });
 });
