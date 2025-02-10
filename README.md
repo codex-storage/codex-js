@@ -83,6 +83,13 @@ if (slots.error) {
 // Access the slots within slots.data.
 ```
 
+### Compatibility
+
+| SDK version | Codex version | Codex app |
+| ----------- | ------------- | --------- |
+| latest      | master        | latest    |
+| 0.0.16      | Testnet 0.1.9 | 0.0.13    |
+
 ### Marketplace
 
 The following API assume that you have already a marketplace module loaded, example:
