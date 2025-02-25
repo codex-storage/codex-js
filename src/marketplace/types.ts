@@ -187,8 +187,8 @@ export const CodexUpdateAvailabilityInput = v.strictObject({
   id: v.string(),
   totalSize: v.pipe(v.number(), v.minValue(1)),
   duration: v.pipe(v.number(), v.minValue(1)),
-  minPrice: v.number(),
-  maxCollateral: v.number(),
+  minPricePerBytePerSecond: v.number(),
+  totalCollateral: v.number(),
 });
 
 export type CodexUpdateAvailabilityInput = v.InferOutput<

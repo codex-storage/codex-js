@@ -247,9 +247,9 @@ describe("marketplace", () => {
 
   it("returns an error when trying to update an availability without id", async () => {
     const response = await marketplace.updateAvailability({
-      maxCollateral: 1,
+      totalCollateral: 1,
       totalSize: 3000,
-      minPrice: 100,
+      minPricePerBytePerSecond: 100,
       duration: 100,
     } as any);
 
@@ -260,9 +260,9 @@ describe("marketplace", () => {
     const response = await marketplace.updateAvailability({
       id: randomString(64),
       totalSize: 0,
-      minPrice: 100,
+      minPricePerBytePerSecond: 100,
       duration: 100,
-      maxCollateral: 100,
+      totalCollateral: 100,
     });
 
     assert.deepStrictEqual(response, minNumberValidationError("totalSize", 1));
@@ -273,8 +273,8 @@ describe("marketplace", () => {
       id: randomString(64),
       totalSize: 100,
       duration: 0,
-      minPrice: 100,
-      maxCollateral: 100,
+      minPricePerBytePerSecond: 100,
+      totalCollateral: 100,
     });
 
     assert.deepStrictEqual(response, minNumberValidationError("duration", 1));
@@ -291,8 +291,8 @@ describe("marketplace", () => {
       id: randomString(64),
       totalSize: 3000,
       duration: 10,
-      minPrice: 100,
-      maxCollateral: 100,
+      minPricePerBytePerSecond: 100,
+      totalCollateral: 100,
     });
 
     assert.ok(!response.error);
