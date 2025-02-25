@@ -105,19 +105,27 @@ export type CodexAvailability = {
   totalSize: number;
 
   /**
+   * Unused size of availability's storage in bytes as decimal string
+   */
+  freeSize: number;
+
+  /**
    * Maximum time the storage should be sold for (in seconds)
    */
   duration: number;
 
   /**
-   * Minimum price to be paid (in amount of tokens)
+   * Minimal price per byte per second paid (in amount of tokens) for the
+   * hosted request's slot for the request's duration as decimal string
    */
-  minPrice: number;
+  minPricePerBytePerSecond: number;
 
   /**
-   * Maximum collateral user is willing to pay per filled Slot (in amount of tokens)
+   * Total collateral (in amount of tokens) that can be used for matching requests
    */
-  maxCollateral: number;
+  totalCollateral: number;
+
+  totalRemainingCollateral: number;
 };
 
 /**
@@ -132,19 +140,27 @@ export type CodexAvailabilityDto = {
   totalSize: string;
 
   /**
+   * Unused size of availability's storage in bytes as decimal string
+   */
+  freeSize: string;
+
+  /**
    * Maximum time the storage should be sold for (in seconds)
    */
   duration: string;
 
   /**
-   * Minimum price to be paid (in amount of tokens)
+   * Minimal price per byte per second paid (in amount of tokens) for the
+   * hosted request's slot for the request's duration as decimal string
    */
-  minPrice: string;
+  minPricePerBytePerSecond: string;
 
   /**
-   * Maximum collateral user is willing to pay per filled Slot (in amount of tokens)
+   * Total collateral (in amount of tokens) that can be used for matching requests
    */
-  maxCollateral: string;
+  totalCollateral: string;
+
+  totalRemainingCollateral: string;
 };
 
 export type CodexAvailabilityCreateResponse = CodexAvailability & {

@@ -88,6 +88,7 @@ if (slots.error) {
 | SDK version | Codex version | Codex app |
 | ----------- | ------------- | --------- |
 | latest      | master        | latest    |
+| 0.0.20      | Testnet 0.2.0 | 0.0.14    |
 | 0.0.16      | Testnet 0.1.9 | 0.0.13    |
 
 ### Marketplace
@@ -103,7 +104,7 @@ const marketplace = await codex.marketplace();
 
 Returns active slots.
 
-- returns Promise<[CodexSlot](./src/marketplace/types.ts#L86)[]>
+- returns Promise<[CodexSlot](./src/marketplace/types.ts#L85)[]>
 
 Example:
 
@@ -116,7 +117,7 @@ const slots = await marketplace.activeSlots();
 Returns active slot with id {slotId} for the host.
 
 - slotId (string, required)
-- returns Promise<[CodexSlot](./src/marketplace/types.ts#L86)[]>
+- returns Promise<[CodexSlot](./src/marketplace/types.ts#L85)[]>
 
 Example:
 
@@ -129,7 +130,7 @@ const slot = await marketplace.activeSlot(slotId);
 
 Returns storage that is for sale.
 
-- returns Promise<[CodexAvailability](./src/marketplace/types.ts#L100)>
+- returns Promise<[CodexAvailability](./src/marketplace/types.ts#L99)>
 
 Example:
 
@@ -141,8 +142,8 @@ const availabilities = await marketplace.availabilities();
 
 Offers storage for sale.
 
-- input ([CodexCreateAvailabilityInput](./src/marketplace/types.ts#L160), required)
-- returns Promise<[CodexAvailabilityCreateResponse](./src/marketplace/types.ts#L151)[]>
+- input ([CodexCreateAvailabilityInput](./src/marketplace/types.ts#L175), required)
+- returns Promise<[CodexAvailabilityCreateResponse](./src/marketplace/types.ts#L186)[]>
 
 Example:
 
@@ -159,7 +160,7 @@ const response = await marketplace.createAvailability({
 
 Updates availability.
 
-- input ([CodexUpdateAvailabilityInput](./src/marketplace/types.ts#L171), required)
+- input ([CodexUpdateAvailabilityInput](./src/marketplace/types.ts#L186), required)
 - returns Promise<"">
 
 Example:
@@ -179,7 +180,7 @@ const response = await marketplace.updateAvailability({
 Return list of reservations for ongoing Storage Requests that the node hosts.
 
 - availabilityId (string, required)
-- returns Promise<[CodexReservation](./src/marketplace/types.ts#L183)[]>
+- returns Promise<[CodexReservation](./src/marketplace/types.ts#L198)[]>
 
 Example:
 
@@ -191,7 +192,7 @@ const reservations = await marketplace.reservations("Ox...");
 
 Creates a new Request for storage
 
-- input ([CodexCreateStorageRequestInput](./src/marketplace/types.ts#L215), required)
+- input ([CodexCreateStorageRequestInput](./src/marketplace/types.ts#L230), required)
 - returns Promise<string>
 
 Example:
@@ -225,7 +226,7 @@ const ids = await marketplace.purchaseIds();
 Returns purchase details
 
 - purchaseId (string, required)
-- returns Promise<[CodexPurchase](./src/marketplace/types.ts#L199)[]>
+- returns Promise<[CodexPurchase](./src/marketplace/types.ts#L214)[]>
 
 Example:
 
@@ -247,7 +248,7 @@ const data = await codex.data;
 
 Returns the manifest stored locally in node.
 
-- returns Promise<[CodexDataResponse](./src/data/types.ts#L59)[]>
+- returns Promise<[CodexDataResponse](./src/data/types.ts#L54)[]>
 
 Example:
 
@@ -259,7 +260,7 @@ const cids = await data.cids();
 
 Returns a summary of the storage space allocation of the node
 
-- returns Promise<[CodexNodeSpace](./src/data/types.ts#L63)[]>
+- returns Promise<[CodexNodeSpace](./src/data/types.ts#L58)[]>
 
 Example:
 
@@ -274,7 +275,7 @@ Upload a file in a streaming manner
 - file (File, required)
 - onProgress (onProgress: (loaded: number, total: number) => void, optional)
 - metadata ({ filename?: string, mimetype?: string }, optional)
-- returns [UploadResponse](./src/data/types.ts#L85)
+- returns [UploadResponse](./src/data/types.ts#L80)
 
 Example:
 

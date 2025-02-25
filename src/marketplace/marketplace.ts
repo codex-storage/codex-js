@@ -64,9 +64,11 @@ export class CodexMarketplace {
       data: res.data.map((a) => ({
         id: a.id,
         totalSize: parseInt(a.totalSize, 10),
+        freeSize: parseInt(a.freeSize, 10),
         duration: parseInt(a.duration, 10),
-        minPrice: parseInt(a.minPrice, 10),
-        maxCollateral: parseInt(a.maxCollateral, 10),
+        minPricePerBytePerSecond: parseInt(a.minPricePerBytePerSecond, 10),
+        totalCollateral: parseInt(a.totalCollateral, 10),
+        totalRemainingCollateral: parseInt(a.totalRemainingCollateral, 10),
       })),
     };
   }
