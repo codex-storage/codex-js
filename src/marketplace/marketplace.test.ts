@@ -145,8 +145,8 @@ describe("marketplace", () => {
   it("returns an error when trying to create an availability with zero total size", async () => {
     const response = await marketplace.createAvailability({
       duration: 3000,
-      maxCollateral: 1,
-      minPrice: 100,
+      totalCollateral: 1,
+      minPricePerBytePerSecond: 100,
       totalSize: 0,
     });
 
@@ -166,8 +166,8 @@ describe("marketplace", () => {
   it("returns an error when trying to create an availability with zero duration", async () => {
     const response = await marketplace.createAvailability({
       duration: 0,
-      maxCollateral: 1,
-      minPrice: 100,
+      totalCollateral: 1,
+      minPricePerBytePerSecond: 100,
       totalSize: 3000,
     });
 
@@ -216,9 +216,9 @@ describe("marketplace", () => {
     spy.mockImplementationOnce(() => Promise.resolve({ error: false, data }));
 
     const response = await marketplace.createAvailability({
-      maxCollateral: 1,
+      totalCollateral: 1,
       totalSize: 3000,
-      minPrice: 100,
+      minPricePerBytePerSecond: 100,
       duration: 100,
     });
 
@@ -234,9 +234,9 @@ describe("marketplace", () => {
     spy.mockImplementationOnce(() => Promise.resolve({ error: false, data }));
 
     const response = await marketplace.createAvailability({
-      maxCollateral: 1,
+      totalCollateral: 1,
       totalSize: 3000,
-      minPrice: 100,
+      minPricePerBytePerSecond: 100,
       duration: 100,
     });
 

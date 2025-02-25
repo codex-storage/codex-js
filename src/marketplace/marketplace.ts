@@ -99,8 +99,8 @@ export class CodexMarketplace {
       body: JSON.stringify({
         totalSize: body.totalSize.toString(),
         duration: body.duration.toString(),
-        minPrice: body.minPrice.toString(),
-        maxCollateral: body.maxCollateral.toString(),
+        minPricePerBytePerSecond: body.minPricePerBytePerSecond.toString(),
+        totalCollateral: body.totalCollateral.toString(),
       }),
     });
   }
