@@ -149,9 +149,9 @@ Example:
 
 ```js
 const response = await marketplace.createAvailability({
-  maxCollateral: 1,
+  totalCollateral: 1,
   totalSize: 3000,
-  minPrice: 100,
+  minPricePerBytePerSecond: 100,
   duration: 100,
 });
 ```
@@ -168,9 +168,9 @@ Example:
 ```js
 const response = await marketplace.updateAvailability({
   id: "0x.....................",
-  maxCollateral: 1,
+  totalCollateral: 1,
   totalSize: 3000,
-  minPrice: 100,
+  minPricePerBytePerSecond: 100,
   duration: 100,
 });
 ```
