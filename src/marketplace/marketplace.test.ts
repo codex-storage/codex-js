@@ -121,8 +121,8 @@ describe("marketplace", () => {
   it("returns an error when trying to create an availability without total size", async () => {
     const response = await marketplace.createAvailability({
       duration: 3000,
-      maxCollateral: 1,
-      minPrice: 100,
+      totalCollateral: 1,
+      minPricePerBytePerSecond: 100,
     } as any);
 
     assert.deepStrictEqual(response, missingNumberValidationError("totalSize"));
@@ -131,8 +131,8 @@ describe("marketplace", () => {
   it("returns an error when trying to create an availability with an invalid number valid", async () => {
     const response = await marketplace.createAvailability({
       duration: 3000,
-      maxCollateral: 1,
-      minPrice: 100,
+      totalCollateral: 1,
+      minPricePerBytePerSecond: 100,
       totalSize: "abc",
     } as any);
 
@@ -156,8 +156,8 @@ describe("marketplace", () => {
   it("returns an error when trying to create an availability without duration", async () => {
     const response = await marketplace.createAvailability({
       totalSize: 3000,
-      maxCollateral: 1,
-      minPrice: 100,
+      totalCollateral: 1,
+      minPricePerBytePerSecond: 100,
     } as any);
 
     assert.deepStrictEqual(response, missingNumberValidationError("duration"));
@@ -177,7 +177,7 @@ describe("marketplace", () => {
   it("returns an error when trying to create an availability without min price", async () => {
     const response = await marketplace.createAvailability({
       totalSize: 3000,
-      maxCollateral: 1,
+      totalCollateral: 1,
       duration: 100,
     } as any);
 
@@ -187,7 +187,7 @@ describe("marketplace", () => {
   it("returns an error when trying to create an availability without max collateral", async () => {
     const response = await marketplace.createAvailability({
       totalSize: 3000,
-      minPrice: 100,
+      minPricePerBytePerSecond: 100,
       duration: 100,
     } as any);
 
@@ -201,7 +201,7 @@ describe("marketplace", () => {
     const response = await marketplace.createAvailability({
       maxCollateral: 1,
       totalSize: 3000,
-      minPrice: 100,
+      minPricePerBytePerSecond: 100,
       duration: 100,
       hello: "world",
     } as any);

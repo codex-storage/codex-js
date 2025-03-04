@@ -254,7 +254,7 @@ export class CodexMarketplace {
         pricePerBytePerSecond: pricePerBytePerSecond.toString(),
         proofProbability: proofProbability.toString(),
         nodes,
-        collateral: collateralPerByte.toString(),
+        collateralPerByte: collateralPerByte.toString(),
         expiry: expiry.toString(),
         tolerance,
       }),
