@@ -55,7 +55,7 @@ const codex = new Codex("http://localhost:3000");
 To use a module, you need to use the await syntax. If the module is not loaded yet, it will be imported first and then cached in memory.
 
 ```js
-const marketplace = await codex.marketplace;
+const marketplace = await codex.marketplace();
 ```
 
 ### Error handling
@@ -241,7 +241,7 @@ The following API assume that you have already a data module loaded, example:
 
 ```js
 const codex = new Codex("http://localhost:3000");
-const data = await codex.data;
+const data = await codex.data();
 ```
 
 #### cids
@@ -342,7 +342,7 @@ The following API assume that you have already a node module loaded, example:
 
 ```js
 const codex = new Codex("http://localhost:3000");
-const data = await codex.debug;
+const data = await codex.debug();
 ```
 
 #### setLogLevel
@@ -376,7 +376,7 @@ The following API assume that you have already a node module loaded, example:
 
 ```js
 const codex = new Codex("http://localhost:3000");
-const node = await codex.node;
+const node = await codex.node();
 ```
 
 #### spr

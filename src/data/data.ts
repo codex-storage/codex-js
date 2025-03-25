@@ -127,8 +127,8 @@ export class CodexData {
   }
 
   /**
-   * Download a file from the network in a streaming manner.
-   * If the file is not available locally, it will be retrieved from other nodes in the network if able.
+   * Download a file from the network to the local node if it's not available locally.
+   * Note: Download is performed async. Call can return before download is completed.
    */
   async networkDownload(cid: string): Promise<SafeValue<NetworkDownloadResponse>> {
     const url = this.url + Api.config.prefix + `/data/${cid}/network`;
