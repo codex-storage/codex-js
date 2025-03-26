@@ -77,6 +77,7 @@
   },
   "devDependencies": {
     "@tsconfig/strictest": "^2.0.5",
+    "@types/node": "^22.13.13",
     "prettier": "^3.5.3",
     "tsup": "^8.3.6",
     "typescript": "^5.8.2",
