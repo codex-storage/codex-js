@@ -6,6 +6,10 @@ The SDK has a small bundle size and support tree shaking.
 
 The SDK is currently under early development and the API can change at any time.
 
+## Breaking changes
+
+- Version 0.1.0 introduce download strategy to support browser and Node JS.
+
 ## How to use
 
 ### Sync api
@@ -272,24 +276,55 @@ const space = await data.space();
 
 Upload a file in a streaming manner
 
-- file (File, required)
-- onProgress (onProgress: (loaded: number, total: number) => void, optional)
-- metadata ({ filename?: string, mimetype?: string }, optional)
+## Browser
+
+- stategy [BrowserDownloadStategy](./src/data/browser-download.ts#L5)
 - returns [UploadResponse](./src/data/types.ts#L80)
 
 Example:
 
 ```js
-// Get file from previous event
-const [file] = e.target.files
-const metadata = {
-  filename: file.name,
-  mimetype: file.type,
+const file = new File(["foo"], "foo.txt", { type: "text/plain" });
+
+const onProgress = (loaded, total) => {
+  console.info("Loaded", loaded, "total", total);
+};
+
+const metadata = { filename: "foo.xt", mimetype: "text/plain" };
+
+const stategy = new BrowserDownloadStategy(file, onProgress, metadata);
+
+const uploadResponse = data.upload(stategy);
+
+const res = await uploadResponse.result;
+
+if (res.error) {
+  console.error(res.data);
+  return;
 }
-const upload = data.upload(file, (loaded: number, total: number) => {
-  // Use loaded and total so update a progress bar for example
-}, metadata);
-await upload.result();
+
+console.info("CID is", res.data);
+```
+
+## Node
+
+- stategy [NodeDownloadStategy](./src/data/node-download.ts#L8)
+- returns [UploadResponse](./src/data/types.ts#L80)
+
+Example:
+
+```js
+const stategy = new NodeDownloadStategy("Hello World !");
+const uploadResponse = data.upload(stategy);
+
+const res = await uploadResponse.result;
+
+if (res.error) {
+  console.error(res.data);
+  return;
+}
+
+console.info("CID is", res.data);
 ```
 
 #### manifest

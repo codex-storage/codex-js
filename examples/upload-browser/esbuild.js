@@ -14,6 +14,9 @@ const options = {
   outfile: "./index.bundle.js",
   bundle: true,
   define,
+  logOverride: {
+    "ignored-bare-import": "silent",
+  },
 };
 
 build(options).catch(() => process.exit(1));
