@@ -97,7 +97,11 @@ The following API assume that you have already a marketplace module loaded, exam
 
 ```js
 const codex = new Codex("http://localhost:3000");
+// When using the async api
 const marketplace = await codex.marketplace();
+
+// When using the sync api
+const marketplace = codex.marketplace
 ```
 
 #### activeSlots()
@@ -241,7 +245,11 @@ The following API assume that you have already a data module loaded, example:
 
 ```js
 const codex = new Codex("http://localhost:3000");
+// When using the async api
 const data = await codex.data();
+
+// When using the sync api
+const data = codex.data
 ```
 
 #### cids
@@ -342,7 +350,11 @@ The following API assume that you have already a node module loaded, example:
 
 ```js
 const codex = new Codex("http://localhost:3000");
+// When using the async api
 const data = await codex.debug();
+
+// When using the sync api
+const data = codex.debug
 ```
 
 #### setLogLevel
@@ -376,7 +388,11 @@ The following API assume that you have already a node module loaded, example:
 
 ```js
 const codex = new Codex("http://localhost:3000");
+// When using the async api
 const node = await codex.node();
+
+// When using the sync api
+const node = codex.node
 ```
 
 #### spr
