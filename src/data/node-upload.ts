@@ -3,9 +3,9 @@ import { CodexError } from "../errors/errors";
 import type { SafeValue } from "../values/values";
 import Undici from "undici";
 import { type FormData } from "undici";
-import type { DownloadStategy } from "./types";
+import type { UploadStategy } from "./types";
 
-export class NodeDownloadStategy implements DownloadStategy {
+export class NodeUploadStategy implements UploadStategy {
   private readonly body:
     | string
     | Buffer

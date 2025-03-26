@@ -1,8 +1,8 @@
 import { CodexError } from "../errors/errors";
 import type { SafeValue } from "../values/values";
-import type { DownloadStategy } from "./types";
+import type { UploadStategy } from "./types";
 
-export class BrowserDownloadStategy implements DownloadStategy {
+export class BrowserUploadStategy implements UploadStategy {
   private readonly file: Document | XMLHttpRequestBodyInit;
   private readonly onProgress:
     | ((loaded: number, total: number) => void)

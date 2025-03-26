@@ -8,7 +8,7 @@ The SDK is currently under early development and the API can change at any time.
 
 ## Breaking changes
 
-- Version 0.1.0 introduce download strategy to support browser and Node JS.
+- Version 0.1.0 introduce upload strategy to support browser and Node JS.
 
 ## How to use
 
@@ -278,7 +278,7 @@ Upload a file in a streaming manner
 
 ## Browser
 
-- stategy [BrowserDownloadStategy](./src/data/browser-download.ts#L5)
+- stategy [BrowserUploadStategy](./src/data/browser-upload.ts#L5)
 - returns [UploadResponse](./src/data/types.ts#L80)
 
 Example:
@@ -292,7 +292,7 @@ const onProgress = (loaded, total) => {
 
 const metadata = { filename: "foo.xt", mimetype: "text/plain" };
 
-const stategy = new BrowserDownloadStategy(file, onProgress, metadata);
+const stategy = new BrowserUploadStategy(file, onProgress, metadata);
 
 const uploadResponse = data.upload(stategy);
 
@@ -308,13 +308,13 @@ console.info("CID is", res.data);
 
 ## Node
 
-- stategy [NodeDownloadStategy](./src/data/node-download.ts#L8)
+- stategy [NodeUploadStategy](./src/data/node-download.ts#L8)
 - returns [UploadResponse](./src/data/types.ts#L80)
 
 Example:
 
 ```js
-const stategy = new NodeDownloadStategy("Hello World !");
+const stategy = new NodeUploadStategy("Hello World !");
 const uploadResponse = data.upload(stategy);
 
 const res = await uploadResponse.result;

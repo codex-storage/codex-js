@@ -82,7 +82,7 @@ export type UploadResponse = {
 
 export type NetworkDownloadResponse = { cid: string; manifest: CodexManifest };
 
-export interface DownloadStategy {
+export interface UploadStategy {
   download(url: string): Promise<SafeValue<string>>;
   abort(): void;
 }

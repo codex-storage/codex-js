@@ -5,7 +5,7 @@ import type {
   CodexDataResponse,
   CodexManifest,
   CodexNodeSpace,
-  DownloadStategy,
+  UploadStategy,
   NetworkDownloadResponse,
   UploadResponse,
 } from "./types";
@@ -50,7 +50,7 @@ export class CodexData {
    * XMLHttpRequest is used instead of fetch for this case, to obtain progress information.
    * A callback onProgress can be passed to receive upload progress data information.
    */
-  upload(stategy: DownloadStategy): UploadResponse {
+  upload(stategy: UploadStategy): UploadResponse {
     const url = this.url + Api.config.prefix + "/data";
 
     return {

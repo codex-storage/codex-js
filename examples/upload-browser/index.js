@@ -1,5 +1,5 @@
 import { Codex } from "@codex-storage/sdk-js";
-import { BrowserDownloadStategy } from "@codex-storage/sdk-js/browser";
+import { BrowserUploadStategy } from "@codex-storage/sdk-js/browser";
 
 async function main() {
   const codex = new Codex(process.env.CODEX_NODE_URL);
@@ -19,7 +19,7 @@ async function main() {
     mimetype: "text/plain",
   };
 
-  const stategy = new BrowserDownloadStategy(file, onProgress, metadata);
+  const stategy = new BrowserUploadStategy(file, onProgress, metadata);
 
   const uploadResponse = data.upload(stategy);
 

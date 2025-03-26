@@ -1,1 +1,1 @@
-export * from "./data/browser-download";
+export * from "./data/browser-upload";
