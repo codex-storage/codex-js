@@ -51,9 +51,7 @@ export type CodexDataContent = {
   manifest: CodexManifest;
 };
 
-export type CodexDataResponse = {
-  content: CodexDataContent[];
-};
+export type CodexDataResponse = { content: CodexDataContent[] };
 
 export type CodexNodeSpace = {
   /**
@@ -82,8 +80,9 @@ export type UploadResponse = {
   abort: () => void;
 };
 
+export type NetworkDownloadResponse = { cid: string; manifest: CodexManifest };
 
-export type NetworkDownloadResponse = {
-  cid: string
-  manifest: CodexManifest
+export interface UploadStategy {
+  download(url: string): Promise<SafeValue<string>>;
+  abort(): void;
 }

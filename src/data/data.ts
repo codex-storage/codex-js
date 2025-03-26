@@ -1,11 +1,11 @@
 import { Api } from "../api/config";
-import { CodexError } from "../errors/errors";
 import { Fetch } from "../fetch-safe/fetch-safe";
 import type { SafeValue } from "../values/values";
 import type {
   CodexDataResponse,
   CodexManifest,
   CodexNodeSpace,
+  UploadStategy,
   NetworkDownloadResponse,
   UploadResponse,
 } from "./types";
@@ -24,20 +24,15 @@ export class CodexData {
   cids(): Promise<SafeValue<CodexDataResponse>> {
     const url = this.url + Api.config.prefix + "/data";
 
-    return Fetch.safeJson<CodexDataResponse>(url, {
-      method: "GET",
-    }).then((data) => {
-      if (data.error) {
-        return data;
-      }
+    return Fetch.safeJson<CodexDataResponse>(url, { method: "GET" }).then(
+      (data) => {
+        if (data.error) {
+          return data;
+        }
 
-      return {
-        error: false,
-        data: {
-          content: data.data.content,
-        },
-      };
-    });
+        return { error: false, data: { content: data.data.content } };
+      }
+    );
   }
 
   /**
@@ -46,9 +41,7 @@ export class CodexData {
   space() {
     const url = this.url + Api.config.prefix + "/space";
 
-    return Fetch.safeJson<CodexNodeSpace>(url, {
-      method: "GET",
-    });
+    return Fetch.safeJson<CodexNodeSpace>(url, { method: "GET" });
   }
 
   /**
@@ -57,59 +50,13 @@ export class CodexData {
    * XMLHttpRequest is used instead of fetch for this case, to obtain progress information.
    * A callback onProgress can be passed to receive upload progress data information.
    */
-  upload(
-    file: Document | XMLHttpRequestBodyInit,
-    onProgress?: (loaded: number, total: number) => void,
-    metadata: { filename?: string, mimetype?: string } = {},
-  ): UploadResponse {
+  upload(stategy: UploadStategy): UploadResponse {
     const url = this.url + Api.config.prefix + "/data";
 
-    const xhr = new XMLHttpRequest();
-
-    const promise = new Promise<SafeValue<string>>((resolve) => {
-      xhr.upload.onprogress = (evt) => {
-        if (evt.lengthComputable) {
-          onProgress?.(evt.loaded, evt.total);
-        }
-      };
-
-      xhr.open("POST", url, true);
-
-      if (metadata.filename) {
-        xhr.setRequestHeader("Content-Disposition", "attachment; filename=\"" + metadata.filename + "\"")
-      }
-
-      if (metadata.mimetype) {
-        xhr.setRequestHeader("Content-Type", metadata.mimetype)
-      }
-
-      xhr.send(file);
-
-      xhr.onload = function () {
-        if (xhr.status != 200) {
-          resolve({
-            error: true,
-            data: new CodexError(xhr.responseText, {
-              code: xhr.status,
-            }),
-          });
-        } else {
-          resolve({ error: false, data: xhr.response });
-        }
-      };
-
-      xhr.onerror = function () {
-        resolve({
-          error: true,
-          data: new CodexError("Something went wrong during the file upload."),
-        });
-      };
-    });
-
     return {
-      result: promise,
+      result: stategy.download(url),
       abort: () => {
-        xhr.abort();
+        stategy.abort();
       },
     };
   }
@@ -121,44 +68,38 @@ export class CodexData {
   async localDownload(cid: string): Promise<SafeValue<Response>> {
     const url = this.url + Api.config.prefix + "/data/" + cid;
 
-    return Fetch.safe(url, {
-      method: "GET",
-    });
+    return Fetch.safe(url, { method: "GET" });
   }
 
   /**
    * Download a file from the network to the local node if it's not available locally.
    * Note: Download is performed async. Call can return before download is completed.
    */
-  async networkDownload(cid: string): Promise<SafeValue<NetworkDownloadResponse>> {
+  async networkDownload(
+    cid: string
+  ): Promise<SafeValue<NetworkDownloadResponse>> {
     const url = this.url + Api.config.prefix + `/data/${cid}/network`;
 
-    return Fetch.safeJson(url, {
-      method: "POST"
-    });
+    return Fetch.safeJson(url, { method: "POST" });
   }
 
   /**
-   * Download a file from the network in a streaming manner. 
+   * Download a file from the network in a streaming manner.
    * If the file is not available locally, it will be retrieved from other nodes in the network if able.
    */
   async networkDownloadStream(cid: string): Promise<SafeValue<Response>> {
     const url = this.url + Api.config.prefix + `/data/${cid}/network/stream`;
 
-    return Fetch.safe(url, {
-      method: "GET"
-    });
+    return Fetch.safe(url, { method: "GET" });
   }
 
   /**
-    * Download only the dataset manifest from the network to the local node 
-    * if it's not available locally.
+   * Download only the dataset manifest from the network to the local node
+   * if it's not available locally.
    */
   async fetchManifest(cid: string) {
     const url = this.url + Api.config.prefix + `/data/${cid}/network/manifest`;
 
-    return Fetch.safeJson<CodexManifest>(url, {
-      method: "GET",
-    });
+    return Fetch.safeJson<CodexManifest>(url, { method: "GET" });
   }
 }

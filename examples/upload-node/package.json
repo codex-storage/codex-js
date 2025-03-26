@@ -1,5 +1,5 @@
 {
-  "name": "@codex-storage/sdk-js-download-example",
+  "name": "@codex-storage/sdk-js-update-node-example",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -9,10 +9,9 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@codex-storage/sdk-js": ".."
+    "@codex-storage/sdk-js": "../.."
   },
   "devDependencies": {
-    "esbuild": "^0.25.1",
     "prettier": "^3.5.3"
   }
 }

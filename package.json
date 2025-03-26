@@ -1,6 +1,6 @@
 {
   "name": "@codex-storage/sdk-js",
-  "version": "0.0.23",
+  "version": "0.1.0",
   "description": "Codex SDK to interact with the Codex decentralized storage network.",
   "repository": {
     "type": "git",
@@ -9,7 +9,7 @@
   "scripts": {
     "prepack": "npm run build",
     "prebuild": "npm run compile && rm -Rf dist/*",
-    "build": "tsup src/index.ts src/async.ts --format esm,cjs --dts --sourcemap --treeshake",
+    "build": "tsup src/index.ts src/async.ts  src/browser.ts src/node.ts --format esm,cjs --dts --sourcemap --treeshake",
     "compile": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -35,6 +35,26 @@
         "default": "./dist/index.js"
       }
     },
+    "./browser": {
+      "import": {
+        "types": "./dist/browser.d.ts",
+        "default": "./dist/browser.mjs"
+      },
+      "require": {
+        "types": "./dist/browser.d.cts",
+        "default": "./dist/browser.js"
+      }
+    },
+    "./node": {
+      "import": {
+        "types": "./dist/node.d.ts",
+        "default": "./dist/node.mjs"
+      },
+      "require": {
+        "types": "./dist/node.d.cts",
+        "default": "./dist/node.js"
+      }
+    },
     "./async": {
       "import": {
         "types": "./dist/async.d.ts",
@@ -46,7 +66,6 @@
       }
     }
   },
-  "sideEffects": false,
   "files": [
     "dist"
   ],
@@ -54,16 +73,17 @@
   "readme": "README.md",
   "license": "MIT",
   "engines": {
-    "node": ">=20"
+    "node": ">=20.18.1"
   },
   "devDependencies": {
     "@tsconfig/strictest": "^2.0.5",
-    "prettier": "^3.4.2",
+    "prettier": "^3.5.3",
     "tsup": "^8.3.6",
-    "typescript": "^5.7.3",
-    "vitest": "^3.0.5"
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.9"
   },
   "dependencies": {
+    "undici": "^7.5.0",
     "valibot": "^0.32.0"
   }
 }
