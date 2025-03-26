@@ -264,7 +264,7 @@ const cids = await data.cids();
 
 Returns a summary of the storage space allocation of the node
 
-- returns Promise<[CodexNodeSpace](./src/data/types.ts#L58)[]>
+- returns Promise<[CodexNodeSpace](./src/data/types.ts#L56)[]>
 
 Example:
 
