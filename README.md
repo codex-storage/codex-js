@@ -8,7 +8,7 @@ The SDK is currently under early development and the API can change at any time.
 
 ## Breaking changes
 
-- Version 0.1.0 introduce upload strategy to support browser and Node JS.
+- Version 0.1.0 introduces [upload strategy](#upload) to support browser and Node JS.
 
 ## How to use
 
@@ -276,7 +276,7 @@ const space = await data.space();
 
 Upload a file in a streaming manner
 
-## Browser
+#### Browser
 
 - stategy [BrowserUploadStategy](./src/data/browser-upload.ts#L5)
 - returns [UploadResponse](./src/data/types.ts#L80)
@@ -306,7 +306,7 @@ if (res.error) {
 console.info("CID is", res.data);
 ```
 
-## Node
+#### Node
 
 - stategy [NodeUploadStategy](./src/data/node-download.ts#L8)
 - returns [UploadResponse](./src/data/types.ts#L80)
