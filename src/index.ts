@@ -28,15 +28,15 @@ export class Codex {
   private _debug: CodexDebug | null;
   private readonly auth: FetchAuth = {};
 
-  constructor(url: string, { auth }: CodexProps) {
+  constructor(url: string, options?: CodexProps) {
     this.url = url;
     this._marketplace = null;
     this._data = null;
     this._node = null;
     this._debug = null;
 
-    if (auth) {
-      this.auth = auth;
+    if (options?.auth) {
+      this.auth = options?.auth;
     }
   }
 
