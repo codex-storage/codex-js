@@ -1,7 +1,14 @@
 import { Api } from "../api/config";
 import { Fetch } from "../fetch-safe/fetch-safe";
 import type { SafeValue } from "../values/values";
-import type { CodexSpr } from "./types";
+import type {
+  CodexPeerId,
+  CodexPeerIdContentType,
+  CodexPeerIdJsonResponse,
+  CodexSpr,
+  CodexSprContentType,
+  CodexSprJsonResponse,
+} from "./types";
 
 export class CodexNode {
   readonly url: string;
@@ -12,9 +19,8 @@ export class CodexNode {
 
   /**
    * Connect to a peer
-   * TODO check result
    */
-  connect(peerId: string, addrs: string[] = []) {
+  connect(peerId: string, addrs: string[] = []): Promise<SafeValue<string>> {
     const params = new URLSearchParams();
 
     for (const addr of addrs) {
@@ -24,7 +30,7 @@ export class CodexNode {
     const url =
       this.url + Api.config.prefix + `/connect/${peerId}?` + params.toString();
 
-    return Fetch.safe(url, {
+    return Fetch.safeText(url, {
       method: "GET",
     });
   }
@@ -32,23 +38,50 @@ export class CodexNode {
   /**
    * Get Node's SPR
    */
-  async spr(): Promise<SafeValue<CodexSpr>> {
+  async spr(
+    type: CodexSprContentType = "json"
+  ): Promise<SafeValue<CodexSpr<CodexSprContentType>>> {
     const url = this.url + Api.config.prefix + "/spr";
 
-    return Fetch.safeJson(url, {
+    if (type === "json") {
+      return Fetch.safeJson<CodexSprJsonResponse>(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
+
+    return Fetch.safeText(url, {
       method: "GET",
+      headers: {
+        "Content-Type": "text/plain",
+      },
     });
   }
 
   /**
    * Get Node's PeerID
-   * TODO check result
    */
-  peerId() {
+  peerId(
+    type: CodexPeerIdContentType = "json"
+  ): Promise<SafeValue<CodexPeerId<CodexPeerIdContentType>>> {
     const url = this.url + Api.config.prefix + "/node/peerid";
 
-    return Fetch.safe(url, {
+    if (type === "json") {
+      return Fetch.safeJson<CodexPeerIdJsonResponse>(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
+
+    return Fetch.safeText(url, {
       method: "GET",
+      headers: {
+        "Content-Type": "text/plain",
+      },
     });
   }
 }

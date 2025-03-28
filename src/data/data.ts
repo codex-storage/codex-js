@@ -3,11 +3,14 @@ import { Fetch } from "../fetch-safe/fetch-safe";
 import type { SafeValue } from "../values/values";
 import type {
   CodexDataResponse,
-  CodexManifest,
-  CodexNodeSpace,
   UploadStategy,
-  NetworkDownloadResponse,
   UploadResponse,
+  CodexSpaceResponse,
+  CodexNodeSpace,
+  CodexDataNetworkResponse,
+  CodexNetworkDownload,
+  CodexManifest,
+  CodexDataItems,
 } from "./types";
 
 export class CodexData {
@@ -21,27 +24,19 @@ export class CodexData {
    * Lists manifest CIDs stored locally in node.
    * TODO: remove the faker data part when the api is ready
    */
-  cids(): Promise<SafeValue<CodexDataResponse>> {
+  cids(): Promise<SafeValue<CodexDataItems>> {
     const url = this.url + Api.config.prefix + "/data";
 
-    return Fetch.safeJson<CodexDataResponse>(url, { method: "GET" }).then(
-      (data) => {
-        if (data.error) {
-          return data;
-        }
-
-        return { error: false, data: { content: data.data.content } };
-      }
-    );
+    return Fetch.safeJson<CodexDataResponse>(url, { method: "GET" });
   }
 
   /**
    * Gets a summary of the storage space allocation of the node.
    */
-  space() {
+  space(): Promise<SafeValue<CodexNodeSpace>> {
     const url = this.url + Api.config.prefix + "/space";
 
-    return Fetch.safeJson<CodexNodeSpace>(url, { method: "GET" });
+    return Fetch.safeJson<CodexSpaceResponse>(url, { method: "GET" });
   }
 
   /**
@@ -75,12 +70,10 @@ export class CodexData {
    * Download a file from the network to the local node if it's not available locally.
    * Note: Download is performed async. Call can return before download is completed.
    */
-  async networkDownload(
-    cid: string
-  ): Promise<SafeValue<NetworkDownloadResponse>> {
+  async networkDownload(cid: string): Promise<SafeValue<CodexNetworkDownload>> {
     const url = this.url + Api.config.prefix + `/data/${cid}/network`;
 
-    return Fetch.safeJson(url, { method: "POST" });
+    return Fetch.safeJson<CodexDataNetworkResponse>(url, { method: "POST" });
   }
 
   /**
@@ -97,7 +90,7 @@ export class CodexData {
    * Download only the dataset manifest from the network to the local node
    * if it's not available locally.
    */
-  async fetchManifest(cid: string) {
+  async fetchManifest(cid: string): Promise<SafeValue<CodexManifest>> {
     const url = this.url + Api.config.prefix + `/data/${cid}/network/manifest`;
 
     return Fetch.safeJson<CodexManifest>(url, { method: "GET" });

@@ -45,4 +45,14 @@ export const Fetch = {
 
     return Promises.safe(() => res.data.json());
   },
+
+  async safeText(url: string, init: RequestInit): Promise<SafeValue<string>> {
+    const res = await this.safe(url, init);
+
+    if (res.error) {
+      return res;
+    }
+
+    return Promises.safe(() => res.data.text());
+  },
 };

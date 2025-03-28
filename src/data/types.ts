@@ -1,86 +1,32 @@
+import type { components, paths } from "../openapi";
 import type { SafeValue } from "../values/values";
 
-export type CodexManifest = {
-  /**
-   * "Root hash of the content"
-   */
-  // rootHash: string;
+export type CodexDataResponse =
+  paths["/data"]["get"]["responses"][200]["content"]["application/json"];
 
-  /**
-   * Length of original content in bytes
-   */
-  // originalBytes: number;
+export type CodexDataItem = components["schemas"]["DataItem"];
 
-  /**
-   * Total size of all blocks
-   */
-  datasetSize: number;
+export type CodexDataItems = CodexDataResponse;
 
-  /**
-   *  "Size of blocks"
-   */
-  blockSize: number;
+export type CodexSpaceResponse =
+  paths["/space"]["get"]["responses"][200]["content"]["application/json"];
 
-  /**
-   * Indicates if content is protected by erasure-coding
-   */
-  protected: boolean;
-
-  /**
-   * Root of the merkle tree
-   */
-  treeCid: string;
-
-  /**
-   * Name of the name
-   */
-  filename: string | null;
-
-  /**
-   * Mimetype
-   */
-  mimetype: string | null;
-};
-
-export type CodexDataContent = {
-  /**
-   * Content Identifier as specified at https://github.com/multiformats/cid
-   */
-  cid: string;
-
-  manifest: CodexManifest;
-};
-
-export type CodexDataResponse = { content: CodexDataContent[] };
-
-export type CodexNodeSpace = {
-  /**
-   * Number of blocks stored by the node
-   */
-  totalBlocks: number;
-
-  /**
-   * Maximum storage space used by the node
-   */
-  quotaMaxBytes: number;
-
-  /**
-   * Amount of storage space currently in use
-   */
-  quotaUsedBytes: number;
-
-  /**
-   * Amount of storage space reserved
-   */
-  quotaReservedBytes: number;
-};
+export type CodexNodeSpace = CodexSpaceResponse;
 
 export type UploadResponse = {
   result: Promise<SafeValue<string>>;
   abort: () => void;
 };
 
-export type NetworkDownloadResponse = { cid: string; manifest: CodexManifest };
+export type CodexDataNetworkResponse =
+  paths["/data/{cid}/network"]["post"]["responses"][200]["content"]["application/json"];
+
+export type CodexNetworkDownload = components["schemas"]["DataItem"];
+
+export type CodexFetchManifestResponse =
+  paths["/data/{cid}/network/manifest"]["get"]["responses"][200]["content"]["application/json"];
+
+export type CodexManifest = CodexFetchManifestResponse;
 
 export interface UploadStategy {
   download(url: string): Promise<SafeValue<string>>;
