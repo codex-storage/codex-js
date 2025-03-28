@@ -1,5 +1,5 @@
 {
-  "name": "@codex-storage/sdk-js-download-example",
+  "name": "@codex-storage/sdk-js-basic-auth-example",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {

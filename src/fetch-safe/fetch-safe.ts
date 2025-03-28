@@ -2,6 +2,21 @@ import { CodexError } from "../errors/errors";
 import { Promises } from "../promise-safe/promise-safe";
 import { type SafeValue } from "../values/values";
 
+export type FetchAuth = {
+  basic?: string;
+};
+
+export const FetchAuthBuilder = {
+  build(auth: FetchAuth | undefined) {
+    if (auth?.basic) {
+      return {
+        Authorization: "Basic " + auth.basic,
+      };
+    }
+    return {};
+  },
+};
+
 export const Fetch = {
   async safe(url: string, init: RequestInit): Promise<SafeValue<Response>> {
     const res = await Promises.safe(() => fetch(url, init));

@@ -1,3 +1,4 @@
+import type { FetchAuth } from "../fetch-safe/fetch-safe";
 import type { SafeValue } from "../values/values";
 
 export type CodexManifest = {
@@ -82,7 +83,14 @@ export type UploadResponse = {
 
 export type NetworkDownloadResponse = { cid: string; manifest: CodexManifest };
 
+export type UploadStategyOptions = {
+  auth?: FetchAuth;
+};
+
 export interface UploadStategy {
-  download(url: string): Promise<SafeValue<string>>;
+  upload(
+    url: string,
+    options?: UploadStategyOptions
+  ): Promise<SafeValue<string>>;
   abort(): void;
 }

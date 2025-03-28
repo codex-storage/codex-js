@@ -1,6 +1,6 @@
 import { CodexError } from "../errors/errors";
 import type { SafeValue } from "../values/values";
-import type { UploadStategy } from "./types";
+import type { UploadStategy, UploadStategyOptions } from "./types";
 
 export class BrowserUploadStategy implements UploadStategy {
   private readonly file: Document | XMLHttpRequestBodyInit;
@@ -22,7 +22,10 @@ export class BrowserUploadStategy implements UploadStategy {
     this.metadata = metadata;
   }
 
-  download(url: string): Promise<SafeValue<string>> {
+  upload(
+    url: string,
+    { auth }: UploadStategyOptions
+  ): Promise<SafeValue<string>> {
     const xhr = new XMLHttpRequest();
     this.xhr = xhr;
 
@@ -40,6 +43,10 @@ export class BrowserUploadStategy implements UploadStategy {
           "Content-Disposition",
           'attachment; filename="' + this.metadata.filename + '"'
         );
+      }
+
+      if (auth?.basic) {
+        xhr.setRequestHeader("Authorization", "Basic " + auth.basic);
       }
 
       if (this.metadata?.mimetype) {

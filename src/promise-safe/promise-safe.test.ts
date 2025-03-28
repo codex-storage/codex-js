@@ -1,6 +1,6 @@
 import { assert, describe, it } from "vitest";
 import { Promises } from "./promise-safe";
-import { CodexError } from "../async";
+import { CodexError } from "../errors/errors";
 
 describe("promise safe", () => {
   it("returns an error when the promise failed", async () => {

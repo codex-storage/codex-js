@@ -62,6 +62,20 @@ To use a module, you need to use the await syntax. If the module is not loaded y
 const marketplace = await codex.marketplace();
 ```
 
+### Authentication
+
+You can use basic authentication when creating a new Codex object:
+
+```js
+const codex = new Codex("http://localhost:3000", {
+  auth: {
+    basic: "MY BASIC AUTH SECRET"
+  }
+});
+
+You can obtain your secret using the `btoa` method in the browser or `Buffer.from(string).toString('base64')` in Node.js. The secret is stored in memory only.
+```
+
 ### Error handling
 
 The SDK provides a type called `SafeValue` for error handling instead of throwing errors. It is inspired by Go's "error as value" concept.
@@ -105,7 +119,7 @@ const codex = new Codex("http://localhost:3000");
 const marketplace = await codex.marketplace();
 
 // When using the sync api
-const marketplace = codex.marketplace
+const marketplace = codex.marketplace;
 ```
 
 #### activeSlots()
@@ -253,7 +267,7 @@ const codex = new Codex("http://localhost:3000");
 const data = await codex.data();
 
 // When using the sync api
-const data = codex.data
+const data = codex.data;
 ```
 
 #### cids
@@ -389,7 +403,7 @@ const codex = new Codex("http://localhost:3000");
 const data = await codex.debug();
 
 // When using the sync api
-const data = codex.debug
+const data = codex.debug;
 ```
 
 #### setLogLevel
@@ -427,7 +441,7 @@ const codex = new Codex("http://localhost:3000");
 const node = await codex.node();
 
 // When using the sync api
-const node = codex.node
+const node = codex.node;
 ```
 
 #### spr

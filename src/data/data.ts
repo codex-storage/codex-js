@@ -1,5 +1,9 @@
 import { Api } from "../api/config";
-import { Fetch } from "../fetch-safe/fetch-safe";
+import {
+  Fetch,
+  FetchAuthBuilder,
+  type FetchAuth,
+} from "../fetch-safe/fetch-safe";
 import type { SafeValue } from "../values/values";
 import type {
   CodexDataResponse,
@@ -10,11 +14,20 @@ import type {
   UploadResponse,
 } from "./types";
 
+type CodexDataOptions = {
+  auth?: FetchAuth;
+};
+
 export class CodexData {
   readonly url: string;
+  readonly auth: FetchAuth = {};
 
-  constructor(url: string) {
+  constructor(url: string, options?: CodexDataOptions) {
     this.url = url;
+
+    if (options?.auth) {
+      this.auth = options.auth;
+    }
   }
 
   /**
@@ -24,15 +37,16 @@ export class CodexData {
   cids(): Promise<SafeValue<CodexDataResponse>> {
     const url = this.url + Api.config.prefix + "/data";
 
-    return Fetch.safeJson<CodexDataResponse>(url, { method: "GET" }).then(
-      (data) => {
-        if (data.error) {
-          return data;
-        }
-
-        return { error: false, data: { content: data.data.content } };
+    return Fetch.safeJson<CodexDataResponse>(url, {
+      method: "GET",
+      headers: FetchAuthBuilder.build(this.auth),
+    }).then((data) => {
+      if (data.error) {
+        return data;
       }
-    );
+
+      return { error: false, data: { content: data.data.content } };
+    });
   }
 
   /**
@@ -41,7 +55,10 @@ export class CodexData {
   space() {
     const url = this.url + Api.config.prefix + "/space";
 
-    return Fetch.safeJson<CodexNodeSpace>(url, { method: "GET" });
+    return Fetch.safeJson<CodexNodeSpace>(url, {
+      method: "GET",
+      headers: FetchAuthBuilder.build(this.auth),
+    });
   }
 
   /**
@@ -54,7 +71,7 @@ export class CodexData {
     const url = this.url + Api.config.prefix + "/data";
 
     return {
-      result: stategy.download(url),
+      result: stategy.upload(url, { auth: this.auth }),
       abort: () => {
         stategy.abort();
       },
@@ -68,7 +85,10 @@ export class CodexData {
   async localDownload(cid: string): Promise<SafeValue<Response>> {
     const url = this.url + Api.config.prefix + "/data/" + cid;
 
-    return Fetch.safe(url, { method: "GET" });
+    return Fetch.safe(url, {
+      method: "GET",
+      headers: FetchAuthBuilder.build(this.auth),
+    });
   }
 
   /**
@@ -80,7 +100,10 @@ export class CodexData {
   ): Promise<SafeValue<NetworkDownloadResponse>> {
     const url = this.url + Api.config.prefix + `/data/${cid}/network`;
 
-    return Fetch.safeJson(url, { method: "POST" });
+    return Fetch.safeJson(url, {
+      method: "POST",
+      headers: FetchAuthBuilder.build(this.auth),
+    });
   }
 
   /**
@@ -90,7 +113,10 @@ export class CodexData {
   async networkDownloadStream(cid: string): Promise<SafeValue<Response>> {
     const url = this.url + Api.config.prefix + `/data/${cid}/network/stream`;
 
-    return Fetch.safe(url, { method: "GET" });
+    return Fetch.safe(url, {
+      method: "GET",
+      headers: FetchAuthBuilder.build(this.auth),
+    });
   }
 
   /**
@@ -100,6 +126,9 @@ export class CodexData {
   async fetchManifest(cid: string) {
     const url = this.url + Api.config.prefix + `/data/${cid}/network/manifest`;
 
-    return Fetch.safeJson<CodexManifest>(url, { method: "GET" });
+    return Fetch.safeJson<CodexManifest>(url, {
+      method: "GET",
+      headers: FetchAuthBuilder.build(this.auth),
+    });
   }
 }
