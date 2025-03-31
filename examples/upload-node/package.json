@@ -9,7 +9,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@codex-storage/sdk-js": "../.."
+    "@codex-storage/sdk-js": "../..",
+    "undici": "^7.6.0"
   },
   "devDependencies": {
     "prettier": "^3.5.3"
