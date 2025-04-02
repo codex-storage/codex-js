@@ -10,6 +10,14 @@ The SDK is currently under early development and the API can change at any time.
 
 - Version 0.1.0 introduces [upload strategy](#upload) to support browser and Node JS.
 
+## Types generation
+
+The types are generated from the openapi.yaml using the commande:
+
+```bash
+npx openapi-typescript ./openapi.yaml -o src/openapi.ts  --default-non-nullable false
+```
+
 ## How to use
 
 ### Sync api
@@ -126,7 +134,7 @@ const marketplace = codex.marketplace;
 
 Returns active slots.
 
-- returns Promise<[CodexSlot](./src/marketplace/types.ts#L85)[]>
+- returns Promise<[CodexSlot](./src/marketplace/types.ts#L7)[]>
 
 Example:
 
@@ -139,7 +147,7 @@ const slots = await marketplace.activeSlots();
 Returns active slot with id {slotId} for the host.
 
 - slotId (string, required)
-- returns Promise<[CodexSlot](./src/marketplace/types.ts#L85)[]>
+- returns Promise<[CodexSlotAgent](./src/marketplace/types.ts#L12)[]>
 
 Example:
 
@@ -152,7 +160,7 @@ const slot = await marketplace.activeSlot(slotId);
 
 Returns storage that is for sale.
 
-- returns Promise<[CodexAvailability](./src/marketplace/types.ts#L99)>
+- returns Promise<[CodexAvailability](./src/marketplace/types.ts#L20)>
 
 Example:
 
@@ -164,8 +172,8 @@ const availabilities = await marketplace.availabilities();
 
 Offers storage for sale.
 
-- input ([CodexCreateAvailabilityInput](./src/marketplace/types.ts#L175), required)
-- returns Promise<[CodexAvailabilityCreateResponse](./src/marketplace/types.ts#L186)[]>
+- input ([CodexCreateAvailabilityInput](./src/marketplace/types.ts#L45), required)
+- returns Promise<[CodexAvailability](./src/marketplace/types.ts#L20)[]>
 
 Example:
 
@@ -182,7 +190,7 @@ const response = await marketplace.createAvailability({
 
 Updates availability.
 
-- input ([CodexUpdateAvailabilityInput](./src/marketplace/types.ts#L186), required)
+- input ([CodexAvailabilityPatchInput](./src/marketplace/types.ts#L66), required)
 - returns Promise<"">
 
 Example:
@@ -202,7 +210,7 @@ const response = await marketplace.updateAvailability({
 Return list of reservations for ongoing Storage Requests that the node hosts.
 
 - availabilityId (string, required)
-- returns Promise<[CodexReservation](./src/marketplace/types.ts#L198)[]>
+- returns Promise<[CodexReservation](./src/marketplace/types.ts#L83)[]>
 
 Example:
 
@@ -214,7 +222,7 @@ const reservations = await marketplace.reservations("Ox...");
 
 Creates a new Request for storage
 
-- input ([CodexCreateStorageRequestInput](./src/marketplace/types.ts#L230), required)
+- input ([CodexCreateStorageRequestInput](./src/marketplace/types.ts#L120), required)
 - returns Promise<string>
 
 Example:
@@ -248,7 +256,7 @@ const ids = await marketplace.purchaseIds();
 Returns purchase details
 
 - purchaseId (string, required)
-- returns Promise<[CodexPurchase](./src/marketplace/types.ts#L214)[]>
+- returns Promise<[CodexPurchase](./src/marketplace/types.ts#L103)[]>
 
 Example:
 
@@ -274,7 +282,7 @@ const data = codex.data;
 
 Returns the manifest stored locally in node.
 
-- returns Promise<[CodexDataResponse](./src/data/types.ts#L54)[]>
+- returns Promise<[CodexDataItem](./src/data/types.ts#L8)[]>
 
 Example:
 
@@ -286,7 +294,7 @@ const cids = await data.cids();
 
 Returns a summary of the storage space allocation of the node
 
-- returns Promise<[CodexNodeSpace](./src/data/types.ts#L56)[]>
+- returns Promise<[CodexNodeSpace](./src/data/types.ts#L15)[]>
 
 Example:
 
@@ -301,7 +309,7 @@ Upload a file in a streaming manner
 #### Browser
 
 - stategy [BrowserUploadStategy](./src/data/browser-upload.ts#L5)
-- returns [UploadResponse](./src/data/types.ts#L80)
+- returns [UploadResponse](./src/data/types.ts#L17)
 
 Example:
 
@@ -330,8 +338,8 @@ console.info("CID is", res.data);
 
 #### Node
 
-- stategy [NodeUploadStategy](./src/data/node-download.ts#L8)
-- returns [UploadResponse](./src/data/types.ts#L80)
+- stategy [NodeUploadStategy](./src/data/node-upload.ts#L9)
+- returns [UploadResponse](./src/data/types.ts#L17)
 
 Example:
 
@@ -354,7 +362,7 @@ console.info("CID is", res.data);
 Download only the dataset manifest from the network to the local node if it's not available locally.
 
 - cid (string, required)
-- returns [CodexManifest](./src/data/types.ts#L3)
+- returns [CodexManifest](./src/data/types.ts#L30)
 
 Example:
 
@@ -410,7 +418,7 @@ const data = codex.debug;
 
 Set log level at run time.
 
-- level ([CodexLogLevel](./src/debug/types.ts#L3), required)
+- level ([CodexLogLevel](./src/debug/types.ts#L7), required)
 - returns Promise<"">
 
 Example:
@@ -423,7 +431,7 @@ await debug.setLogLevel("DEBUG");
 
 Gets node information
 
-- returns Promise<[CodexDebugInfo](./src/debug/types.ts#L15)>
+- returns Promise<[CodexDebugInfo](./src/debug/types.ts#L23)>
 
 Example:
 
@@ -448,10 +456,44 @@ const node = codex.node;
 
 Get Node's SPR
 
-- returns Promise<[CodexSpr](./src/node/types.ts#L1)>
+- returns Promise<[CodexSpr](./src/node/types.ts#L11)>
 
 Example:
 
 ```js
 const spr = await node.spr();
+```
+
+By default, the response will be a json. You can use `text` option to get the string:
+
+#### peeriD
+
+Get Node's peer id
+
+- returns Promise<[CodexPeerId](./src/node/types.ts#L25)>
+
+Example:
+
+```js
+const peerId = await node.peerId();
+```
+
+By default, the response will be a json. You can use `text` option to get the string:
+
+```js
+const peerId = await node.peerId("text");
+```
+
+#### connect
+
+Connect to a peer
+
+- returns Promise<string>
+
+Example:
+
+```js
+const peerId = "..."
+const addrs = [...]
+const spr = await node.connect(peerId, addrs);
 ```

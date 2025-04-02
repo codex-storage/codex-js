@@ -8,16 +8,27 @@ import {
 } from "../fetch-safe/fetch-safe";
 import type { SafeValue } from "../values/values";
 import {
+  type CodexAvailabilityResponse,
   type CodexAvailability,
+  type CodexSlot,
+  type CodexSlotAgent,
+  type CodexSlotResponse,
+  type CodexSlotAgentResponse,
+  type CodexAvailabilityWithoutTypes,
   type CodexAvailabilityCreateResponse,
-  type CodexAvailabilityDto,
+  type CodexAvailabilityCreateBody,
+  CodexAvailabilityPatchInput,
+  type CodexReservationsResponse,
+  type CodexPurchaseIdsResponse,
+  type CodexPurchaseResponse,
+  type CodexPurchase,
+  type CodexStorageRequestCreateBody,
+  type CodexReservation,
+  type CodexPurchaseWithoutTypes,
+} from "./types";
+import {
   CodexCreateAvailabilityInput,
   CodexCreateStorageRequestInput,
-  type CodexPurchase,
-  type CodexReservation,
-  type CodexSlot,
-  type CodexStorageRequest,
-  CodexUpdateAvailabilityInput,
 } from "./types";
 
 type CodexMarketplaceOptions = {
@@ -42,7 +53,7 @@ export class CodexMarketplace {
   async activeSlots(): Promise<SafeValue<CodexSlot[]>> {
     const url = this.url + Api.config.prefix + "/sales/slots";
 
-    return Fetch.safeJson<CodexSlot[]>(url, {
+    return Fetch.safeJson<CodexSlotResponse[]>(url, {
       method: "GET",
       headers: FetchAuthBuilder.build(this.auth),
     });
@@ -51,13 +62,31 @@ export class CodexMarketplace {
   /**
    * Returns active slot with id {slotId} for the host
    */
-  async activeSlot(slotId: string): Promise<SafeValue<CodexSlot>> {
+  async activeSlot(slotId: string): Promise<SafeValue<CodexSlotAgent>> {
     const url = this.url + Api.config.prefix + "/sales/slots/" + slotId;
 
-    return Fetch.safeJson<CodexSlot>(url, {
+    return Fetch.safeJson<CodexSlotAgentResponse>(url, {
       method: "GET",
       headers: FetchAuthBuilder.build(this.auth),
     });
+  }
+
+  private transformAvailability({
+    freeSize,
+    ...a
+  }: CodexAvailabilityWithoutTypes) {
+    const availability: CodexAvailability = {
+      ...a,
+      minPricePerBytePerSecond: parseInt(a.minPricePerBytePerSecond, 10),
+      totalCollateral: parseInt(a.totalCollateral, 10),
+      totalRemainingCollateral: parseInt(a.totalRemainingCollateral, 10),
+    };
+
+    if (freeSize) {
+      availability.freeSize = freeSize;
+    }
+
+    return availability;
   }
 
   /**
@@ -66,7 +95,7 @@ export class CodexMarketplace {
   async availabilities(): Promise<SafeValue<CodexAvailability[]>> {
     const url = this.url + Api.config.prefix + "/sales/availability";
 
-    const res = await Fetch.safeJson<CodexAvailabilityDto[]>(url, {
+    const res = await Fetch.safeJson<CodexAvailabilityResponse>(url, {
       method: "GET",
       headers: FetchAuthBuilder.build(this.auth),
     });
@@ -77,15 +106,7 @@ export class CodexMarketplace {
 
     return {
       error: false,
-      data: res.data.map((a) => ({
-        id: a.id,
-        totalSize: parseInt(a.totalSize, 10),
-        freeSize: parseInt(a.freeSize, 10),
-        duration: parseInt(a.duration, 10),
-        minPricePerBytePerSecond: parseInt(a.minPricePerBytePerSecond, 10),
-        totalCollateral: parseInt(a.totalCollateral, 10),
-        totalRemainingCollateral: parseInt(a.totalRemainingCollateral, 10),
-      })),
+      data: res.data.map(this.transformAvailability),
     };
   }
 
@@ -94,7 +115,7 @@ export class CodexMarketplace {
    */
   async createAvailability(
     input: CodexCreateAvailabilityInput
-  ): Promise<SafeValue<CodexAvailabilityCreateResponse>> {
+  ): Promise<SafeValue<CodexAvailability>> {
     const result = v.safeParse(CodexCreateAvailabilityInput, input);
 
     if (!result.success) {
@@ -108,17 +129,32 @@ export class CodexMarketplace {
 
     const url = this.url + Api.config.prefix + "/sales/availability";
 
-    const body = result.output;
+    const body: CodexAvailabilityCreateBody = {
+      totalSize: result.output.totalSize,
+      duration: result.output.duration,
+      minPricePerBytePerSecond:
+        result.output.minPricePerBytePerSecond.toString(),
+      totalCollateral: result.output.totalCollateral.toString(),
+    };
+
+    if (result.output.enabled) {
+      body.enabled = result.output.enabled;
+    }
+
+    if (result.output.until) {
+      body.until = result.output.until;
+    }
 
     return Fetch.safeJson<CodexAvailabilityCreateResponse>(url, {
       method: "POST",
       headers: FetchAuthBuilder.build(this.auth),
-      body: JSON.stringify({
-        totalSize: body.totalSize.toString(),
-        duration: body.duration.toString(),
-        minPricePerBytePerSecond: body.minPricePerBytePerSecond.toString(),
-        totalCollateral: body.totalCollateral.toString(),
-      }),
+      body: JSON.stringify(body),
+    }).then((result) => {
+      if (result.error) {
+        return result;
+      }
+
+      return { error: false, data: this.transformAvailability(result.data) };
     });
   }
 
@@ -127,9 +163,9 @@ export class CodexMarketplace {
    * Existing Requests linked to this Availability will continue as is.
    */
   async updateAvailability(
-    input: CodexUpdateAvailabilityInput
+    input: CodexAvailabilityPatchInput
   ): Promise<SafeValue<"">> {
-    const result = v.safeParse(CodexUpdateAvailabilityInput, input);
+    const result = v.safeParse(CodexAvailabilityPatchInput, input);
 
     if (!result.success) {
       return {
@@ -143,17 +179,26 @@ export class CodexMarketplace {
     const url =
       this.url + Api.config.prefix + "/sales/availability/" + result.output.id;
 
-    const body = result.output;
+    const body: CodexAvailabilityCreateBody = {
+      totalSize: result.output.totalSize,
+      duration: result.output.duration,
+      minPricePerBytePerSecond:
+        result.output.minPricePerBytePerSecond.toString(),
+      totalCollateral: result.output.totalCollateral.toString(),
+    };
+
+    if (result.output.enabled) {
+      body.enabled = result.output.enabled;
+    }
+
+    if (result.output.until) {
+      body.until = result.output.until;
+    }
 
     const res = await Fetch.safe(url, {
       method: "PATCH",
       headers: FetchAuthBuilder.build(this.auth),
-      body: JSON.stringify({
-        totalSize: body.totalSize.toString(),
-        duration: body.duration.toString(),
-        minPricePerBytePerSecond: body.minPricePerBytePerSecond.toString(),
-        totalCollateral: body.totalCollateral.toString(),
-      }),
+      body: JSON.stringify(body),
     });
 
     if (res.error) {
@@ -174,7 +219,7 @@ export class CodexMarketplace {
       Api.config.prefix +
       `/sales/availability/${availabilityId}/reservations`;
 
-    return Fetch.safeJson<CodexReservation[]>(url, {
+    return Fetch.safeJson<CodexReservationsResponse>(url, {
       method: "GET",
       headers: FetchAuthBuilder.build(this.auth),
     });
@@ -183,22 +228,47 @@ export class CodexMarketplace {
   /**
    * Returns list of purchase IDs
    */
-  async purchaseIds(): Promise<SafeValue<string[]>> {
+  async purchaseIds(): Promise<SafeValue<CodexPurchaseIdsResponse>> {
     const url = this.url + Api.config.prefix + `/storage/purchases`;
 
-    return Fetch.safeJson<string[]>(url, {
+    return Fetch.safeJson<CodexPurchaseIdsResponse>(url, {
       method: "GET",
       headers: FetchAuthBuilder.build(this.auth),
     });
   }
 
-  async purchases(): Promise<SafeValue<CodexPurchase[]>> {
-    const url = this.url + Api.config.prefix + `/storage/purchases`;
+  private transformPurchase(p: CodexPurchaseWithoutTypes): CodexPurchase {
+    const purchase: CodexPurchase = {
+      requestId: p.requestId,
+      state: p.state,
+    };
 
-    const res = await Fetch.safeJson<string[]>(url, {
-      method: "GET",
-      headers: FetchAuthBuilder.build(this.auth),
-    });
+    if (p.error) {
+      purchase.error = p.error;
+    }
+
+    if (!p.request) {
+      return purchase;
+    }
+
+    return {
+      ...purchase,
+      request: {
+        ...p.request,
+        ask: {
+          ...p.request.ask,
+          proofProbability: parseInt(p.request.ask.proofProbability, 10),
+          pricePerBytePerSecond: parseInt(
+            p.request.ask.pricePerBytePerSecond,
+            10
+          ),
+        },
+      },
+    };
+  }
+
+  async purchases(): Promise<SafeValue<CodexPurchase[]>> {
+    const res = await this.purchaseIds();
 
     if (res.error) {
       return res;
@@ -220,7 +290,6 @@ export class CodexMarketplace {
               state: "error",
               error: p.data.message,
               requestId: "",
-              request: {} as CodexStorageRequest,
             } satisfies CodexPurchase)
           : p.data
       ),
@@ -234,9 +303,15 @@ export class CodexMarketplace {
     const url =
       this.url + Api.config.prefix + `/storage/purchases/` + purchaseId;
 
-    return Fetch.safeJson<CodexPurchase>(url, {
-      method: "GET",
+    return Fetch.safeJson<CodexPurchaseResponse>(url, {
       headers: FetchAuthBuilder.build(this.auth),
+      method: "GET",
+    }).then((res) => {
+      if (res.error) {
+        return res;
+      }
+
+      return { error: false, data: this.transformPurchase(res.data) };
     });
   }
 
@@ -269,24 +344,18 @@ export class CodexMarketplace {
     } = result.output;
     const url = this.url + Api.config.prefix + "/storage/request/" + cid;
 
-    const res = await Fetch.safe(url, {
+    return Fetch.safeText(url, {
       method: "POST",
       headers: FetchAuthBuilder.build(this.auth),
       body: JSON.stringify({
-        duration: duration.toString(),
+        duration,
         pricePerBytePerSecond: pricePerBytePerSecond.toString(),
         proofProbability: proofProbability.toString(),
         nodes,
         collateralPerByte: collateralPerByte.toString(),
-        expiry: expiry.toString(),
+        expiry,
         tolerance,
-      }),
+      } satisfies CodexStorageRequestCreateBody),
     });
-
-    if (res.error) {
-      return res;
-    }
-
-    return { error: false, data: await res.data.text() };
   }
 }

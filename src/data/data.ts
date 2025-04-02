@@ -7,11 +7,14 @@ import {
 import type { SafeValue } from "../values/values";
 import type {
   CodexDataResponse,
-  CodexManifest,
-  CodexNodeSpace,
   UploadStategy,
-  NetworkDownloadResponse,
   UploadResponse,
+  CodexSpaceResponse,
+  CodexNodeSpace,
+  CodexDataNetworkResponse,
+  CodexNetworkDownload,
+  CodexManifest,
+  CodexDataItems,
 } from "./types";
 
 type CodexDataOptions = {
@@ -34,7 +37,7 @@ export class CodexData {
    * Lists manifest CIDs stored locally in node.
    * TODO: remove the faker data part when the api is ready
    */
-  cids(): Promise<SafeValue<CodexDataResponse>> {
+  cids(): Promise<SafeValue<CodexDataItems>> {
     const url = this.url + Api.config.prefix + "/data";
 
     return Fetch.safeJson<CodexDataResponse>(url, {
@@ -52,10 +55,10 @@ export class CodexData {
   /**
    * Gets a summary of the storage space allocation of the node.
    */
-  space() {
+  space(): Promise<SafeValue<CodexNodeSpace>> {
     const url = this.url + Api.config.prefix + "/space";
 
-    return Fetch.safeJson<CodexNodeSpace>(url, {
+    return Fetch.safeJson<CodexSpaceResponse>(url, {
       method: "GET",
       headers: FetchAuthBuilder.build(this.auth),
     });
@@ -95,12 +98,10 @@ export class CodexData {
    * Download a file from the network to the local node if it's not available locally.
    * Note: Download is performed async. Call can return before download is completed.
    */
-  async networkDownload(
-    cid: string
-  ): Promise<SafeValue<NetworkDownloadResponse>> {
+  async networkDownload(cid: string): Promise<SafeValue<CodexNetworkDownload>> {
     const url = this.url + Api.config.prefix + `/data/${cid}/network`;
 
-    return Fetch.safeJson(url, {
+    return Fetch.safeJson<CodexDataNetworkResponse>(url, {
       method: "POST",
       headers: FetchAuthBuilder.build(this.auth),
     });
@@ -123,7 +124,7 @@ export class CodexData {
    * Download only the dataset manifest from the network to the local node
    * if it's not available locally.
    */
-  async fetchManifest(cid: string) {
+  async fetchManifest(cid: string): Promise<SafeValue<CodexManifest>> {
     const url = this.url + Api.config.prefix + `/data/${cid}/network/manifest`;
 
     return Fetch.safeJson<CodexManifest>(url, {

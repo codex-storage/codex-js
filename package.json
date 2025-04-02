@@ -77,16 +77,18 @@
   },
   "devDependencies": {
     "@tsconfig/strictest": "^2.0.5",
-    "@types/node": "^22.13.14",
+    "@types/node": "^22.13.17",
+    "oas-normalize": "^13.1.2",
+    "openapi-typescript": "^7.6.1",
     "prettier": "^3.5.3",
     "tsup": "^8.3.6",
     "typescript": "^5.8.2",
     "vitest": "^3.1.1"
   },
   "dependencies": {
-    "valibot": "^0.32.0"
+    "valibot": "^1.0.0"
   },
   "peerDependencies": {
-    "undici": "^7.0.0"
+    "undici": "^7.7.0"
   }
 }

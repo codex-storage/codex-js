@@ -104,10 +104,12 @@ function minNumberValidationError(field: string, min: number) {
 function createAvailability() {
   return {
     id: randomEthereumAddress(),
-    totalSize: randomInt(0, 9).toString(),
-    duration: randomInt(0, 9).toString(),
-    minPrice: randomInt(0, 9).toString(),
-    maxCollateral: randomInt(0, 9).toString(),
+    totalSize: randomInt(0, 9),
+    duration: randomInt(0, 9),
+    minPrice: randomInt(0, 9),
+    minPricePerBytePerSecond: randomInt(0, 9),
+    totalCollateral: randomInt(0, 900),
+    totalRemainingCollateral: randomInt(0, 900),
   };
 }
 
@@ -210,7 +212,7 @@ describe("marketplace", () => {
   });
 
   it("returns a response when the request succeed", async () => {
-    const data = { ...createAvailability(), freeSize: "1000" };
+    const data = { ...createAvailability(), freeSize: 1000 };
 
     const spy = vi.spyOn(Fetch, "safeJson");
     spy.mockImplementationOnce(() => Promise.resolve({ error: false, data }));
@@ -228,16 +230,16 @@ describe("marketplace", () => {
   });
 
   it("returns a response when the create availability succeed", async () => {
-    const data = { ...createAvailability(), freeSize: "1000" };
+    const data = { ...createAvailability(), freeSize: 1000 };
 
     const spy = vi.spyOn(Fetch, "safeJson");
     spy.mockImplementationOnce(() => Promise.resolve({ error: false, data }));
 
     const response = await marketplace.createAvailability({
-      totalCollateral: 1,
-      totalSize: 3000,
-      minPricePerBytePerSecond: 100,
-      duration: 100,
+      totalCollateral: data.totalCollateral,
+      totalSize: data.totalSize,
+      minPricePerBytePerSecond: data.minPricePerBytePerSecond,
+      duration: data.duration,
     });
 
     assert.ok(!response.error);
