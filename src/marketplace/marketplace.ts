@@ -77,8 +77,6 @@ export class CodexMarketplace {
   }: CodexAvailabilityWithoutTypes) {
     const availability: CodexAvailability = {
       ...a,
-      totalSize: a.totalSize,
-      duration: a.duration,
       minPricePerBytePerSecond: parseInt(a.minPricePerBytePerSecond, 10),
       totalCollateral: parseInt(a.totalCollateral, 10),
       totalRemainingCollateral: parseInt(a.totalRemainingCollateral, 10),
@@ -259,8 +257,6 @@ export class CodexMarketplace {
         ...p.request,
         ask: {
           ...p.request.ask,
-          slotSize: p.request.ask.slotSize,
-          duration: p.request.ask.duration,
           proofProbability: parseInt(p.request.ask.proofProbability, 10),
           pricePerBytePerSecond: parseInt(
             p.request.ask.pricePerBytePerSecond,
@@ -352,12 +348,12 @@ export class CodexMarketplace {
       method: "POST",
       headers: FetchAuthBuilder.build(this.auth),
       body: JSON.stringify({
-        duration: duration,
+        duration,
         pricePerBytePerSecond: pricePerBytePerSecond.toString(),
         proofProbability: proofProbability.toString(),
         nodes,
         collateralPerByte: collateralPerByte.toString(),
-        expiry: expiry,
+        expiry,
         tolerance,
       } satisfies CodexStorageRequestCreateBody),
     });

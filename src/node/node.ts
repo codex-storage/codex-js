@@ -61,6 +61,7 @@ export class CodexNode {
       return Fetch.safeJson<CodexSprJsonResponse>(url, {
         method: "GET",
         headers: {
+          ...FetchAuthBuilder.build(this.auth),
           "Content-Type": "application/json",
         },
       });
@@ -69,8 +70,8 @@ export class CodexNode {
     return Fetch.safeText(url, {
       method: "GET",
       headers: {
-        "Content-Type": "text/plain",
         ...FetchAuthBuilder.build(this.auth),
+        "Content-Type": "text/plain",
       },
     });
   }
@@ -87,6 +88,7 @@ export class CodexNode {
       return Fetch.safeJson<CodexPeerIdJsonResponse>(url, {
         method: "GET",
         headers: {
+          ...FetchAuthBuilder.build(this.auth),
           "Content-Type": "application/json",
         },
       });
@@ -95,8 +97,8 @@ export class CodexNode {
     return Fetch.safeText(url, {
       method: "GET",
       headers: {
-        "Content-Type": "text/plain",
         ...FetchAuthBuilder.build(this.auth),
+        "Content-Type": "text/plain",
       },
     });
   }

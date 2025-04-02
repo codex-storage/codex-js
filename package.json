@@ -86,7 +86,9 @@
     "vitest": "^3.1.1"
   },
   "dependencies": {
-    "undici": "^7.7.0",
     "valibot": "^1.0.0"
+  },
+  "peerDependencies": {
+    "undici": "^7.7.0"
   }
 }
