@@ -282,7 +282,7 @@ const data = codex.data;
 
 Returns the manifest stored locally in node.
 
-- returns Promise<[CodexDataItem](./src/data/types.ts#L7)[]>
+- returns Promise<[CodexDataItem](./src/data/types.ts#L8)[]>
 
 Example:
 
@@ -294,7 +294,7 @@ const cids = await data.cids();
 
 Returns a summary of the storage space allocation of the node
 
-- returns Promise<[CodexNodeSpace](./src/data/types.ts#L14)[]>
+- returns Promise<[CodexNodeSpace](./src/data/types.ts#L15)[]>
 
 Example:
 
@@ -309,7 +309,7 @@ Upload a file in a streaming manner
 #### Browser
 
 - stategy [BrowserUploadStategy](./src/data/browser-upload.ts#L5)
-- returns [UploadResponse](./src/data/types.ts#L16)
+- returns [UploadResponse](./src/data/types.ts#L17)
 
 Example:
 
@@ -338,8 +338,8 @@ console.info("CID is", res.data);
 
 #### Node
 
-- stategy [NodeUploadStategy](./src/data/node-upload.ts#L8)
-- returns [UploadResponse](./src/data/types.ts#L16)
+- stategy [NodeUploadStategy](./src/data/node-upload.ts#L9)
+- returns [UploadResponse](./src/data/types.ts#L17)
 
 Example:
 
@@ -362,7 +362,7 @@ console.info("CID is", res.data);
 Download only the dataset manifest from the network to the local node if it's not available locally.
 
 - cid (string, required)
-- returns [CodexManifest](./src/data/types.ts#L29)
+- returns [CodexManifest](./src/data/types.ts#L30)
 
 Example:
 
