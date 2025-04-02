@@ -1,6 +1,10 @@
 import { Api } from "../api/config";
 import { CodexError, CodexValibotIssuesMap } from "../errors/errors";
-import { Fetch } from "../fetch-safe/fetch-safe";
+import {
+  Fetch,
+  FetchAuthBuilder,
+  type FetchAuth,
+} from "../fetch-safe/fetch-safe";
 import type { SafeValue } from "../values/values";
 import {
   CodexLogLevelInput,
@@ -10,11 +14,20 @@ import {
 } from "./types";
 import * as v from "valibot";
 
+type CodexDebugOptions = {
+  auth?: FetchAuth;
+};
+
 export class CodexDebug {
   readonly url: string;
+  readonly auth: FetchAuth = {};
 
-  constructor(url: string) {
+  constructor(url: string, options?: CodexDebugOptions) {
     this.url = url;
+
+    if (options?.auth) {
+      this.auth = options.auth;
+    }
   }
 
   /**
@@ -40,6 +53,7 @@ export class CodexDebug {
 
     return Fetch.safeText(url, {
       method: "POST",
+      headers: FetchAuthBuilder.build(this.auth),
       body: "",
     });
   }
@@ -52,6 +66,7 @@ export class CodexDebug {
 
     return Fetch.safeJson<CodexInfoResponse>(url, {
       method: "GET",
+      headers: FetchAuthBuilder.build(this.auth),
     });
   }
 }

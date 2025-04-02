@@ -1,4 +1,5 @@
 import type { components, paths } from "../openapi";
+import type { FetchAuth } from "../fetch-safe/fetch-safe";
 import type { SafeValue } from "../values/values";
 
 export type CodexDataResponse =
@@ -28,7 +29,14 @@ export type CodexFetchManifestResponse =
 
 export type CodexManifest = CodexFetchManifestResponse;
 
+export type UploadStategyOptions = {
+  auth?: FetchAuth;
+};
+
 export interface UploadStategy {
-  download(url: string): Promise<SafeValue<string>>;
+  upload(
+    url: string,
+    options?: UploadStategyOptions
+  ): Promise<SafeValue<string>>;
   abort(): void;
 }

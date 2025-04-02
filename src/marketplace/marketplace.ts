@@ -1,7 +1,11 @@
 import * as v from "valibot";
 import { Api } from "../api/config";
 import { CodexError, CodexValibotIssuesMap } from "../errors/errors";
-import { Fetch } from "../fetch-safe/fetch-safe";
+import {
+  Fetch,
+  FetchAuthBuilder,
+  type FetchAuth,
+} from "../fetch-safe/fetch-safe";
 import type { SafeValue } from "../values/values";
 import {
   type CodexAvailabilityResponse,
@@ -27,11 +31,20 @@ import {
   CodexCreateStorageRequestInput,
 } from "./types";
 
+type CodexMarketplaceOptions = {
+  auth?: FetchAuth;
+};
+
 export class CodexMarketplace {
   readonly url: string;
+  readonly auth: FetchAuth = {};
 
-  constructor(url: string) {
+  constructor(url: string, options?: CodexMarketplaceOptions) {
     this.url = url;
+
+    if (options?.auth) {
+      this.auth = options.auth;
+    }
   }
 
   /**
@@ -42,6 +55,7 @@ export class CodexMarketplace {
 
     return Fetch.safeJson<CodexSlotResponse[]>(url, {
       method: "GET",
+      headers: FetchAuthBuilder.build(this.auth),
     });
   }
 
@@ -53,6 +67,7 @@ export class CodexMarketplace {
 
     return Fetch.safeJson<CodexSlotAgentResponse>(url, {
       method: "GET",
+      headers: FetchAuthBuilder.build(this.auth),
     });
   }
 
@@ -84,6 +99,7 @@ export class CodexMarketplace {
 
     const res = await Fetch.safeJson<CodexAvailabilityResponse>(url, {
       method: "GET",
+      headers: FetchAuthBuilder.build(this.auth),
     });
 
     if (res.error) {
@@ -133,6 +149,7 @@ export class CodexMarketplace {
 
     return Fetch.safeJson<CodexAvailabilityCreateResponse>(url, {
       method: "POST",
+      headers: FetchAuthBuilder.build(this.auth),
       body: JSON.stringify(body),
     }).then((result) => {
       if (result.error) {
@@ -182,6 +199,7 @@ export class CodexMarketplace {
 
     const res = await Fetch.safe(url, {
       method: "PATCH",
+      headers: FetchAuthBuilder.build(this.auth),
       body: JSON.stringify(body),
     });
 
@@ -205,6 +223,7 @@ export class CodexMarketplace {
 
     return Fetch.safeJson<CodexReservationsResponse>(url, {
       method: "GET",
+      headers: FetchAuthBuilder.build(this.auth),
     });
   }
 
@@ -216,6 +235,7 @@ export class CodexMarketplace {
 
     return Fetch.safeJson<CodexPurchaseIdsResponse>(url, {
       method: "GET",
+      headers: FetchAuthBuilder.build(this.auth),
     });
   }
 
@@ -288,6 +308,7 @@ export class CodexMarketplace {
       this.url + Api.config.prefix + `/storage/purchases/` + purchaseId;
 
     return Fetch.safeJson<CodexPurchaseResponse>(url, {
+      headers: FetchAuthBuilder.build(this.auth),
       method: "GET",
     }).then((res) => {
       if (res.error) {
@@ -329,6 +350,7 @@ export class CodexMarketplace {
 
     return Fetch.safeText(url, {
       method: "POST",
+      headers: FetchAuthBuilder.build(this.auth),
       body: JSON.stringify({
         duration: duration,
         pricePerBytePerSecond: pricePerBytePerSecond.toString(),

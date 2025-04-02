@@ -70,6 +70,20 @@ To use a module, you need to use the await syntax. If the module is not loaded y
 const marketplace = await codex.marketplace();
 ```
 
+### Authentication
+
+You can use basic authentication when creating a new Codex object:
+
+```js
+const codex = new Codex("http://localhost:3000", {
+  auth: {
+    basic: "MY BASIC AUTH SECRET"
+  }
+});
+
+You can obtain your secret using the `btoa` method in the browser or `Buffer.from(string).toString('base64')` in Node.js. The secret is stored in memory only.
+```
+
 ### Error handling
 
 The SDK provides a type called `SafeValue` for error handling instead of throwing errors. It is inspired by Go's "error as value" concept.

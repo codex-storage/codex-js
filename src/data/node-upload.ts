@@ -3,7 +3,8 @@ import { CodexError } from "../errors/errors";
 import type { SafeValue } from "../values/values";
 import Undici from "undici";
 import { type FormData } from "undici";
-import type { UploadStategy } from "./types";
+import type { UploadStategy, UploadStategyOptions } from "./types";
+import { FetchAuthBuilder } from "../fetch-safe/fetch-safe";
 
 export class NodeUploadStategy implements UploadStategy {
   private readonly body:
@@ -26,8 +27,11 @@ export class NodeUploadStategy implements UploadStategy {
     this.metadata = metadata;
   }
 
-  async download(url: string): Promise<SafeValue<string>> {
-    const headers: Record<string, string> = {};
+  async upload(
+    url: string,
+    { auth }: UploadStategyOptions
+  ): Promise<SafeValue<string>> {
+    const headers: Record<string, string> = FetchAuthBuilder.build(auth);
 
     if (this.metadata?.filename) {
       headers["Content-Disposition"] =

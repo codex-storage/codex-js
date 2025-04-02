@@ -2,6 +2,7 @@ import { CodexData } from "./data/data";
 import { CodexNode } from "./node/node";
 import { CodexMarketplace } from "./marketplace/marketplace";
 import { CodexDebug } from "./debug/debug";
+import type { FetchAuth } from "./fetch-safe/fetch-safe";
 
 export * from "./fetch-safe/fetch-safe";
 export * from "./marketplace/types";
@@ -15,19 +16,28 @@ export { CodexData } from "./data/data";
 export { CodexNode } from "./node/node";
 export { CodexMarketplace } from "./marketplace/marketplace";
 
+type CodexProps = {
+  auth?: FetchAuth;
+};
+
 export class Codex {
   readonly url: string;
   private _marketplace: CodexMarketplace | null;
   private _data: CodexData | null;
   private _node: CodexNode | null;
   private _debug: CodexDebug | null;
+  private readonly auth: FetchAuth = {};
 
-  constructor(url: string) {
+  constructor(url: string, options?: CodexProps) {
     this.url = url;
     this._marketplace = null;
     this._data = null;
     this._node = null;
     this._debug = null;
+
+    if (options?.auth) {
+      this.auth = options?.auth;
+    }
   }
 
   get marketplace() {
@@ -35,7 +45,7 @@ export class Codex {
       return this._marketplace;
     }
 
-    this._marketplace = new CodexMarketplace(this.url);
+    this._marketplace = new CodexMarketplace(this.url, { auth: this.auth });
 
     return this._marketplace;
   }
@@ -45,7 +55,7 @@ export class Codex {
       return this._data;
     }
 
-    this._data = new CodexData(this.url);
+    this._data = new CodexData(this.url, { auth: this.auth });
 
     return this._data;
   }
@@ -55,7 +65,7 @@ export class Codex {
       return this._node;
     }
 
-    this._node = new CodexNode(this.url);
+    this._node = new CodexNode(this.url, { auth: this.auth });
 
     return this._node;
   }
@@ -65,7 +75,7 @@ export class Codex {
       return this._debug;
     }
 
-    this._debug = new CodexDebug(this.url);
+    this._debug = new CodexDebug(this.url, { auth: this.auth });
 
     return this._debug;
   }

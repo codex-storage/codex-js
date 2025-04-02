@@ -1,5 +1,9 @@
 import { Api } from "../api/config";
-import { Fetch } from "../fetch-safe/fetch-safe";
+import {
+  Fetch,
+  FetchAuthBuilder,
+  type FetchAuth,
+} from "../fetch-safe/fetch-safe";
 import type { SafeValue } from "../values/values";
 import type {
   CodexPeerId,
@@ -10,11 +14,20 @@ import type {
   CodexSprJsonResponse,
 } from "./types";
 
+type CodexNodeOptions = {
+  auth?: FetchAuth;
+};
+
 export class CodexNode {
   readonly url: string;
+  readonly auth: FetchAuth = {};
 
-  constructor(url: string) {
+  constructor(url: string, options?: CodexNodeOptions) {
     this.url = url;
+
+    if (options?.auth) {
+      this.auth = options.auth;
+    }
   }
 
   /**
@@ -32,6 +45,7 @@ export class CodexNode {
 
     return Fetch.safeText(url, {
       method: "GET",
+      headers: FetchAuthBuilder.build(this.auth),
     });
   }
 
@@ -56,6 +70,7 @@ export class CodexNode {
       method: "GET",
       headers: {
         "Content-Type": "text/plain",
+        ...FetchAuthBuilder.build(this.auth),
       },
     });
   }
@@ -81,6 +96,7 @@ export class CodexNode {
       method: "GET",
       headers: {
         "Content-Type": "text/plain",
+        ...FetchAuthBuilder.build(this.auth),
       },
     });
   }

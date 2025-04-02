@@ -11,7 +11,7 @@ npm install
 ## Build the javascript asset
 
 ```bash
-CODEX_CID=REPLACE_BY_YOUR_CIDE npm run build
+CODEX_CID=REPLACE_BY_YOUR_CID npm run build
 ```
 
 The response will be displayed as text, so it is better to test with .txt files.

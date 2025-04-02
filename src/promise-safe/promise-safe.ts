@@ -1,4 +1,4 @@
-import { CodexError } from "../async";
+import { CodexError } from "../errors/errors";
 import type { SafeValue } from "../values/values";
 
 export const Promises = {
