@@ -361,8 +361,6 @@ export interface components {
          * @example 0x...
          */
         Id: string;
-        /** @description Integer represented as decimal string */
-        BigInt: string;
         /**
          * @description Content Identifier as specified at https://github.com/multiformats/cid
          * @example QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx5N
@@ -382,15 +380,18 @@ export interface components {
         EthereumAddress: string;
         /** @description The amount of tokens paid per byte per second per slot to hosts the client is willing to pay */
         PricePerBytePerSecond: string;
-        /** @description The duration of the request in seconds as decimal string */
-        Duration: string;
+        /**
+         * Format: int64
+         * @description The duration of the request in seconds
+         */
+        Duration: number;
         /** @description How often storage proofs are required as decimal string */
         ProofProbability: string;
         /**
+         * Format: int64
          * @description A timestamp as seconds since unix epoch at which this request expires if the Request does not find requested amount of nodes to host the data.
-         * @default 10 minutes
          */
-        Expiry: string;
+        Expiry: number;
         /** @description Signed Peer Record (libp2p) */
         SPR: string;
         SPRRead: {
@@ -431,8 +432,11 @@ export interface components {
             codex: components["schemas"]["CodexVersion"];
         };
         SalesAvailability: {
-            /** @description Total size of availability's storage in bytes as decimal string */
-            totalSize: string;
+            /**
+             * Format: int64
+             * @description Total size of availability's storage in bytes
+             */
+            totalSize: number;
             duration: components["schemas"]["Duration"];
             /** @description Minimal price per byte per second paid (in amount of tokens) for the hosted request's slot for the request's duration as decimal string */
             minPricePerBytePerSecond: string;
@@ -451,21 +455,29 @@ export interface components {
         };
         SalesAvailabilityREAD: components["schemas"]["SalesAvailability"] & {
             id: components["schemas"]["Id"];
-            /** @description Unused size of availability's storage in bytes as decimal string */
-            freeSize?: string;
+            /**
+             * Format: int64
+             * @description Unused size of availability's storage in bytes as decimal string
+             */
+            readonly freeSize?: number;
             /** @description Total collateral effective (in amount of tokens) that can be used for matching requests */
-            totalRemainingCollateral: string;
+            readonly totalRemainingCollateral: string;
         };
-        SalesAvailabilityCREATE: components["schemas"]["SalesAvailability"];
         Slot: {
             id: components["schemas"]["SlotId"];
             request: components["schemas"]["StorageRequest"];
-            /** @description Slot Index as decimal string */
-            slotIndex: string;
+            /**
+             * Format: int64
+             * @description Slot Index number
+             */
+            slotIndex: number;
         };
         SlotAgent: {
-            /** @description Slot Index as decimal string */
-            slotIndex: string;
+            /**
+             * Format: int64
+             * @description Slot Index number
+             */
+            slotIndex: number;
             requestId: components["schemas"]["Id"];
             request?: components["schemas"]["StorageRequest"];
             reservation?: components["schemas"]["Reservation"];
@@ -478,10 +490,17 @@ export interface components {
         Reservation: {
             id: components["schemas"]["Id"];
             availabilityId: components["schemas"]["Id"];
-            size: components["schemas"]["BigInt"];
+            /**
+             * Format: int64
+             * @description Size of the slot in bytes
+             */
+            size: number;
             requestId: components["schemas"]["Id"];
-            /** @description Slot Index as decimal string */
-            slotIndex: string;
+            /**
+             * Format: int64
+             * @description Slot Index number
+             */
+            slotIndex: number;
             /** @description Timestamp after which the reservation will no longer be valid. */
             validUntil: number;
         };
@@ -491,28 +510,40 @@ export interface components {
             proofProbability: components["schemas"]["ProofProbability"];
             /**
              * @description Minimal number of nodes the content should be stored on
-             * @default 1
+             * @default 3
              */
             nodes?: number;
             /**
              * @description Additional number of nodes on top of the `nodes` property that can be lost before pronouncing the content lost
-             * @default 0
+             * @default 1
              */
             tolerance?: number;
             /** @description Number as decimal string that represents how much collateral per byte is asked from hosts that wants to fill a slots */
             collateralPerByte: string;
-            /** @description Number as decimal string that represents expiry threshold in seconds from when the Request is submitted. When the threshold is reached and the Request does not find requested amount of nodes to host the data, the Request is voided. The number of seconds can not be higher then the Request's duration itself. */
-            expiry: string;
+            /**
+             * Format: int64
+             * @description Number that represents expiry threshold in seconds from when the Request is submitted. When the threshold is reached and the Request does not find requested amount of nodes to host the data, the Request is voided. The number of seconds can not be higher then the Request's duration itself.
+             */
+            expiry: number;
         };
         StorageAsk: {
-            /** @description Number of slots (eq. hosts) that the Request want to have the content spread over */
+            /**
+             * Format: int64
+             * @description Number of slots (eq. hosts) that the Request want to have the content spread over
+             */
             slots: number;
-            /** @description Amount of storage per slot (in bytes) as decimal string */
-            slotSize: string;
+            /**
+             * Format: int64
+             * @description Amount of storage per slot in bytes
+             */
+            slotSize: number;
             duration: components["schemas"]["Duration"];
             proofProbability: components["schemas"]["ProofProbability"];
             pricePerBytePerSecond: components["schemas"]["PricePerBytePerSecond"];
-            /** @description Max slots that can be lost without data considered to be lost */
+            /**
+             * Format: int64
+             * @description Max slots that can be lost without data considered to be lost
+             */
             maxSlotLoss: number;
         };
         StorageRequest: {
@@ -1032,7 +1063,7 @@ export interface operations {
         };
         requestBody?: {
             content: {
-                "application/json": components["schemas"]["SalesAvailabilityCREATE"];
+                "application/json": components["schemas"]["SalesAvailability"];
             };
         };
         responses: {
@@ -1087,7 +1118,7 @@ export interface operations {
         };
         requestBody?: {
             content: {
-                "application/json": components["schemas"]["SalesAvailabilityCREATE"];
+                "application/json": components["schemas"]["SalesAvailability"];
             };
         };
         responses: {

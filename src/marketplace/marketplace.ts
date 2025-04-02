@@ -62,15 +62,15 @@ export class CodexMarketplace {
   }: CodexAvailabilityWithoutTypes) {
     const availability: CodexAvailability = {
       ...a,
-      totalSize: parseInt(a.totalSize, 10),
-      duration: parseInt(a.duration, 10),
+      totalSize: a.totalSize,
+      duration: a.duration,
       minPricePerBytePerSecond: parseInt(a.minPricePerBytePerSecond, 10),
       totalCollateral: parseInt(a.totalCollateral, 10),
       totalRemainingCollateral: parseInt(a.totalRemainingCollateral, 10),
     };
 
     if (freeSize) {
-      availability.freeSize = parseInt(freeSize, 10);
+      availability.freeSize = freeSize;
     }
 
     return availability;
@@ -116,8 +116,8 @@ export class CodexMarketplace {
     const url = this.url + Api.config.prefix + "/sales/availability";
 
     const body: CodexAvailabilityCreateBody = {
-      totalSize: result.output.totalSize.toString(),
-      duration: result.output.duration.toString(),
+      totalSize: result.output.totalSize,
+      duration: result.output.duration,
       minPricePerBytePerSecond:
         result.output.minPricePerBytePerSecond.toString(),
       totalCollateral: result.output.totalCollateral.toString(),
@@ -165,8 +165,8 @@ export class CodexMarketplace {
       this.url + Api.config.prefix + "/sales/availability/" + result.output.id;
 
     const body: CodexAvailabilityCreateBody = {
-      totalSize: result.output.totalSize.toString(),
-      duration: result.output.duration.toString(),
+      totalSize: result.output.totalSize,
+      duration: result.output.duration,
       minPricePerBytePerSecond:
         result.output.minPricePerBytePerSecond.toString(),
       totalCollateral: result.output.totalCollateral.toString(),
@@ -239,8 +239,8 @@ export class CodexMarketplace {
         ...p.request,
         ask: {
           ...p.request.ask,
-          slotSize: parseInt(p.request.ask.slotSize, 10),
-          duration: parseInt(p.request.ask.duration, 10),
+          slotSize: p.request.ask.slotSize,
+          duration: p.request.ask.duration,
           proofProbability: parseInt(p.request.ask.proofProbability, 10),
           pricePerBytePerSecond: parseInt(
             p.request.ask.pricePerBytePerSecond,
@@ -330,12 +330,12 @@ export class CodexMarketplace {
     return Fetch.safeText(url, {
       method: "POST",
       body: JSON.stringify({
-        duration: duration.toString(),
+        duration: duration,
         pricePerBytePerSecond: pricePerBytePerSecond.toString(),
         proofProbability: proofProbability.toString(),
         nodes,
         collateralPerByte: collateralPerByte.toString(),
-        expiry: expiry.toString(),
+        expiry: expiry,
         tolerance,
       } satisfies CodexStorageRequestCreateBody),
     });
