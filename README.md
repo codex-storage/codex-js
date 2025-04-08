@@ -37,7 +37,7 @@ const { Codex } = require("@codex-storage/sdk-js");
 To create a Codex instance, provide the REST API url to interact with the Codex client:
 
 ```js
-const codex = new Codex("http://localhost:3000");
+const codex = new Codex("http://localhost:8080");
 ```
 
 Then you can access any module like this:
@@ -61,7 +61,7 @@ const { Codex } = require("@codex-storage/sdk-js/async");
 To create a Codex instance, provide the REST API url to interact with the Codex client:
 
 ```js
-const codex = new Codex("http://localhost:3000");
+const codex = new Codex("http://localhost:8080");
 ```
 
 To use a module, you need to use the await syntax. If the module is not loaded yet, it will be imported first and then cached in memory.
@@ -75,7 +75,7 @@ const marketplace = await codex.marketplace();
 You can use basic authentication when creating a new Codex object:
 
 ```js
-const codex = new Codex("http://localhost:3000", {
+const codex = new Codex("http://localhost:8080", {
   auth: {
     basic: "MY BASIC AUTH SECRET"
   }
@@ -122,7 +122,7 @@ if (slots.error) {
 The following API assume that you have already a marketplace module loaded, example:
 
 ```js
-const codex = new Codex("http://localhost:3000");
+const codex = new Codex("http://localhost:8080");
 // When using the async api
 const marketplace = await codex.marketplace();
 
@@ -270,7 +270,7 @@ const purchase = await marketplace.purchaseDetail(purchaseId);
 The following API assume that you have already a data module loaded, example:
 
 ```js
-const codex = new Codex("http://localhost:3000");
+const codex = new Codex("http://localhost:8080");
 // When using the async api
 const data = await codex.data();
 
@@ -406,7 +406,7 @@ const result = await data.localDownload(cid);
 The following API assume that you have already a node module loaded, example:
 
 ```js
-const codex = new Codex("http://localhost:3000");
+const codex = new Codex("http://localhost:8080");
 // When using the async api
 const data = await codex.debug();
 
@@ -444,7 +444,7 @@ const info = await debug.info();
 The following API assume that you have already a node module loaded, example:
 
 ```js
-const codex = new Codex("http://localhost:3000");
+const codex = new Codex("http://localhost:8080");
 // When using the async api
 const node = await codex.node();
 
