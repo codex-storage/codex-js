@@ -33,16 +33,16 @@ describe("marketplace", async () => {
     describe("create", async () => {
       it("verifies that the availability was created successfully", async () => {
         assert.ok(availability.id);
-        assert.strictEqual(availability.duration, duration);
-        assert.strictEqual(availability.freeSize, totalSize);
-        assert.strictEqual(
+        assert.equal(availability.duration, duration);
+        assert.equal(availability.freeSize, totalSize);
+        assert.equal(
           availability.minPricePerBytePerSecond,
-          minPricePerBytePerSecond
+          BigInt(minPricePerBytePerSecond)
         );
-        assert.strictEqual(availability.totalCollateral, totalCollateral);
-        assert.strictEqual(
+        assert.equal(availability.totalCollateral, BigInt(totalCollateral));
+        assert.equal(
           availability.totalRemainingCollateral,
-          totalCollateral
+          BigInt(totalCollateral)
         );
         assert.strictEqual(availability.totalSize, totalSize);
         assert.strictEqual(availability.until, 0);
@@ -52,8 +52,8 @@ describe("marketplace", async () => {
       const errors: Partial<CodexCreateAvailabilityInput>[] = [
         { duration: 0 },
         { totalSize: 0 },
-        { totalCollateral: -1 },
-        { minPricePerBytePerSecond: -1 },
+        { totalCollateral: BigInt(-1) },
+        { minPricePerBytePerSecond: BigInt(-1) },
       ];
 
       for (const err of errors) {
@@ -90,9 +90,9 @@ describe("marketplace", async () => {
       const updates: Omit<CodexAvailabilityPatchInput, "id">[] = [
         { enabled: false },
         { duration: 3000 },
-        { minPricePerBytePerSecond: 1 },
+        { minPricePerBytePerSecond: BigInt(1) },
         { totalSize: 3000 },
-        { totalCollateral: 3000 },
+        { totalCollateral: BigInt(3000) },
         { until: 5000 },
       ];
 
