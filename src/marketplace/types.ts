@@ -20,18 +20,14 @@ export type CodexAvailabilityWithoutTypes =
 export type CodexAvailability = Omit<
   CodexAvailabilityWithoutTypes,
   | "freeSize"
-  | "totalSize"
   | "minPricePerBytePerSecond"
-  | "duration"
   | "totalCollateral"
   | "totalRemainingCollateral"
 > & {
   freeSize?: number;
-  totalSize: number;
-  duration: number;
-  minPricePerBytePerSecond: number;
-  totalCollateral: number;
-  totalRemainingCollateral: number;
+  minPricePerBytePerSecond: BigInt;
+  totalCollateral: BigInt;
+  totalRemainingCollateral: BigInt;
 };
 
 export type CodexAvailabilityCreateResponse =
@@ -45,8 +41,20 @@ export type CodexAvailabilityCreateBody = Exclude<
 export const CodexCreateAvailabilityInput = v.strictObject({
   totalSize: v.pipe(v.number(), v.minValue(1)),
   duration: v.pipe(v.number(), v.minValue(1)),
-  minPricePerBytePerSecond: v.number(),
-  totalCollateral: v.number(),
+  minPricePerBytePerSecond: v.union([
+    v.bigint(),
+    v.pipe(
+      v.number(),
+      v.transform((input) => BigInt(input))
+    ),
+  ]),
+  totalCollateral: v.union([
+    v.bigint(),
+    v.pipe(
+      v.number(),
+      v.transform((input) => BigInt(input))
+    ),
+  ]),
   enabled: v.optional(v.boolean()),
   until: v.optional(v.number()),
 });
@@ -67,8 +75,20 @@ export const CodexAvailabilityPatchInput = v.strictObject({
   id: v.string(),
   totalSize: v.pipe(v.number(), v.minValue(1)),
   duration: v.pipe(v.number(), v.minValue(1)),
-  minPricePerBytePerSecond: v.number(),
-  totalCollateral: v.number(),
+  minPricePerBytePerSecond: v.union([
+    v.bigint(),
+    v.pipe(
+      v.number(),
+      v.transform((input) => BigInt(input))
+    ),
+  ]),
+  totalCollateral: v.union([
+    v.bigint(),
+    v.pipe(
+      v.number(),
+      v.transform((input) => BigInt(input))
+    ),
+  ]),
   enabled: v.optional(v.boolean()),
   until: v.optional(v.number()),
 });

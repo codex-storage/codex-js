@@ -107,9 +107,9 @@ function createAvailability() {
     totalSize: randomInt(0, 9),
     duration: randomInt(0, 9),
     minPrice: randomInt(0, 9),
-    minPricePerBytePerSecond: randomInt(0, 9),
-    totalCollateral: randomInt(0, 900),
-    totalRemainingCollateral: randomInt(0, 900),
+    minPricePerBytePerSecond: BigInt(randomInt(0, 9)),
+    totalCollateral: BigInt(randomInt(0, 900)),
+    totalRemainingCollateral: BigInt(randomInt(0, 900)),
   };
 }
 
@@ -123,8 +123,8 @@ describe("marketplace", () => {
   it("returns an error when trying to create an availability without total size", async () => {
     const response = await marketplace.createAvailability({
       duration: 3000,
-      totalCollateral: 1,
-      minPricePerBytePerSecond: 100,
+      totalCollateral: BigInt(1),
+      minPricePerBytePerSecond: BigInt(100),
     } as any);
 
     assert.deepStrictEqual(response, missingNumberValidationError("totalSize"));
@@ -133,8 +133,8 @@ describe("marketplace", () => {
   it("returns an error when trying to create an availability with an invalid number valid", async () => {
     const response = await marketplace.createAvailability({
       duration: 3000,
-      totalCollateral: 1,
-      minPricePerBytePerSecond: 100,
+      totalCollateral: BigInt(1),
+      minPricePerBytePerSecond: BigInt(100),
       totalSize: "abc",
     } as any);
 
@@ -147,8 +147,8 @@ describe("marketplace", () => {
   it("returns an error when trying to create an availability with zero total size", async () => {
     const response = await marketplace.createAvailability({
       duration: 3000,
-      totalCollateral: 1,
-      minPricePerBytePerSecond: 100,
+      totalCollateral: BigInt(1),
+      minPricePerBytePerSecond: BigInt(100),
       totalSize: 0,
     });
 
@@ -158,8 +158,8 @@ describe("marketplace", () => {
   it("returns an error when trying to create an availability without duration", async () => {
     const response = await marketplace.createAvailability({
       totalSize: 3000,
-      totalCollateral: 1,
-      minPricePerBytePerSecond: 100,
+      totalCollateral: BigInt(1),
+      minPricePerBytePerSecond: BigInt(100),
     } as any);
 
     assert.deepStrictEqual(response, missingNumberValidationError("duration"));
@@ -168,8 +168,8 @@ describe("marketplace", () => {
   it("returns an error when trying to create an availability with zero duration", async () => {
     const response = await marketplace.createAvailability({
       duration: 0,
-      totalCollateral: 1,
-      minPricePerBytePerSecond: 100,
+      totalCollateral: BigInt(1),
+      minPricePerBytePerSecond: BigInt(100),
       totalSize: 3000,
     });
 
@@ -179,7 +179,7 @@ describe("marketplace", () => {
   it("returns an error when trying to create an availability without min price", async () => {
     const response = await marketplace.createAvailability({
       totalSize: 3000,
-      totalCollateral: 1,
+      totalCollateral: BigInt(1),
       duration: 100,
     } as any);
 
@@ -189,7 +189,7 @@ describe("marketplace", () => {
   it("returns an error when trying to create an availability without max collateral", async () => {
     const response = await marketplace.createAvailability({
       totalSize: 3000,
-      minPricePerBytePerSecond: 100,
+      minPricePerBytePerSecond: BigInt(100),
       duration: 100,
     } as any);
 
@@ -203,30 +203,12 @@ describe("marketplace", () => {
     const response = await marketplace.createAvailability({
       maxCollateral: 1,
       totalSize: 3000,
-      minPricePerBytePerSecond: 100,
+      minPricePerBytePerSecond: BigInt(100),
       duration: 100,
       hello: "world",
     } as any);
 
     assert.deepStrictEqual(response, extraValidationError("hello", "world"));
-  });
-
-  it("returns a response when the request succeed", async () => {
-    const data = { ...createAvailability(), freeSize: 1000 };
-
-    const spy = vi.spyOn(Fetch, "safeJson");
-    spy.mockImplementationOnce(() => Promise.resolve({ error: false, data }));
-
-    const response = await marketplace.createAvailability({
-      totalCollateral: 1,
-      totalSize: 3000,
-      minPricePerBytePerSecond: 100,
-      duration: 100,
-    });
-
-    assert.ok(!response.error);
-    // @ts-ignore
-    assert.deepEqual(response.data, data);
   });
 
   it("returns a response when the create availability succeed", async () => {
@@ -243,8 +225,23 @@ describe("marketplace", () => {
     });
 
     assert.ok(!response.error);
-    // @ts-ignore
     assert.deepEqual(response.data, data);
+  });
+
+  it("returns a response when the create availability succeed using a number instead of BigInt", async () => {
+    const data = { ...createAvailability(), freeSize: 1000 };
+
+    const spy = vi.spyOn(Fetch, "safeJson");
+    spy.mockImplementationOnce(() => Promise.resolve({ error: false, data }));
+
+    const response = await marketplace.createAvailability({
+      totalCollateral: 1 as any,
+      totalSize: 3000,
+      minPricePerBytePerSecond: 100 as any,
+      duration: 100,
+    });
+
+    assert.ok(!response.error);
   });
 
   it("returns an error when trying to update an availability without id", async () => {
@@ -262,9 +259,9 @@ describe("marketplace", () => {
     const response = await marketplace.updateAvailability({
       id: randomString(64),
       totalSize: 0,
-      minPricePerBytePerSecond: 100,
+      minPricePerBytePerSecond: BigInt(100),
       duration: 100,
-      totalCollateral: 100,
+      totalCollateral: BigInt(100),
     });
 
     assert.deepStrictEqual(response, minNumberValidationError("totalSize", 1));
@@ -275,8 +272,8 @@ describe("marketplace", () => {
       id: randomString(64),
       totalSize: 100,
       duration: 0,
-      minPricePerBytePerSecond: 100,
-      totalCollateral: 100,
+      minPricePerBytePerSecond: BigInt(100),
+      totalCollateral: BigInt(100),
     });
 
     assert.deepStrictEqual(response, minNumberValidationError("duration", 1));
@@ -293,8 +290,26 @@ describe("marketplace", () => {
       id: randomString(64),
       totalSize: 3000,
       duration: 10,
-      minPricePerBytePerSecond: 100,
-      totalCollateral: 100,
+      minPricePerBytePerSecond: BigInt(100),
+      totalCollateral: BigInt(100),
+    });
+
+    assert.ok(!response.error);
+  });
+
+  it("returns a response when the update availability succeed using number instead of BigInt", async () => {
+    const mockResponse = {
+      ok: true,
+      status: 200,
+    } as any;
+    globalThis.fetch = vi.fn().mockResolvedValue(mockResponse);
+
+    const response = await marketplace.updateAvailability({
+      id: randomString(64),
+      totalSize: 3000,
+      duration: 10,
+      minPricePerBytePerSecond: 100 as any,
+      totalCollateral: 100 as any,
     });
 
     assert.ok(!response.error);
