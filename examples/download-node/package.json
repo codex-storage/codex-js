@@ -1,0 +1,18 @@
+{
+  "name": "@codex-storage/sdk-js-download-node-example",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "node esbuild.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@codex-storage/sdk-js": "../..",
+    "undici": "^7.7.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3"
+  }
+}
