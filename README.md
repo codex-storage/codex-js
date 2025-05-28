@@ -6,6 +6,11 @@ The SDK has a small bundle size and support tree shaking.
 
 The SDK is currently under early development and the API can change at any time.
 
+[![License: Apache](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Stability: experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](#stability)
+[![CI](https://github.com/codex-storage/codex-js/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/codex-storage/codex-js/actions/workflows/ci.yml?query=branch%3Amaster)
+
 ## Breaking changes
 
 - Version 0.1.0 introduces [upload strategy](#upload) to support browser and Node JS.
