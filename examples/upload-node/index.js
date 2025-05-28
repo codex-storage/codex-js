@@ -1,5 +1,5 @@
 const { Codex } = require("@codex-storage/sdk-js");
-const { NodeUploadStategy } = require("@codex-storage/sdk-js/node");
+const { NodeUploadStrategy } = require("@codex-storage/sdk-js/node");
 
 async function main() {
   const codex = new Codex(
@@ -7,8 +7,8 @@ async function main() {
   );
   const data = codex.data;
 
-  const stategy = new NodeUploadStategy("Hello World !");
-  const uploadResponse = data.upload(stategy);
+  const strategy = new NodeUploadStrategy("Hello World !");
+  const uploadResponse = data.upload(strategy);
 
   const res = await uploadResponse.result;
 

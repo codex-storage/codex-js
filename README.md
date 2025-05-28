@@ -313,7 +313,7 @@ Upload a file in a streaming manner
 
 #### Browser
 
-- stategy [BrowserUploadStategy](./src/data/browser-upload.ts#L5)
+- strategy [BrowserUploadStrategy](./src/data/browser-upload.ts#L5)
 - returns [UploadResponse](./src/data/types.ts#L17)
 
 Example:
@@ -327,9 +327,9 @@ const onProgress = (loaded, total) => {
 
 const metadata = { filename: "foo.xt", mimetype: "text/plain" };
 
-const stategy = new BrowserUploadStategy(file, onProgress, metadata);
+const strategy = new BrowserUploadStrategy(file, onProgress, metadata);
 
-const uploadResponse = data.upload(stategy);
+const uploadResponse = data.upload(strategy);
 
 const res = await uploadResponse.result;
 
@@ -343,14 +343,14 @@ console.info("CID is", res.data);
 
 #### Node
 
-- stategy [NodeUploadStategy](./src/data/node-upload.ts#L9)
+- strategy [NodeUploadStrategy](./src/data/node-upload.ts#L9)
 - returns [UploadResponse](./src/data/types.ts#L17)
 
 Example:
 
 ```js
-const stategy = new NodeUploadStategy("Hello World !");
-const uploadResponse = data.upload(stategy);
+const strategy = new NodeUploadStrategy("Hello World !");
+const uploadResponse = data.upload(strategy);
 
 const res = await uploadResponse.result;
 

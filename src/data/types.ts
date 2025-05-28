@@ -29,14 +29,14 @@ export type CodexFetchManifestResponse =
 
 export type CodexManifest = CodexFetchManifestResponse;
 
-export type UploadStategyOptions = {
+export type UploadStrategyOptions = {
   auth?: FetchAuth;
 };
 
-export interface UploadStategy {
+export interface UploadStrategy {
   upload(
     url: string,
-    options?: UploadStategyOptions
+    options?: UploadStrategyOptions
   ): Promise<SafeValue<string>>;
   abort(): void;
 }

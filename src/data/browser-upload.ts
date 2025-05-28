@@ -1,8 +1,8 @@
 import { CodexError } from "../errors/errors";
 import type { SafeValue } from "../values/values";
-import type { UploadStategy, UploadStategyOptions } from "./types";
+import type { UploadStrategy, UploadStrategyOptions } from "./types";
 
-export class BrowserUploadStategy implements UploadStategy {
+export class BrowserUploadStrategy implements UploadStrategy {
   private readonly file: Document | XMLHttpRequestBodyInit;
   private readonly onProgress:
     | ((loaded: number, total: number) => void)
@@ -24,7 +24,7 @@ export class BrowserUploadStategy implements UploadStategy {
 
   upload(
     url: string,
-    { auth }: UploadStategyOptions
+    { auth }: UploadStrategyOptions
   ): Promise<SafeValue<string>> {
     const xhr = new XMLHttpRequest();
     this.xhr = xhr;
