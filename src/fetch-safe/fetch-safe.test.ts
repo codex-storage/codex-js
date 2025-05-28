@@ -2,7 +2,7 @@ import { afterEach, assert, describe, it, vi } from "vitest";
 import { Fetch } from "../fetch-safe/fetch-safe";
 import { CodexError } from "../errors/errors";
 
-describe.only("fetch", () => {
+describe("fetch", () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
@@ -26,7 +26,7 @@ describe.only("fetch", () => {
     assert.deepStrictEqual(result, { error: true, data: error });
   });
 
-  it.only("returns an error when the json parsing failed", async () => {
+  it("returns an error when the json parsing failed", async () => {
     const mockResponse = {
       ok: true,
       status: 200,
