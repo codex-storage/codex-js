@@ -1,0 +1,16 @@
+{
+  "name": "@codex-storage/sdk-js-update-node-throwable-example",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@codex-storage/sdk-js": "../..",
+    "undici": "^7.7.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3"
+  }
+}
