@@ -20,18 +20,14 @@ export type CodexAvailabilityWithoutTypes =
 export type CodexAvailability = Omit<
   CodexAvailabilityWithoutTypes,
   | "freeSize"
-  | "totalSize"
   | "minPricePerBytePerSecond"
-  | "duration"
   | "totalCollateral"
   | "totalRemainingCollateral"
 > & {
   freeSize?: number;
-  totalSize: number;
-  duration: number;
-  minPricePerBytePerSecond: number;
-  totalCollateral: number;
-  totalRemainingCollateral: number;
+  minPricePerBytePerSecond: BigInt;
+  totalCollateral: BigInt;
+  totalRemainingCollateral: BigInt;
 };
 
 export type CodexAvailabilityCreateResponse =
@@ -45,8 +41,22 @@ export type CodexAvailabilityCreateBody = Exclude<
 export const CodexCreateAvailabilityInput = v.strictObject({
   totalSize: v.pipe(v.number(), v.minValue(1)),
   duration: v.pipe(v.number(), v.minValue(1)),
-  minPricePerBytePerSecond: v.pipe(v.number(), v.minValue(0)),
-  totalCollateral: v.pipe(v.number(), v.minValue(0)),
+  minPricePerBytePerSecond: v.union([
+    v.pipe(v.bigint(), v.minValue(BigInt(0))),
+    v.pipe(
+      v.number(),
+      v.minValue(0),
+      v.transform((input) => BigInt(input))
+    ),
+  ]),
+  totalCollateral: v.union([
+    v.pipe(v.bigint(), v.minValue(BigInt(0))),
+    v.pipe(
+      v.number(),
+      v.minValue(0),
+      v.transform((input) => BigInt(input))
+    ),
+  ]),
   enabled: v.optional(v.boolean()),
   until: v.optional(v.pipe(v.number(), v.minValue(0))),
 });
@@ -61,23 +71,49 @@ export type CodexAvailabilityPatchBody = Partial<
   >["content"]["application/json"]
 >;
 
-export type CodexCreateAvailabilityInput = v.InferOutput<
-  typeof CodexCreateAvailabilityInput
->;
+export type CodexCreateAvailabilityInput = Omit<
+  v.InferOutput<typeof CodexCreateAvailabilityInput>,
+  "minPricePerBytePerSecond" | "totalCollateral"
+> & {
+  minPricePerBytePerSecond?: number | BigInt;
+  totalCollateral?: number | BigInt;
+};
 
 export const CodexAvailabilityPatchInput = v.strictObject({
   id: v.string(),
   totalSize: v.optional(v.pipe(v.number(), v.minValue(1))),
   duration: v.optional(v.pipe(v.number(), v.minValue(1))),
-  minPricePerBytePerSecond: v.optional(v.pipe(v.number(), v.minValue(1))),
-  totalCollateral: v.optional(v.pipe(v.number(), v.minValue(0))),
+  minPricePerBytePerSecond: v.optional(
+    v.union([
+      v.pipe(v.bigint(), v.minValue(BigInt(0))),
+      v.pipe(
+        v.number(),
+        v.minValue(0),
+        v.transform((input) => BigInt(input))
+      ),
+    ])
+  ),
+  totalCollateral: v.optional(
+    v.union([
+      v.pipe(v.bigint(), v.minValue(BigInt(0))),
+      v.pipe(
+        v.number(),
+        v.minValue(0),
+        v.transform((input) => BigInt(input))
+      ),
+    ])
+  ),
   enabled: v.optional(v.boolean()),
   until: v.optional(v.pipe(v.number(), v.minValue(0))),
 });
 
-export type CodexAvailabilityPatchInput = v.InferOutput<
-  typeof CodexAvailabilityPatchInput
->;
+export type CodexAvailabilityPatchInput = Omit<
+  v.InferOutput<typeof CodexAvailabilityPatchInput>,
+  "minPricePerBytePerSecond" | "totalCollateral"
+> & {
+  minPricePerBytePerSecond?: number | BigInt;
+  totalCollateral?: number | BigInt;
+};
 
 export type CodexReservationsResponse =
   paths["/sales/availability/{id}/reservations"]["get"]["responses"][200]["content"]["application/json"];

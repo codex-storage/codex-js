@@ -78,9 +78,9 @@ export class CodexMarketplace {
   }: CodexAvailabilityWithoutTypes) {
     const availability: CodexAvailability = {
       ...a,
-      minPricePerBytePerSecond: parseInt(a.minPricePerBytePerSecond, 10),
-      totalCollateral: parseInt(a.totalCollateral, 10),
-      totalRemainingCollateral: parseInt(a.totalRemainingCollateral, 10),
+      minPricePerBytePerSecond: BigInt(a.minPricePerBytePerSecond),
+      totalCollateral: BigInt(a.totalCollateral),
+      totalRemainingCollateral: BigInt(a.totalRemainingCollateral),
     };
 
     if (freeSize) {

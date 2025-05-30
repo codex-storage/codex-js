@@ -33,16 +33,16 @@ describe("marketplace", async () => {
     describe("create", async () => {
       it("verifies that the availability was created successfully", async () => {
         assert.ok(availability.id);
-        assert.strictEqual(availability.duration, duration);
-        assert.strictEqual(availability.freeSize, totalSize);
-        assert.strictEqual(
+        assert.equal(availability.duration, duration);
+        assert.equal(availability.freeSize, totalSize);
+        assert.equal(
           availability.minPricePerBytePerSecond,
-          minPricePerBytePerSecond
+          BigInt(minPricePerBytePerSecond)
         );
-        assert.strictEqual(availability.totalCollateral, totalCollateral);
-        assert.strictEqual(
+        assert.equal(availability.totalCollateral, BigInt(totalCollateral));
+        assert.equal(
           availability.totalRemainingCollateral,
-          totalCollateral
+          BigInt(totalCollateral)
         );
         assert.strictEqual(availability.totalSize, totalSize);
         assert.strictEqual(availability.until, 0);
@@ -60,7 +60,7 @@ describe("marketplace", async () => {
         const field = Object.keys(err)[0] as keyof typeof err;
         assert.ok(field);
 
-        it(`fails to create availability with wrong ${field}`, async () => {
+        it(`fails to create availability with wrong ${field} = ${err[field]}`, async () => {
           const response = await spMarketplace.createAvailability({
             ...body,
             [field]: err[field],
@@ -73,9 +73,7 @@ describe("marketplace", async () => {
             response.data.errors[0]?.received,
             err[field]?.toString()
           );
-          assert.ok(
-            response.data.errors[0]?.message.startsWith("Invalid value:")
-          );
+          assert.ok(response.data.errors[0]?.message.startsWith("Invalid"));
         });
       }
     });
@@ -90,9 +88,9 @@ describe("marketplace", async () => {
       const updates: Omit<CodexAvailabilityPatchInput, "id">[] = [
         { enabled: false },
         { duration: 3000 },
-        { minPricePerBytePerSecond: 1 },
+        { minPricePerBytePerSecond: BigInt(1) },
         { totalSize: 3000 },
-        { totalCollateral: 3000 },
+        { totalCollateral: BigInt(3000) },
         { until: 5000 },
       ];
 
@@ -137,9 +135,7 @@ describe("marketplace", async () => {
             response.data.errors[0]?.received,
             err[field]?.toString()
           );
-          assert.ok(
-            response.data.errors[0]?.message.startsWith("Invalid value:")
-          );
+          assert.ok(response.data.errors[0]?.message.startsWith("Invalid"));
         });
       }
     });
