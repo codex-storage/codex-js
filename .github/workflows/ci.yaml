@@ -16,6 +16,12 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env: |
+      URL="http://localhost:8081/api/codex/v1/debug/info"
+      TIMEOUT_SECONDS=300
+      SLEEP_INTERVAL=2
+      MAX_RETRIES=$((TIMEOUT_SECONDS / SLEEP_INTERVAL))
+
     steps:
       - uses: actions/checkout@v4
 
@@ -29,10 +35,21 @@ jobs:
       - name: Start codex-factory
         run: npx codex-factory start latest &
 
-      - name: Wait for client node to be started
-        run: npx wait-on tcp:8080 --timeout=300000
+      - name: Wait for first SP to be started
+        run: |
+          echo "Waiting for $URL (timeout: ${TIMEOUT_SECONDS}s)..."
 
-      - name: Wait for first storage provider to be started
-        run: npx wait-on tcp:8081 --timeout=300000
+          for i in $(seq 1 $MAX_RETRIES); do
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
+          if [ "$STATUS" = "200" ]; then
+              echo "Codex is ready"
+              exit 0
+          fi
+
+          sleep $SLEEP_INTERVAL
+          done
+
+          echo "Timed out after ${TIMEOUT_SECONDS}s waiting for $URL"
+          exit 1
 
       - run: npm test
