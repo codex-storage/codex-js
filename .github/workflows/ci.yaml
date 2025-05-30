@@ -26,4 +26,13 @@ jobs:
 
       - run: npm ci
 
+      - name: Start codex-factory
+        run: npx codex-factory start latest &
+
+      - name: Wait for client node to be started
+        run: npx wait-on tcp:8080 --timeout=300000
+
+      - name: Wait for first storage provider to be started
+        run: npx wait-on tcp:8081 --timeout=300000
+
       - run: npm test
