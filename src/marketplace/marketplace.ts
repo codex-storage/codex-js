@@ -300,7 +300,7 @@ export class CodexMarketplace {
       data: purchases.map((p) =>
         p.error
           ? ({
-              state: "error",
+              state: "errored",
               error: p.data.message,
               requestId: "",
             } satisfies CodexPurchase)

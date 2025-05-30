@@ -38,6 +38,26 @@ describe("data", () => {
     assert.ok(treeCid);
   });
 
+  it("delete a file a locally", async () => {
+    const content = "b".repeat(131072);
+    const strategy = new NodeUploadStategy(content);
+    const res = data.upload(strategy);
+    const cid = await res.result;
+    assert.ok(cid.error == false);
+    assert.ok(cid.data);
+
+    let cids = await data.cids();
+    assert.ok(cids.error == false);
+    assert.ok(cids.data.content.find((c) => c.cid == cid.data));
+
+    const del = await data.delete(cid.data);
+    assert.ok(del.error == false);
+
+    cids = await data.cids();
+    assert.ok(cids.error == false);
+    assert.notOk(cids.data.content.find((c) => c.cid == cid.data));
+  });
+
   it("updates the space available when storing data", async () => {
     const content = crypto.randomBytes(16).toString("hex");
 

@@ -40,3 +40,8 @@ export interface UploadStategy {
   ): Promise<SafeValue<string>>;
   abort(): void;
 }
+
+// paths["/data/{cid}"]["delete"]["responses"][204]["content"];
+export type CodexDeleteResponse = "";
+
+export type CodexDelete = CodexDeleteResponse;

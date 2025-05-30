@@ -406,6 +406,21 @@ const cid = "QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx5N";
 const result = await data.localDownload(cid);
 ```
 
+#### delete
+
+Deletes either a single block or an entire dataset from the local node.
+Does nothing if the dataset is not locally available.
+
+- cid (string, required)
+- returns ""
+
+Example:
+
+```js
+const cid = "QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx5N";
+const result = await data.delete(cid);
+```
+
 ### Debug
 
 The following API assume that you have already a node module loaded, example:
