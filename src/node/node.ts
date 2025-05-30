@@ -57,7 +57,7 @@ export class CodexNode {
   ): Promise<SafeValue<CodexSpr<CodexSprContentType>>> {
     const url = this.url + Api.config.prefix + "/spr";
 
-    if (type === "json") {
+    if (type == "json") {
       return Fetch.safeJson<CodexSprJsonResponse>(url, {
         method: "GET",
         headers: {
@@ -84,7 +84,7 @@ export class CodexNode {
   ): Promise<SafeValue<CodexPeerId<CodexPeerIdContentType>>> {
     const url = this.url + Api.config.prefix + "/node/peerid";
 
-    if (type === "json") {
+    if (type == "json") {
       return Fetch.safeJson<CodexPeerIdJsonResponse>(url, {
         method: "GET",
         headers: {
