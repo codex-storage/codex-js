@@ -1,7 +1,7 @@
 import { assert, describe, it } from "vitest";
 import { CodexMarketplace } from "./marketplace";
 import { CodexData } from "../data/data";
-import { NodeUploadStategy } from "../data/node-upload";
+import { NodeUploadStrategy } from "../data/node-upload";
 import type {
   CodexAvailabilityPatchInput,
   CodexCreateAvailabilityInput,
@@ -154,7 +154,7 @@ describe("marketplace", async () => {
 
   async function uploadContent(sizeInBytes: number) {
     const content = "a".repeat(sizeInBytes);
-    const strategy = new NodeUploadStategy(content);
+    const strategy = new NodeUploadStrategy(content);
     const res = data.upload(strategy);
     const cid = await res.result;
     assert.ok(cid.error == false);
