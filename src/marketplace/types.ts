@@ -42,7 +42,7 @@ export const CodexCreateAvailabilityInput = v.strictObject({
   totalSize: v.pipe(v.number(), v.minValue(1)),
   duration: v.pipe(v.number(), v.minValue(1)),
   minPricePerBytePerSecond: v.union([
-    v.bigint(),
+    v.pipe(v.bigint(), v.minValue(BigInt(0))),
     v.pipe(
       v.number(),
       v.minValue(0),
@@ -50,7 +50,7 @@ export const CodexCreateAvailabilityInput = v.strictObject({
     ),
   ]),
   totalCollateral: v.union([
-    v.bigint(),
+    v.pipe(v.bigint(), v.minValue(BigInt(0))),
     v.pipe(
       v.number(),
       v.minValue(0),
@@ -85,17 +85,17 @@ export const CodexAvailabilityPatchInput = v.strictObject({
   duration: v.optional(v.pipe(v.number(), v.minValue(1))),
   minPricePerBytePerSecond: v.optional(
     v.union([
-      v.bigint(),
+      v.pipe(v.bigint(), v.minValue(BigInt(0))),
       v.pipe(
         v.number(),
-        v.minValue(1),
+        v.minValue(0),
         v.transform((input) => BigInt(input))
       ),
     ])
   ),
   totalCollateral: v.optional(
     v.union([
-      v.bigint(),
+      v.pipe(v.bigint(), v.minValue(BigInt(0))),
       v.pipe(
         v.number(),
         v.minValue(0),

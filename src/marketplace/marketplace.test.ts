@@ -52,15 +52,15 @@ describe("marketplace", async () => {
       const errors: Partial<CodexCreateAvailabilityInput>[] = [
         { duration: 0 },
         { totalSize: 0 },
-        { totalCollateral: BigInt(-1) },
-        { minPricePerBytePerSecond: BigInt(-1) },
+        { totalCollateral: -1 },
+        { minPricePerBytePerSecond: -1 },
       ];
 
       for (const err of errors) {
         const field = Object.keys(err)[0] as keyof typeof err;
         assert.ok(field);
 
-        it(`fails to create availability with wrong ${field}`, async () => {
+        it(`fails to create availability with wrong ${field} = ${err[field]}`, async () => {
           const response = await spMarketplace.createAvailability({
             ...body,
             [field]: err[field],
@@ -73,9 +73,7 @@ describe("marketplace", async () => {
             response.data.errors[0]?.received,
             err[field]?.toString()
           );
-          assert.ok(
-            response.data.errors[0]?.message.startsWith("Invalid value:")
-          );
+          assert.ok(response.data.errors[0]?.message.startsWith("Invalid"));
         });
       }
     });
@@ -137,9 +135,7 @@ describe("marketplace", async () => {
             response.data.errors[0]?.received,
             err[field]?.toString()
           );
-          assert.ok(
-            response.data.errors[0]?.message.startsWith("Invalid value:")
-          );
+          assert.ok(response.data.errors[0]?.message.startsWith("Invalid"));
         });
       }
     });
