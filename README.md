@@ -114,6 +114,20 @@ if (slots.error) {
 // Access the slots within slots.data.
 ```
 
+If you prefer to use the "classic" JavaScript mode and deal with exceptions, you can import the throwable component instead:
+
+```js
+import { Codex } from "@codex-storage/sdk-js/throwable";
+
+const marketplace = codex.marketplace;
+
+try {
+  const slots = marketplace.activeSlots();
+} catch (e) {
+  // Do something
+}
+```
+
 ### Compatibility
 
 | SDK version | Codex version | Codex app |

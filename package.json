@@ -9,7 +9,7 @@
   "scripts": {
     "prepack": "npm run build",
     "prebuild": "npm run compile && rm -Rf dist/*",
-    "build": "tsup src/index.ts src/async.ts  src/browser.ts src/node.ts --format esm,cjs --dts --sourcemap --treeshake",
+    "build": "tsup src/index.ts src/async.ts  src/browser.ts src/node.ts src/throwable.ts --format esm,cjs --dts --sourcemap --treeshake",
     "compile": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -33,6 +33,16 @@
       "require": {
         "types": "./dist/index.d.cts",
         "default": "./dist/index.js"
+      }
+    },
+    "./throwable": {
+      "import": {
+        "types": "./dist/throwable.d.ts",
+        "default": "./dist/throwable.mjs"
+      },
+      "require": {
+        "types": "./dist/throwable.d.cts",
+        "default": "./dist/throwable.js"
       }
     },
     "./browser": {
