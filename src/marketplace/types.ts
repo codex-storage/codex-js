@@ -45,19 +45,21 @@ export type CodexAvailabilityCreateBody = Exclude<
 export const CodexCreateAvailabilityInput = v.strictObject({
   totalSize: v.pipe(v.number(), v.minValue(1)),
   duration: v.pipe(v.number(), v.minValue(1)),
-  minPricePerBytePerSecond: v.number(),
-  totalCollateral: v.number(),
+  minPricePerBytePerSecond: v.pipe(v.number(), v.minValue(0)),
+  totalCollateral: v.pipe(v.number(), v.minValue(0)),
   enabled: v.optional(v.boolean()),
-  until: v.optional(v.number()),
+  until: v.optional(v.pipe(v.number(), v.minValue(0))),
 });
 
 export type CodexAvailabilityPatchResponse =
   paths["/sales/availability/{id}"]["patch"]["responses"][204]["content"];
 
-export type CodexAvailabilityPatchBody = Exclude<
-  paths["/sales/availability"]["post"]["requestBody"],
-  undefined
->["content"]["application/json"];
+export type CodexAvailabilityPatchBody = Partial<
+  Exclude<
+    paths["/sales/availability"]["post"]["requestBody"],
+    undefined
+  >["content"]["application/json"]
+>;
 
 export type CodexCreateAvailabilityInput = v.InferOutput<
   typeof CodexCreateAvailabilityInput
@@ -65,12 +67,12 @@ export type CodexCreateAvailabilityInput = v.InferOutput<
 
 export const CodexAvailabilityPatchInput = v.strictObject({
   id: v.string(),
-  totalSize: v.pipe(v.number(), v.minValue(1)),
-  duration: v.pipe(v.number(), v.minValue(1)),
-  minPricePerBytePerSecond: v.number(),
-  totalCollateral: v.number(),
+  totalSize: v.optional(v.pipe(v.number(), v.minValue(1))),
+  duration: v.optional(v.pipe(v.number(), v.minValue(1))),
+  minPricePerBytePerSecond: v.optional(v.pipe(v.number(), v.minValue(1))),
+  totalCollateral: v.optional(v.pipe(v.number(), v.minValue(0))),
   enabled: v.optional(v.boolean()),
-  until: v.optional(v.number()),
+  until: v.optional(v.pipe(v.number(), v.minValue(0))),
 });
 
 export type CodexAvailabilityPatchInput = v.InferOutput<
@@ -120,12 +122,12 @@ export type CodexStorageRequestCreateBody = Exclude<
 export const CodexCreateStorageRequestInput = v.strictObject({
   cid: v.string(),
   duration: v.pipe(v.number(), v.minValue(1)),
-  pricePerBytePerSecond: v.number(),
-  proofProbability: v.number(),
+  pricePerBytePerSecond: v.pipe(v.number(), v.minValue(1)),
+  proofProbability: v.pipe(v.number(), v.minValue(1)),
   nodes: v.optional(v.number(), 1),
-  tolerance: v.optional(v.number(), 0),
+  tolerance: v.optional(v.pipe(v.number(), v.minValue(1)), 1),
   expiry: v.pipe(v.number(), v.minValue(1)),
-  collateralPerByte: v.number(),
+  collateralPerByte: v.pipe(v.number(), v.minValue(1)),
 });
 
 export type CodexCreateStorageRequestInput = v.InferOutput<

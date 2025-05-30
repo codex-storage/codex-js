@@ -25,6 +25,7 @@ import {
   type CodexStorageRequestCreateBody,
   type CodexReservation,
   type CodexPurchaseWithoutTypes,
+  type CodexAvailabilityPatchBody,
 } from "./types";
 import {
   CodexCreateAvailabilityInput,
@@ -179,15 +180,27 @@ export class CodexMarketplace {
     const url =
       this.url + Api.config.prefix + "/sales/availability/" + result.output.id;
 
-    const body: CodexAvailabilityCreateBody = {
-      totalSize: result.output.totalSize,
-      duration: result.output.duration,
-      minPricePerBytePerSecond:
-        result.output.minPricePerBytePerSecond.toString(),
-      totalCollateral: result.output.totalCollateral.toString(),
-    };
+    const { totalSize, duration, minPricePerBytePerSecond, totalCollateral } =
+      result.output;
+    let body: CodexAvailabilityPatchBody = {};
 
-    if (result.output.enabled) {
+    if (totalSize) {
+      body.totalSize = totalSize;
+    }
+
+    if (duration) {
+      body.duration = duration;
+    }
+
+    if (minPricePerBytePerSecond) {
+      body.minPricePerBytePerSecond = minPricePerBytePerSecond.toString();
+    }
+
+    if (totalCollateral) {
+      body.totalCollateral = totalCollateral.toString();
+    }
+
+    if (result.output.enabled != undefined) {
       body.enabled = result.output.enabled;
     }
 
