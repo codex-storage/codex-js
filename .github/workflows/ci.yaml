@@ -16,11 +16,10 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    env: |
-      URL="http://localhost:8081/api/codex/v1/debug/info"
-      TIMEOUT_SECONDS=300
-      SLEEP_INTERVAL=2
-      MAX_RETRIES=$((TIMEOUT_SECONDS / SLEEP_INTERVAL))
+    env:
+      URL: "http://localhost:8081/api/codex/v1/debug/info"
+      TIMEOUT_SECONDS: 300
+      SLEEP_INTERVAL: 2
 
     steps:
       - uses: actions/checkout@v4
@@ -37,16 +36,18 @@ jobs:
 
       - name: Wait for first SP to be started
         run: |
+          MAX_RETRIES=$((TIMEOUT_SECONDS / SLEEP_INTERVAL))
           echo "Waiting for $URL (timeout: ${TIMEOUT_SECONDS}s)..."
 
           for i in $(seq 1 $MAX_RETRIES); do
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
-          if [ "$STATUS" = "200" ]; then
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
+            if [ "$STATUS" = "200" ]; then
               echo "Codex is ready"
               exit 0
-          fi
+            fi
 
-          sleep $SLEEP_INTERVAL
+            echo "Waiting... HTTP status: $STATUS"
+            sleep $SLEEP_INTERVAL
           done
 
           echo "Timed out after ${TIMEOUT_SECONDS}s waiting for $URL"
