@@ -55,7 +55,8 @@ export interface paths {
         get: operations["downloadLocal"];
         put?: never;
         post?: never;
-        delete?: never;
+        /** Deletes either a single block or an entire dataset from the local node. */
+        delete: operations["deleteLocal"];
         options?: never;
         head?: never;
         patch?: never;
@@ -380,6 +381,8 @@ export interface components {
         EthereumAddress: string;
         /** @description The amount of tokens paid per byte per second per slot to hosts the client is willing to pay */
         PricePerBytePerSecond: string;
+        /** @description Number as decimal string that represents how much collateral per byte is asked from hosts that wants to fill a slots */
+        CollateralPerByte: string;
         /**
          * Format: int64
          * @description The duration of the request in seconds
@@ -416,6 +419,8 @@ export interface components {
             version?: string;
             /** @example 0c647d8 */
             revision?: string;
+            /** @example 0b537c7 */
+            contracts?: string;
         };
         PeersTable: {
             localNode: components["schemas"]["Node"];
@@ -459,7 +464,7 @@ export interface components {
              * Format: int64
              * @description Unused size of availability's storage in bytes as decimal string
              */
-            readonly freeSize?: number;
+            readonly freeSize: number;
             /** @description Total collateral effective (in amount of tokens) that can be used for matching requests */
             readonly totalRemainingCollateral: string;
         };
@@ -518,8 +523,7 @@ export interface components {
              * @default 1
              */
             tolerance?: number;
-            /** @description Number as decimal string that represents how much collateral per byte is asked from hosts that wants to fill a slots */
-            collateralPerByte: string;
+            collateralPerByte: components["schemas"]["CollateralPerByte"];
             /**
              * Format: int64
              * @description Number that represents expiry threshold in seconds from when the Request is submitted. When the threshold is reached and the Request does not find requested amount of nodes to host the data, the Request is voided. The number of seconds can not be higher then the Request's duration itself.
@@ -540,6 +544,7 @@ export interface components {
             duration: components["schemas"]["Duration"];
             proofProbability: components["schemas"]["ProofProbability"];
             pricePerBytePerSecond: components["schemas"]["PricePerBytePerSecond"];
+            collateralPerByte: components["schemas"]["CollateralPerByte"];
             /**
              * Format: int64
              * @description Max slots that can be lost without data considered to be lost
@@ -561,7 +566,7 @@ export interface components {
              * @description Description of the Request's state
              * @enum {string}
              */
-            state: "cancelled" | "error" | "failed" | "finished" | "pending" | "started" | "submitted" | "unknown";
+            state: "cancelled" | "errored" | "failed" | "finished" | "pending" | "started" | "submitted" | "unknown";
             /** @description If Request failed, then here is presented the error message */
             error?: string | null;
             request?: components["schemas"]["StorageRequest"];
@@ -737,6 +742,13 @@ export interface operations {
                     "text/plain": string;
                 };
             };
+            /** @description The mimetype of the filename is invalid */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             /** @description Well it was bad-bad and the upload did not work out */
             500: {
                 headers: {
@@ -782,6 +794,41 @@ export interface operations {
                 content?: never;
             };
             /** @description Well it was bad-bad */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    deleteLocal: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Block or dataset to be deleted. */
+                cid: components["schemas"]["Cid"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Data was successfully deleted. */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid CID is specified */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description There was an error during deletion */
             500: {
                 headers: {
                     [name: string]: unknown;

@@ -132,4 +132,18 @@ export class CodexData {
       headers: FetchAuthBuilder.build(this.auth),
     });
   }
+
+  /**
+   * Deletes either a single block or an entire dataset
+   * from the local node. Does nothing
+   * if the dataset is not locally available.
+   */
+  async delete(cid: string): Promise<SafeValue<string>> {
+    const url = this.url + Api.config.prefix + `/data/${cid}`;
+
+    return Fetch.safeText(url, {
+      method: "DELETE",
+      headers: FetchAuthBuilder.build(this.auth),
+    });
+  }
 }
