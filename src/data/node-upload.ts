@@ -3,10 +3,10 @@ import { CodexError } from "../errors/errors";
 import type { SafeValue } from "../values/values";
 import Undici from "undici";
 import { type FormData } from "undici";
-import type { UploadStategy, UploadStategyOptions } from "./types";
+import type { UploadStrategy, UploadStrategyOptions } from "./types";
 import { FetchAuthBuilder } from "../fetch-safe/fetch-safe";
 
-export class NodeUploadStategy implements UploadStategy {
+export class NodeUploadStrategy implements UploadStrategy {
   private readonly body:
     | string
     | Buffer
@@ -29,7 +29,7 @@ export class NodeUploadStategy implements UploadStategy {
 
   async upload(
     url: string,
-    { auth }: UploadStategyOptions
+    { auth }: UploadStrategyOptions
   ): Promise<SafeValue<string>> {
     const headers: Record<string, string> = FetchAuthBuilder.build(auth);
 

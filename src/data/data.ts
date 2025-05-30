@@ -7,7 +7,7 @@ import {
 import type { SafeValue } from "../values/values";
 import type {
   CodexDataResponse,
-  UploadStategy,
+  UploadStrategy,
   UploadResponse,
   CodexSpaceResponse,
   CodexNodeSpace,
@@ -70,13 +70,13 @@ export class CodexData {
    * XMLHttpRequest is used instead of fetch for this case, to obtain progress information.
    * A callback onProgress can be passed to receive upload progress data information.
    */
-  upload(stategy: UploadStategy): UploadResponse {
+  upload(strategy: UploadStrategy): UploadResponse {
     const url = this.url + Api.config.prefix + "/data";
 
     return {
-      result: stategy.upload(url, { auth: this.auth }),
+      result: strategy.upload(url, { auth: this.auth }),
       abort: () => {
-        stategy.abort();
+        strategy.abort();
       },
     };
   }

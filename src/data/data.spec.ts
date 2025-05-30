@@ -1,6 +1,6 @@
 import { assert, describe, it } from "vitest";
 import { CodexData } from "./data";
-import { NodeUploadStategy } from "./node-upload";
+import { NodeUploadStrategy } from "./node-upload";
 import crypto from "crypto";
 
 describe("data", () => {
@@ -14,7 +14,7 @@ describe("data", () => {
   it("uploads a file a download it locally", async () => {
     const content = crypto.randomBytes(16).toString("hex");
 
-    const strategy = new NodeUploadStategy(content);
+    const strategy = new NodeUploadStrategy(content);
     const res = data.upload(strategy);
     const cid = await res.result;
     assert.ok(cid.error == false);
@@ -41,7 +41,7 @@ describe("data", () => {
   it("saves the metadata uploads provided during the upload", async () => {
     const content = crypto.randomBytes(16).toString("hex");
 
-    const strategy = new NodeUploadStategy(content, {
+    const strategy = new NodeUploadStrategy(content, {
       filename: "hello.txt",
       mimetype: "text/plain",
     });
@@ -63,7 +63,7 @@ describe("data", () => {
   it("fails when providing wrong metadata", async () => {
     const content = crypto.randomBytes(16).toString("hex");
 
-    const strategy = new NodeUploadStategy(content, {
+    const strategy = new NodeUploadStrategy(content, {
       filename: "hello.txt",
       mimetype: "plain/text",
     });
@@ -79,7 +79,7 @@ describe("data", () => {
 
   it("delete a file a locally", async () => {
     const content = "b".repeat(131072);
-    const strategy = new NodeUploadStategy(content);
+    const strategy = new NodeUploadStrategy(content);
     const res = data.upload(strategy);
     const cid = await res.result;
     assert.ok(cid.error == false);
@@ -99,7 +99,7 @@ describe("data", () => {
 
   it("doesn't do anything when trying to delete a non existing cid", async () => {
     const content = crypto.randomBytes(16).toString("hex");
-    const strategy = new NodeUploadStategy(content);
+    const strategy = new NodeUploadStrategy(content);
     const res = spData.upload(strategy);
     const cid = await res.result;
     assert.ok(cid.error == false);
@@ -124,7 +124,7 @@ describe("data", () => {
 
     const usedBytes = space.data.quotaUsedBytes;
 
-    const strategy = new NodeUploadStategy(content);
+    const strategy = new NodeUploadStrategy(content);
     const res = data.upload(strategy);
     const cid = await res.result;
     assert.ok(cid.error == false);
@@ -139,7 +139,7 @@ describe("data", () => {
   it("stream downloads a file on the network", async () => {
     const content = crypto.randomBytes(16).toString("hex");
 
-    const strategy = new NodeUploadStategy(content);
+    const strategy = new NodeUploadStrategy(content);
     const res = spData.upload(strategy);
     const cid = await res.result;
     assert.ok(cid.error == false);
@@ -153,7 +153,7 @@ describe("data", () => {
   it("downloads a file on the network", async () => {
     const content = crypto.randomBytes(16).toString("hex");
 
-    const strategy = new NodeUploadStategy(content);
+    const strategy = new NodeUploadStrategy(content);
     const res = spData.upload(strategy);
     const cid = await res.result;
     assert.ok(cid.error == false);
